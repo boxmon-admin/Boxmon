@@ -83,13 +83,15 @@
         </div>
         
         <!-- Movers Time Scale Buttons -->
-        <div class="flex items-center bg-gray-900 border border-gray-800 rounded-lg p-0.5 space-x-1" id="movers-time-selector">
+        <div class="flex items-center bg-gray-900 border border-gray-800 rounded-lg p-0.5 space-x-1 flex-wrap" id="movers-time-selector">
           <button onclick="setMoversTimeScale('1D')" class="mover-time-btn px-2.5 py-1 text-[11px] font-semibold rounded text-gray-400 hover:text-white transition">1D</button>
           <button onclick="setMoversTimeScale('7D')" class="mover-time-btn active px-2.5 py-1 text-[11px] font-semibold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition">7D</button>
           <button onclick="setMoversTimeScale('1M')" class="mover-time-btn px-2.5 py-1 text-[11px] font-semibold rounded text-gray-400 hover:text-white transition">1M</button>
           <button onclick="setMoversTimeScale('6M')" class="mover-time-btn px-2.5 py-1 text-[11px] font-semibold rounded text-gray-400 hover:text-white transition">6M</button>
           <button onclick="setMoversTimeScale('1Y')" class="mover-time-btn px-2.5 py-1 text-[11px] font-semibold rounded text-gray-400 hover:text-white transition">1Y</button>
           <button onclick="setMoversTimeScale('5Y')" class="mover-time-btn px-2.5 py-1 text-[11px] font-semibold rounded text-gray-400 hover:text-white transition">5Y</button>
+          <button onclick="setMoversTimeScale('10Y')" class="mover-time-btn px-2.5 py-1 text-[11px] font-semibold rounded text-gray-400 hover:text-white transition">10Y</button>
+          <button onclick="setMoversTimeScale('20Y')" class="mover-time-btn px-2.5 py-1 text-[11px] font-semibold rounded text-gray-400 hover:text-white transition">20Y</button>
         </div>
       </div>
 
@@ -139,15 +141,17 @@
       </div>
 
       <!-- Main Chart Time Scale Buttons -->
-      <div class="flex items-center justify-between pt-2 border-t border-gray-800">
+      <div class="flex items-center justify-between pt-2 border-t border-gray-800 flex-wrap gap-2">
         <span class="text-xs text-gray-500">Historical performance view</span>
-        <div class="flex items-center bg-gray-900 border border-gray-800 rounded-lg p-1 space-x-1" id="main-time-selector">
+        <div class="flex items-center bg-gray-900 border border-gray-800 rounded-lg p-1 space-x-1 flex-wrap" id="main-time-selector">
           <button onclick="setMainTimeScale('1D')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">1D</button>
           <button onclick="setMainTimeScale('7D')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">7D</button>
           <button onclick="setMainTimeScale('1M')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">1M</button>
           <button onclick="setMainTimeScale('6M')" class="main-time-btn active px-3 py-1 text-xs font-semibold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition">6M</button>
           <button onclick="setMainTimeScale('1Y')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">1Y</button>
           <button onclick="setMainTimeScale('5Y')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">5Y</button>
+          <button onclick="setMainTimeScale('10Y')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">10Y</button>
+          <button onclick="setMainTimeScale('20Y')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">20Y</button>
         </div>
       </div>
     </section>
@@ -184,7 +188,6 @@
 
   <!-- APPLICATION LOGIC & DATA -->
   <script>
-    // Authentic Date Labels formatted like "Apr '21"
     const TIME_INTERVALS = {
       '1D': { 
         label: '24 Hours', 
@@ -216,10 +219,23 @@
           'Jan \'25', 'Apr \'25', 'Jul \'25', 'Oct \'25',
           '2026'
         ] 
+      },
+      '10Y': {
+        label: '10 Years',
+        labels: [
+          'Jan \'16', 'Jan \'17', 'Jan \'18', 'Jan \'19', 'Jan \'20',
+          'Jan \'21', 'Jan \'22', 'Jan \'23', 'Jan \'24', 'Jan \'25', '2026'
+        ]
+      },
+      '20Y': {
+        label: '20 Years',
+        labels: [
+          'Jan \'06', 'Jan \'08', 'Jan \'10', 'Jan \'12', 'Jan \'14',
+          'Jan \'16', 'Jan \'18', 'Jan \'20', 'Jan \'22', 'Jan \'24', '2026'
+        ]
       }
     };
 
-    // Realistic bidirectional market trends with reprints, sell-offs, and crashes
     const SETS_DATA = [
       {
         id: 'sv8pt5-prismatic',
@@ -236,11 +252,13 @@
             msrp: 49.99,
             history: {
               '1D': [92, 91.5, 90, 89.2, 88.5, 87, 86.8, 88, 87.5, 87.8, 88.2, 88, 88],
-              '7D': [96, 94.5, 92, 90.5, 89, 87.5, 88, 88], // Recent pull-back from $96
+              '7D': [96, 94.5, 92, 90.5, 89, 87.5, 88, 88],
               '1M': [105, 102, 100, 98, 95, 92, 90, 88, 86.5, 89, 91, 90, 89, 88.5, 88],
-              '6M': [65, 75, 95, 110, 102, 94, 88], // Launch hype bubble to $110, then correction
+              '6M': [65, 75, 95, 110, 102, 94, 88],
               '1Y': [null, null, null, 50, 68, 88, 105, 110, 102, 95, 90, 88],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 55, 78, 110, 96, 88]
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 55, 78, 110, 96, 88],
+              '10Y': [null, null, null, null, null, null, null, null, null, 55, 88],
+              '20Y': [null, null, null, null, null, null, null, null, null, 55, 88]
             }
           }
         }
@@ -264,7 +282,9 @@
               '1M': [72, 70.5, 69, 68.5, 67, 66.2, 65, 65.8, 66.2, 65.5, 65, 64.8, 65, 65],
               '6M': [54, 60, 68, 74, 71, 67, 65],
               '1Y': [null, 50, 58, 65, 70, 75, 72, 69, 67, 66, 65, 65],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 50, 62, 72, 68, 65, 65]
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 50, 62, 72, 68, 65, 65],
+              '10Y': [null, null, null, null, null, null, null, null, null, 50, 65],
+              '20Y': [null, null, null, null, null, null, null, null, null, 50, 65]
             }
           }
         }
@@ -284,11 +304,13 @@
             msrp: 49.99,
             history: {
               '1D': [48.2, 48, 48.5, 48.2, 48.6, 48.8, 48.5, 49, 48.9, 49.2, 49, 49],
-              '7D': [52, 51.5, 50.8, 50.2, 49.5, 49.2, 49, 49], // Slumping
+              '7D': [52, 51.5, 50.8, 50.2, 49.5, 49.2, 49, 49],
               '1M': [54, 53.2, 52.8, 51.5, 51, 50.2, 49.8, 49.5, 50, 49.2, 49, 48.8, 49],
-              '6M': [56, 54, 52, 51, 50, 49.5, 49], // Clear 6-month downtrend
+              '6M': [56, 54, 52, 51, 50, 49.5, 49],
               '1Y': [null, 50, 52, 55, 57, 56, 54, 52, 51, 50, 49.5, 49],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, 50, 56, 54, 51, 50, 49, 49]
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, 50, 56, 54, 51, 50, 49, 49],
+              '10Y': [null, null, null, null, null, null, null, null, null, 50, 49],
+              '20Y': [null, null, null, null, null, null, null, null, null, 50, 49]
             }
           }
         }
@@ -308,11 +330,13 @@
             msrp: 49.99,
             history: {
               '1D': [53.5, 53.8, 54, 53.6, 54.1, 53.9, 54.2, 54, 54],
-              '7D': [50, 50.5, 51.2, 52, 52.8, 53.4, 53.8, 54], // Greninja hype surge
+              '7D': [50, 50.5, 51.2, 52, 52.8, 53.4, 53.8, 54],
               '1M': [44, 44.8, 46, 47.5, 48, 49.2, 51, 50.5, 52, 52.5, 53, 53.8, 54],
-              '6M': [46, 44, 42, 45, 48, 51, 54], // Dip followed by rebound
+              '6M': [46, 44, 42, 45, 48, 51, 54],
               '1Y': [49, 46, 44, 42, 41, 43, 46, 48, 50, 51.5, 53, 54],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, 49, 44, 42, 45, 49, 52, 54, 54]
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, 49, 44, 42, 45, 49, 52, 54, 54],
+              '10Y': [null, null, null, null, null, null, null, null, 49, 48, 54],
+              '20Y': [null, null, null, null, null, null, null, null, 49, 48, 54]
             }
           }
         }
@@ -332,11 +356,13 @@
             msrp: 49.99,
             history: {
               '1D': [48.5, 48.2, 48.0, 48.1, 47.8, 48.0, 47.9, 48],
-              '7D': [51, 50.5, 49.8, 49.2, 48.8, 48.2, 48.1, 48], // Down this week
+              '7D': [51, 50.5, 49.8, 49.2, 48.8, 48.2, 48.1, 48],
               '1M': [53, 52.5, 51.8, 51, 50.2, 49.5, 49, 48.8, 48.2, 48],
-              '6M': [54, 52.5, 51, 49.5, 48.8, 48.2, 48], // Continuous 6M slide
+              '6M': [54, 52.5, 51, 49.5, 48.8, 48.2, 48],
               '1Y': [49, 52, 54, 55, 54, 53, 51, 50, 49, 48.5, 48.2, 48],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, 49, 54, 52, 50, 49, 48.5, 48, 48, 48]
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, 49, 54, 52, 50, 49, 48.5, 48, 48, 48],
+              '10Y': [null, null, null, null, null, null, null, null, 49, 48.5, 48],
+              '20Y': [null, null, null, null, null, null, null, null, 49, 48.5, 48]
             }
           }
         }
@@ -358,9 +384,11 @@
               '1D': [59.5, 60, 59.8, 60.2, 60, 60.5, 60],
               '7D': [56, 56.8, 57.5, 58, 58.8, 59.2, 60],
               '1M': [52, 53.5, 54, 55.2, 56, 57.5, 58, 59, 60],
-              '6M': [64, 58, 52, 50, 53, 56, 60], // Major reprint drop from $64 to $50, then rebound
+              '6M': [64, 58, 52, 50, 53, 56, 60],
               '1Y': [58, 62, 65, 60, 54, 51, 50, 53, 55, 57, 59, 60],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, 50, 62, 52, 51, 53, 56, 58, 60, 60]
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, 50, 62, 52, 51, 53, 56, 58, 60, 60],
+              '10Y': [null, null, null, null, null, null, null, null, 50, 54, 60],
+              '20Y': [null, null, null, null, null, null, null, null, 50, 54, 60]
             }
           }
         }
@@ -384,7 +412,9 @@
               '1M': [49, 48.8, 48.2, 47.9, 47.5, 47.2, 47],
               '6M': [51, 49.5, 48.8, 47.8, 47.2, 47, 47],
               '1Y': [45, 47, 49, 51, 52, 51, 49.5, 48.5, 47.8, 47.2, 47, 47],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, 48, 45, 49, 52, 49, 48, 47.5, 47, 47, 47]
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, 48, 45, 49, 52, 49, 48, 47.5, 47, 47, 47],
+              '10Y': [null, null, null, null, null, null, null, 48, 46, 47, 47],
+              '20Y': [null, null, null, null, null, null, null, 48, 46, 47, 47]
             }
           }
         }
@@ -406,9 +436,11 @@
               '1D': [133, 133.5, 134, 133.8, 134.5, 134, 134],
               '7D': [124, 125, 126.5, 128, 130, 132, 134],
               '1M': [118, 120, 122.5, 125, 127, 129, 131, 134],
-              '6M': [145, 132, 115, 108, 118, 126, 134], // Dropped to $108 on Costco/Target restocks, now bouncing
+              '6M': [145, 132, 115, 108, 118, 126, 134],
               '1Y': [120, 135, 150, 142, 128, 112, 108, 115, 122, 128, 131, 134],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, 120, 145, 125, 110, 135, 150, 125, 112, 122, 130, 134]
+              '5Y': [null, null, null, null, null, null, null, null, null, null, 120, 145, 125, 110, 135, 150, 125, 112, 122, 130, 134],
+              '10Y': [null, null, null, null, null, null, null, 120, 115, 125, 134],
+              '20Y': [null, null, null, null, null, null, null, 120, 115, 125, 134]
             }
           },
           ETB: {
@@ -419,9 +451,11 @@
               '1D': [73, 73.2, 72.8, 73.5, 73, 73],
               '7D': [67, 68, 69, 70.5, 71.8, 72.5, 73],
               '1M': [62, 63.5, 65, 67, 68.5, 70.2, 73],
-              '6M': [78, 70, 58, 54, 62, 68, 73], // Restock crash down to $54, followed by tight supply recovery
+              '6M': [78, 70, 58, 54, 62, 68, 73],
               '1Y': [65, 72, 80, 76, 68, 56, 54, 60, 64, 68, 71, 73],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, 50, 75, 65, 55, 72, 80, 66, 56, 64, 70, 73]
+              '5Y': [null, null, null, null, null, null, null, null, null, null, 50, 75, 65, 55, 72, 80, 66, 56, 64, 70, 73],
+              '10Y': [null, null, null, null, null, null, null, 50, 68, 62, 73],
+              '20Y': [null, null, null, null, null, null, null, 50, 68, 62, 73]
             }
           }
         }
@@ -441,11 +475,13 @@
             msrp: 49.99,
             history: {
               '1D': [47.2, 47, 46.8, 47.1, 47, 47],
-              '7D': [49, 48.6, 48.2, 47.8, 47.4, 47.1, 47], // Clear slide
+              '7D': [49, 48.6, 48.2, 47.8, 47.4, 47.1, 47],
               '1M': [51, 50.4, 49.8, 49.2, 48.5, 47.8, 47],
-              '6M': [55, 53.5, 51.8, 50.2, 48.8, 47.8, 47], // Protracted decline
+              '6M': [55, 53.5, 51.8, 50.2, 48.8, 47.8, 47],
               '1Y': [58, 56.5, 55, 53.8, 52, 50.5, 49.2, 48.5, 47.8, 47.2, 47, 47],
-              '5Y': [null, null, null, null, null, null, null, null, null, 55, 52, 48, 54, 58, 55, 52, 50, 49, 48, 47, 47]
+              '5Y': [null, null, null, null, null, null, null, null, null, 55, 52, 48, 54, 58, 55, 52, 50, 49, 48, 47, 47],
+              '10Y': [null, null, null, null, null, null, null, 50, 52, 48, 47],
+              '20Y': [null, null, null, null, null, null, null, 50, 52, 48, 47]
             }
           }
         }
@@ -469,7 +505,9 @@
               '1M': [54, 55.2, 56.5, 57.8, 59, 60.2, 61],
               '6M': [48, 50, 52, 54.5, 57, 59, 61],
               '1Y': [42, 44, 46.5, 48, 50.5, 53, 56, 58, 60, 61],
-              '5Y': [null, null, null, null, null, null, null, 50, 45, 42, 40, 42, 44, 46, 48, 51, 54, 56, 58, 60, 61]
+              '5Y': [null, null, null, null, null, null, null, 50, 45, 42, 40, 42, 44, 46, 48, 51, 54, 56, 58, 60, 61],
+              '10Y': [null, null, null, null, null, null, null, 50, 46, 55, 61],
+              '20Y': [null, null, null, null, null, null, null, 50, 46, 55, 61]
             }
           }
         }
@@ -493,8 +531,9 @@
               '1M': [124, 126, 128, 129.5, 131.5, 133, 135],
               '6M': [118, 121, 124, 127, 129.5, 132, 135],
               '1Y': [102, 106, 110, 114, 118, 122, 126, 130, 135],
-              // Authentic market crash: Released at $120, scalped to $180, then cratered to $82 on massive reprint
-              '5Y': [null, null, null, null, null, null, 175, 140, 95, 84, 82, 86, 92, 98, 105, 112, 118, 124, 129, 132, 135]
+              '5Y': [null, null, null, null, null, null, 175, 140, 95, 84, 82, 86, 92, 98, 105, 112, 118, 124, 129, 132, 135],
+              '10Y': [null, null, null, null, null, null, 175, 95, 92, 112, 135],
+              '20Y': [null, null, null, null, null, null, 175, 95, 92, 112, 135]
             }
           }
         }
@@ -518,8 +557,9 @@
               '1M': [338, 345, 352, 360, 372, 380, 385],
               '6M': [310, 320, 335, 350, 365, 376, 385],
               '1Y': [260, 275, 290, 305, 325, 345, 365, 385],
-              // Historic roller coaster: $120 MSRP -> $380 hype -> $270 post-hype chill -> $385 breakout
-              '5Y': [null, null, null, 120, 380, 340, 295, 270, 265, 280, 295, 305, 315, 328, 340, 355, 368, 374, 380, 385, 385]
+              '5Y': [null, null, null, 120, 380, 340, 295, 270, 265, 280, 295, 305, 315, 328, 340, 355, 368, 374, 380, 385, 385],
+              '10Y': [null, null, null, null, null, 120, 340, 280, 315, 365, 385],
+              '20Y': [null, null, null, null, null, null, null, 120, 340, 315, 385]
             }
           }
         }
@@ -543,7 +583,35 @@
               '1M': [178, 182, 186, 191, 196, 201, 205],
               '6M': [142, 152, 164, 176, 188, 198, 205],
               '1Y': [115, 125, 138, 150, 165, 178, 192, 205],
-              '5Y': [null, null, 40, 52, 48, 55, 68, 85, 98, 112, 128, 142, 155, 168, 180, 190, 198, 202, 204, 205, 205]
+              '5Y': [null, null, 40, 52, 48, 55, 68, 85, 98, 112, 128, 142, 155, 168, 180, 190, 198, 202, 204, 205, 205],
+              '10Y': [null, null, null, null, null, 40, 55, 98, 155, 195, 205],
+              '20Y': [null, null, null, null, null, null, null, 40, 55, 155, 205]
+            }
+          }
+        }
+      },
+      {
+        id: 'xy12-evolutions',
+        name: 'XY Evolutions',
+        era: 'XY',
+        category: 'VINTAGE',
+        released: 'Nov 2016',
+        image: 'https://images.pokemontcg.io/xy12/logo.png',
+        selectedType: 'ETB',
+        variants: {
+          ETB: {
+            name: 'XY Evolutions ETB',
+            packCount: 8,
+            msrp: 39.99,
+            history: {
+              '1D': [227, 227.5, 227.2, 228, 227.8, 228.2, 228, 228.4, 228.1, 228.3, 228, 228.2, 228],
+              '7D': [215, 217, 219, 221.5, 223, 225, 227, 228],
+              '1M': [198, 201, 204, 207, 210, 213, 216, 219, 221, 223, 225, 226.5, 227.2, 227.8, 228],
+              '6M': [170, 175, 181, 187, 193, 199, 205, 211, 216, 220, 224, 226.5, 228],
+              '1Y': [145, 152, 160, 168, 177, 186, 195, 204, 212, 219, 224, 228],
+              '5Y': [50, 85, 115, 138, 155, 168, 175, 182, 190, 196, 202, 208, 214, 218, 222, 224, 226, 227, 227.5, 228, 228],
+              '10Y': [null, 40, 42, 45, 65, 138, 168, 190, 214, 224, 228],
+              '20Y': [null, null, null, null, null, 40, 45, 138, 168, 214, 228]
             }
           }
         }
@@ -567,8 +635,9 @@
               '1M': [13900, 14050, 14180, 14320, 14480, 14600],
               '6M': [13200, 13450, 13700, 13980, 14250, 14480, 14600],
               '1Y': [12000, 12450, 12900, 13400, 13850, 14250, 14600],
-              // Historic 2020-2021 post-pandemic correction from $18k down to $12k
-              '5Y': [11500, 16500, 18000, 15200, 13800, 12600, 12100, 12400, 12800, 13100, 13400, 13700, 14000, 14200, 14400, 14500, 14550, 14580, 14600, 14600, 14600]
+              '5Y': [11500, 16500, 18000, 15200, 13800, 12600, 12100, 12400, 12800, 13100, 13400, 13700, 14000, 14200, 14400, 14500, 14550, 14580, 14600, 14600, 14600],
+              '10Y': [4200, 5400, 6800, 8900, 11500, 18000, 12800, 13400, 14200, 14550, 14600],
+              '20Y': [750, 1200, 1800, 2600, 3400, 4200, 6800, 11500, 12800, 14200, 14600]
             }
           }
         }
@@ -588,7 +657,7 @@
 
     function getMetrics(setObj, timeScale) {
       const v = getVariant(setObj);
-      const arr = v.history[timeScale];
+      const arr = v.history[timeScale] || v.history['6M'];
       const validPoints = arr.filter(x => x !== null && x !== undefined);
       
       const start = validPoints[0] || v.msrp;
@@ -675,7 +744,6 @@
 
       document.getElementById('mover-range-indicator').innerText = `(${activeMoversTimeScale} delta)`;
 
-      // Rank by absolute percentage change to capture biggest positive AND negative movers
       const ranked = [...SETS_DATA].sort((a, b) => {
         return Math.abs(getMetrics(b, activeMoversTimeScale).pct) - Math.abs(getMetrics(a, activeMoversTimeScale).pct);
       }).slice(0, 4);
@@ -756,7 +824,7 @@
     function updateMainChart() {
       const ctx = document.getElementById('mainChart').getContext('2d');
       const metrics = getMetrics(activeProduct, activeMainTimeScale);
-      const dataset = getVariant(activeProduct).history[activeMainTimeScale];
+      const dataset = getVariant(activeProduct).history[activeMainTimeScale] || getVariant(activeProduct).history['6M'];
       const labels = TIME_INTERVALS[activeMainTimeScale].labels;
       const isPositive = metrics.pct >= 0;
 
@@ -827,7 +895,7 @@
               ticks: { 
                 color: '#9ca3af', 
                 font: { size: 11 },
-                maxTicksLimit: 8
+                maxTicksLimit: 10
               }
             },
             y: {
