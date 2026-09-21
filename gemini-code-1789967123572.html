@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Boxmon | Sealed Pokémon TCG Market Terminal</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            boxmon: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              900: '#14532d',
+            },
+            darkbg: '#0b0f19',
+            cardbg: '#111827',
+            borderbg: '#1f2937'
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      background-color: #0b0f19;
+      color: #f3f4f6;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-emerald-500 selection:text-white">
+
+  <!-- NAVBAR -->
+  <header class="border-b border-gray-800 bg-[#0e1424]/80 backdrop-blur sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="resetFilters()">
+        <div class="w-9 h-9 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-black text-xl shadow-lg shadow-emerald-500/10">
+          ⬡
+        </div>
+        <div>
+          <span class="text-xl font-black tracking-tight text-white">BOX<span class="text-emerald-400">MON</span></span>
+          <span class="hidden sm:inline-block ml-2 text-xs font-semibold px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-800/40 tracking-wider uppercase">Sealed Terminal</span>
+        </div>
+      </div>
+      
+      <div class="flex items-center space-x-4">
+        <div class="text-right hidden sm:block">
+          <p class="text-[11px] text-gray-400 uppercase tracking-widest font-semibold">Live Index Update</p>
+          <p class="text-xs font-mono text-emerald-400 font-bold flex items-center justify-end gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Synchronized
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+    
+    <!-- 4 BIGGEST MARKET MOVERS OF THE WEEK -->
+    <section>
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center space-x-2">
+          <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
+          <h2 class="text-sm font-bold uppercase tracking-wider text-gray-300">Top Market Movers This Week (7D)</h2>
+        </div>
+        <span class="text-xs text-gray-500">Calculated via 7-day moving price delta</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="movers-grid">
+        <!-- Dynamically Rendered by JS -->
+      </div>
+    </section>
+
+    <!-- MAIN CHART & SPOTLIGHT SECTION -->
+    <section class="bg-[#111827] rounded-xl border border-gray-800 p-5 shadow-2xl space-y-4">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-800 pb-4">
+        <div>
+          <div class="flex items-center space-x-3">
+            <h3 id="active-title" class="text-xl font-bold text-white tracking-tight">Celebrations Ultra-Premium Collection</h3>
+            <span id="active-type-badge" class="px-2 py-0.5 rounded text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">UPC</span>
+          </div>
+          <p id="active-era" class="text-xs text-gray-400 mt-0.5">Sword & Shield Era • Released Oct 2021</p>
+        </div>
+
+        <!-- Metric Ribbon -->
+        <div class="flex items-center space-x-6">
+          <div>
+            <p class="text-[11px] text-gray-400 uppercase tracking-wider">Market Price</p>
+            <p id="active-price" class="text-2xl font-black text-white font-mono">$385.00</p>
+          </div>
+          <div>
+            <p class="text-[11px] text-gray-400 uppercase tracking-wider">7D Change</p>
+            <p id="active-delta" class="text-sm font-bold font-mono text-emerald-400">+12.4%</p>
+          </div>
+          <div>
+            <p class="text-[11px] text-gray-400 uppercase tracking-wider">Est. / Pack</p>
+            <p id="active-pack-val" class="text-sm font-bold font-mono text-gray-200">$22.64</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Canvas -->
+      <div class="relative w-full h-72 sm:h-80">
+        <canvas id="mainChart"></canvas>
+      </div>
+    </section>
+
+    <!-- CATALOG & COMPARISON SELECTOR -->
+    <section class="space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-center space-x-2">
+          <h2 class="text-base font-bold text-white">Tracked Sealed Products</h2>
+          <span id="product-count" class="text-xs px-2 py-0.5 rounded-full bg-gray-800 text-gray-400 font-mono">8</span>
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="flex items-center space-x-2">
+          <button onclick="setFilter('ALL')" class="filter-btn active px-3 py-1 text-xs font-semibold rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">All</button>
+          <button onclick="setFilter('ETB')" class="filter-btn px-3 py-1 text-xs font-semibold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">ETBs</button>
+          <button onclick="setFilter('UPC')" class="filter-btn px-3 py-1 text-xs font-semibold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">UPCs</button>
+        </div>
+      </div>
+
+      <!-- Product Cards Table / Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="catalog-grid">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-gray-800 py-6 text-center text-xs text-gray-500 mt-12">
+    <p>Boxmon © 2026. Sealed Pokémon TCG pricing indexes and market analytics.</p>
+  </footer>
+
+  <!-- APPLICATION LOGIC & DATA -->
+  <script>
+    // Sealed Product Dataset with 7-day granular price ticks
+    const PRODUCTS = [
+      {
+        id: 'celebrations-upc',
+        name: 'Celebrations Ultra-Premium Collection',
+        type: 'UPC',
+        era: 'Sword & Shield',
+        released: 'Oct 2021',
+        packCount: 17,
+        msrp: 119.99,
+        // 7-day trajectory (Day -6 to Today)
+        history7D: [342, 345, 350, 360, 368, 375, 385],
+        history30D: [310, 315, 320, 335, 342, 350, 368, 385]
+      },
+      {
+        id: 'evolving-skies-etb',
+        name: 'Evolving Skies Elite Trainer Box',
+        type: 'ETB',
+        era: 'Sword & Shield',
+        released: 'Aug 2021',
+        packCount: 8,
+        msrp: 39.99,
+        history7D: [180, 182, 185, 188, 192, 198, 205],
+        history30D: [160, 165, 172, 178, 182, 190, 205]
+      },
+      {
+        id: '151-upc',
+        name: 'Scarlet & Violet 151 UPC',
+        type: 'UPC',
+        era: 'Scarlet & Violet',
+        released: 'Oct 2023',
+        packCount: 16,
+        msrp: 119.99,
+        history7D: [120, 120, 122, 123, 125, 128, 134],
+        history30D: [115, 116, 118, 120, 122, 125, 134]
+      },
+      {
+        id: 'prismatic-evolutions-etb',
+        name: 'Prismatic Evolutions ETB',
+        type: 'ETB',
+        era: 'Scarlet & Violet',
+        released: 'Jan 2025',
+        packCount: 9,
+        msrp: 49.99,
+        history7D: [72, 74, 76, 78, 80, 84, 88],
+        history30D: [60, 65, 68, 72, 75, 80, 88]
+      },
+      {
+        id: 'charizard-upc',
+        name: 'Sword & Shield Charizard UPC',
+        type: 'UPC',
+        era: 'Sword & Shield',
+        released: 'Oct 2022',
+        packCount: 16,
+        msrp: 119.99,
+        history7D: [130, 129, 131, 130, 132, 133, 135],
+        history30D: [125, 126, 128, 130, 130, 132, 135]
+      },
+      {
+        id: '151-etb',
+        name: 'Scarlet & Violet 151 ETB',
+        type: 'ETB',
+        era: 'Scarlet & Violet',
+        released: 'Sep 2023',
+        packCount: 9,
+        msrp: 49.99,
+        history7D: [68, 68, 69, 70, 71, 71, 73],
+        history30D: [62, 64, 65, 68, 69, 70, 73]
+      },
+      {
+        id: 'hidden-fates-etb',
+        name: 'Hidden Fates Elite Trainer Box',
+        type: 'ETB',
+        era: 'Sun & Moon',
+        released: 'Sep 2019',
+        packCount: 10,
+        msrp: 49.99,
+        history7D: [165, 165, 166, 166, 167, 168, 170],
+        history30D: [155, 158, 160, 162, 165, 168, 170]
+      },
+      {
+        id: 'crown-zenith-etb',
+        name: 'Crown Zenith Elite Trainer Box',
+        type: 'ETB',
+        era: 'Sword & Shield',
+        released: 'Jan 2023',
+        packCount: 10,
+        msrp: 49.99,
+        history7D: [58, 58, 59, 58, 59, 60, 61],
+        history30D: [54, 55, 56, 57, 58, 60, 61]
+      }
+    ];
+
+    let activeProduct = PRODUCTS[0];
+    let activeFilter = 'ALL';
+    let mainChart = null;
+
+    // Calculate percentage and absolute mover deltas
+    function calculateMoverMetrics(product) {
+      const start = product.history7D[0];
+      const end = product.history7D[product.history7D.length - 1];
+      const delta = end - start;
+      const pct = ((delta / start) * 100).toFixed(1);
+      return { start, end, delta, pct: parseFloat(pct) };
+    }
+
+    // Render the 4 Biggest Movers of the Week Cards
+    function renderMarketMovers() {
+      const moversGrid = document.getElementById('movers-grid');
+      moversGrid.innerHTML = '';
+
+      // Rank products by highest 7-day % increase
+      const ranked = [...PRODUCTS].sort((a, b) => {
+        return calculateMoverMetrics(b).pct - calculateMoverMetrics(a).pct;
+      }).slice(0, 4);
+
+      ranked.forEach((item, index) => {
+        const { end, delta, pct } = calculateMoverMetrics(item);
+        const card = document.createElement('div');
+        card.className = `bg-[#111827] border ${activeProduct.id === item.id ? 'border-emerald-500/80 bg-[#141e33]' : 'border-gray-800 hover:border-gray-700'} rounded-xl p-3.5 flex flex-col justify-between cursor-pointer transition duration-150 relative overflow-hidden group shadow-lg`;
+        card.onclick = () => selectProduct(item.id);
+
+        card.innerHTML = `
+          <div class="flex items-start justify-between">
+            <span class="text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-emerald-950/70 border border-emerald-800/40 text-emerald-400">
+              #${index + 1} Mover
+            </span>
+            <span class="text-xs font-bold font-mono text-emerald-400 flex items-center gap-0.5">
+              ▲ +${pct}%
+            </span>
+          </div>
+
+          <div class="mt-2">
+            <h4 class="text-xs font-bold text-gray-100 truncate group-hover:text-emerald-300 transition">${item.name}</h4>
+            <div class="flex items-baseline space-x-2 mt-0.5">
+              <span class="text-lg font-black font-mono text-white">$${end}</span>
+              <span class="text-[11px] font-mono text-gray-400">+$${delta} 7D</span>
+            </div>
+          </div>
+
+          <!-- Micro Sparkline Canvas -->
+          <div class="h-10 w-full mt-2">
+            <canvas id="sparkline-${item.id}"></canvas>
+          </div>
+        `;
+
+        moversGrid.appendChild(card);
+
+        // Render sparkline micro-chart
+        setTimeout(() => {
+          renderSparkline(`sparkline-${item.id}`, item.history7D);
+        }, 10);
+      });
+    }
+
+    // Sparkline Chart Instance
+    function renderSparkline(canvasId, dataPoints) {
+      const ctx = document.getElementById(canvasId);
+      if (!ctx) return;
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['-6D', '-5D', '-4D', '-3D', '-2D', '-1D', 'Now'],
+          datasets: [{
+            data: dataPoints,
+            borderColor: '#34d399',
+            borderWidth: 2,
+            pointRadius: 0,
+            pointHoverRadius: 3,
+            tension: 0.35,
+            fill: true,
+            backgroundColor: 'rgba(52, 211, 153, 0.08)'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false }, tooltip: { enabled: true } },
+          scales: {
+            x: { display: false },
+            y: { display: false }
+          }
+        }
+      });
+    }
+
+    // Render Main Comparison Chart
+    function updateMainChart() {
+      const ctx = document.getElementById('mainChart').getContext('2d');
+      const metrics = calculateMoverMetrics(activeProduct);
+
+      // Update Header Elements
+      document.getElementById('active-title').innerText = activeProduct.name;
+      document.getElementById('active-era').innerText = `${activeProduct.era} Era • Released ${activeProduct.released}`;
+      document.getElementById('active-type-badge').innerText = activeProduct.type;
+      document.getElementById('active-type-badge').className = `px-2 py-0.5 rounded text-[11px] font-bold border ${activeProduct.type === 'UPC' ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' : 'bg-blue-500/20 text-blue-300 border-blue-500/30'}`;
+      document.getElementById('active-price').innerText = `$${metrics.end}.00`;
+      document.getElementById('active-delta').innerText = `+${metrics.pct}% (7D)`;
+      document.getElementById('active-pack-val').innerText = `$${(metrics.end / activeProduct.packCount).toFixed(2)}`;
+
+      if (mainChart) mainChart.destroy();
+
+      mainChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['6 Days Ago', '5 Days Ago', '4 Days Ago', '3 Days Ago', '2 Days Ago', 'Yesterday', 'Today'],
+          datasets: [{
+            label: `${activeProduct.name} ($)`,
+            data: activeProduct.history7D,
+            borderColor: '#10b981',
+            borderWidth: 3,
+            backgroundColor: 'rgba(16, 185, 129, 0.12)',
+            fill: true,
+            tension: 0.3,
+            pointBackgroundColor: '#10b981',
+            pointHoverRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { intersect: false, mode: 'index' },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#1f2937',
+              titleColor: '#9ca3af',
+              bodyColor: '#f9fafb',
+              borderColor: '#374151',
+              borderWidth: 1,
+              padding: 10,
+              displayColors: false,
+              callbacks: {
+                label: (ctx) => ` Price: $${ctx.parsed.y}.00`
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: '#1f2937' },
+              ticks: { color: '#9ca3af', font: { size: 11 } }
+            },
+            y: {
+              grid: { color: '#1f2937' },
+              ticks: {
+                color: '#9ca3af',
+                font: { size: 11 },
+                callback: (val) => `$${val}`
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Render Catalog
+    function renderCatalog() {
+      const grid = document.getElementById('catalog-grid');
+      grid.innerHTML = '';
+
+      const filtered = PRODUCTS.filter(p => activeFilter === 'ALL' || p.type === activeFilter);
+      document.getElementById('product-count').innerText = filtered.length;
+
+      filtered.forEach(item => {
+        const { end, pct } = calculateMoverMetrics(item);
+        const card = document.createElement('div');
+        card.className = `bg-[#111827] border ${activeProduct.id === item.id ? 'border-emerald-500' : 'border-gray-800'} hover:border-gray-700 p-4 rounded-xl cursor-pointer transition flex flex-col justify-between`;
+        card.onclick = () => selectProduct(item.id);
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${item.type === 'UPC' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-blue-500/10 text-blue-400 border border-blue-500/20'}">
+                ${item.type}
+              </span>
+              <span class="text-xs font-mono font-bold text-emerald-400">+${pct}%</span>
+            </div>
+            <h4 class="text-sm font-bold text-white mt-2 leading-snug">${item.name}</h4>
+            <p class="text-xs text-gray-400 mt-1">${item.packCount} Packs • MSRP $${item.msrp}</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-gray-800 flex items-baseline justify-between">
+            <span class="text-xs text-gray-400">Current Market</span>
+            <span class="text-base font-black font-mono text-white">$${end}.00</span>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function selectProduct(id) {
+      const found = PRODUCTS.find(p => p.id === id);
+      if (found) {
+        activeProduct = found;
+        updateMainChart();
+        renderMarketMovers();
+        renderCatalog();
+      }
+    }
+
+    function setFilter(type) {
+      activeFilter = type;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        if (btn.innerText.toUpperCase().includes(type)) {
+          btn.className = 'filter-btn active px-3 py-1 text-xs font-semibold rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40';
+        } else {
+          btn.className = 'filter-btn px-3 py-1 text-xs font-semibold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white';
+        }
+      });
+      renderCatalog();
+    }
+
+    function resetFilters() {
+      setFilter('ALL');
+      selectProduct(PRODUCTS[0].id);
+    }
+
+    // Init
+    window.addEventListener('DOMContentLoaded', () => {
+      renderMarketMovers();
+      updateMainChart();
+      renderCatalog();
+    });
+  </script>
+</body>
+</html>
