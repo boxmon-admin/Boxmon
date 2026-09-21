@@ -35,8 +35,12 @@
       color: #f3f4f6;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
+    .set-logo-container {
+      box-shadow: 0 0 16px -2px rgba(16, 185, 129, 0.18), inset 0 0 8px 0 rgba(16, 185, 129, 0.08);
+      background: radial-gradient(circle at center, rgba(16, 185, 129, 0.08) 0%, rgba(17, 24, 39, 0.95) 75%);
+    }
     .set-logo {
-      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+      filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.65));
     }
   </style>
 </head>
@@ -57,9 +61,9 @@
       
       <div class="flex items-center space-x-4">
         <div class="text-right hidden sm:block">
-          <p class="text-[11px] text-gray-400 uppercase tracking-widest font-semibold">Live Index Update</p>
+          <p class="text-[11px] text-gray-400 uppercase tracking-widest font-semibold">Market Volatility Index</p>
           <p class="text-xs font-mono text-emerald-400 font-bold flex items-center justify-end gap-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Synchronized
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Active Bid/Ask Spread
           </p>
         </div>
       </div>
@@ -90,7 +94,7 @@
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="movers-grid">
-        <!-- Dynamically Rendered by JS -->
+        <!-- Rendered by JS -->
       </div>
     </section>
 
@@ -98,8 +102,8 @@
     <section class="bg-[#111827] rounded-xl border border-gray-800 p-5 shadow-2xl space-y-4">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-800 pb-4">
         <div class="flex items-center space-x-4">
-          <!-- Main Product Set Logo Banner -->
-          <div class="w-28 h-14 rounded-lg bg-gray-900/90 border border-gray-800 p-1.5 flex-shrink-0 flex items-center justify-center overflow-hidden shadow-inner">
+          <!-- Main Product Set Logo Banner with Backlit Glow -->
+          <div class="w-28 h-14 rounded-lg border border-emerald-500/30 p-1.5 flex-shrink-0 flex items-center justify-center overflow-hidden set-logo-container">
             <img id="active-img" src="" alt="" class="max-h-full max-w-full object-contain set-logo" />
           </div>
 
@@ -136,7 +140,7 @@
 
       <!-- Main Chart Time Scale Buttons -->
       <div class="flex items-center justify-between pt-2 border-t border-gray-800">
-        <span class="text-xs text-gray-500">Uniform multi-year market view</span>
+        <span class="text-xs text-gray-500">Historical performance view</span>
         <div class="flex items-center bg-gray-900 border border-gray-800 rounded-lg p-1 space-x-1" id="main-time-selector">
           <button onclick="setMainTimeScale('1D')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">1D</button>
           <button onclick="setMainTimeScale('7D')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">7D</button>
@@ -168,7 +172,7 @@
 
       <!-- Product Cards Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="catalog-grid">
-        <!-- Dynamically Rendered by JS -->
+        <!-- Rendered by JS -->
       </div>
     </section>
 
@@ -180,6 +184,7 @@
 
   <!-- APPLICATION LOGIC & DATA -->
   <script>
+    // Authentic Date Labels formatted like "Apr '21"
     const TIME_INTERVALS = {
       '1D': { 
         label: '24 Hours', 
@@ -187,34 +192,34 @@
       },
       '7D': { 
         label: '7 Days', 
-        labels: ['7D Ago', '6D Ago', '5D Ago', '4D Ago', '3D Ago', '2D Ago', 'Yesterday', 'Today'] 
+        labels: ['Sep 14', 'Sep 15', 'Sep 16', 'Sep 17', 'Sep 18', 'Sep 19', 'Sep 20', 'Today'] 
       },
       '1M': { 
         label: '30 Days', 
-        labels: ['Day 1', 'Day 3', 'Day 5', 'Day 7', 'Day 10', 'Day 12', 'Day 14', 'Day 17', 'Day 19', 'Day 21', 'Day 24', 'Day 26', 'Day 28', 'Day 29', 'Today'] 
+        labels: ['Aug 21', 'Aug 23', 'Aug 26', 'Aug 28', 'Aug 31', 'Sep 02', 'Sep 05', 'Sep 08', 'Sep 10', 'Sep 13', 'Sep 15', 'Sep 17', 'Sep 19', 'Sep 20', 'Today'] 
       },
       '6M': { 
         label: '6 Months', 
-        labels: ['-6M', '-5.5M', '-5M', '-4.5M', '-4M', '-3.5M', '-3M', '-2.5M', '-2M', '-1.5M', '-1M', '-2W', 'Now'] 
+        labels: ['Mar \'26', 'Apr \'26', 'May \'26', 'Jun \'26', 'Jul \'26', 'Aug \'26', 'Sep \'26'] 
       },
       '1Y': { 
         label: '1 Year', 
-        labels: ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'] 
+        labels: ['Oct \'25', 'Nov \'25', 'Dec \'25', 'Jan \'26', 'Feb \'26', 'Mar \'26', 'Apr \'26', 'May \'26', 'Jun \'26', 'Jul \'26', 'Aug \'26', 'Sep \'26'] 
       },
       '5Y': { 
         label: '5 Years', 
         labels: [
-          'Q1 21', 'Q2 21', 'Q3 21', 'Q4 21',
-          'Q1 22', 'Q2 22', 'Q3 22', 'Q4 22',
-          'Q1 23', 'Q2 23', 'Q3 23', 'Q4 23',
-          'Q1 24', 'Q2 24', 'Q3 24', 'Q4 24',
-          'Q1 25', 'Q2 25', 'Q3 25', 'Q4 25',
+          'Jan \'21', 'Apr \'21', 'Jul \'21', 'Oct \'21',
+          'Jan \'22', 'Apr \'22', 'Jul \'22', 'Oct \'22',
+          'Jan \'23', 'Apr \'23', 'Jul \'23', 'Oct \'23',
+          'Jan \'24', 'Apr \'24', 'Jul \'24', 'Oct \'24',
+          'Jan \'25', 'Apr \'25', 'Jul \'25', 'Oct \'25',
           '2026'
         ] 
       }
     };
 
-    // Full list with high-density data and market volatility
+    // Realistic bidirectional market trends with reprints, sell-offs, and crashes
     const SETS_DATA = [
       {
         id: 'sv8pt5-prismatic',
@@ -230,12 +235,12 @@
             packCount: 9,
             msrp: 49.99,
             history: {
-              '1D': [86, 86.5, 87, 86.8, 87.2, 87.5, 87, 87.8, 88.2, 87.9, 88, 88.5, 88],
-              '7D': [72, 74, 73.5, 76, 75.8, 80, 84, 88],
-              '1M': [60, 62, 61, 64, 68, 66.5, 70, 72, 75, 73.5, 78, 81, 84, 86, 88],
-              '6M': [50, 52, 54, 53, 58, 62, 60, 65, 70, 68, 75, 82, 88],
-              '1Y': [null, null, null, null, null, 50, 56, 62, 68, 72, 80, 88],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 52, 58, 66, 75, 88]
+              '1D': [92, 91.5, 90, 89.2, 88.5, 87, 86.8, 88, 87.5, 87.8, 88.2, 88, 88],
+              '7D': [96, 94.5, 92, 90.5, 89, 87.5, 88, 88], // Recent pull-back from $96
+              '1M': [105, 102, 100, 98, 95, 92, 90, 88, 86.5, 89, 91, 90, 89, 88.5, 88],
+              '6M': [65, 75, 95, 110, 102, 94, 88], // Launch hype bubble to $110, then correction
+              '1Y': [null, null, null, 50, 68, 88, 105, 110, 102, 95, 90, 88],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 55, 78, 110, 96, 88]
             }
           }
         }
@@ -254,12 +259,12 @@
             packCount: 9,
             msrp: 49.99,
             history: {
-              '1D': [63.5, 64, 63.8, 64.2, 64, 64.5, 64.8, 64.6, 65.2, 65, 65.4, 65, 65],
-              '7D': [58, 59, 58.5, 60.5, 61, 62.5, 64, 65],
-              '1M': [52, 53, 52.5, 54, 56, 55, 57, 58.5, 60, 59, 61.5, 63, 64, 64.5, 65],
-              '6M': [45, 47, 46, 49, 52, 50.5, 54, 56, 55, 58, 60, 63, 65],
-              '1Y': [null, 48, 46, 48, 50, 52, 51, 54, 57, 59, 62, 65],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 48, 50, 52, 56, 60, 65]
+              '1D': [66, 65.5, 65.8, 65.2, 64.8, 65, 64.9, 65.2, 65, 65.3, 65, 65],
+              '7D': [68, 67.5, 66.8, 66, 65.2, 65.5, 65, 65],
+              '1M': [72, 70.5, 69, 68.5, 67, 66.2, 65, 65.8, 66.2, 65.5, 65, 64.8, 65, 65],
+              '6M': [54, 60, 68, 74, 71, 67, 65],
+              '1Y': [null, 50, 58, 65, 70, 75, 72, 69, 67, 66, 65, 65],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 50, 62, 72, 68, 65, 65]
             }
           }
         }
@@ -278,12 +283,12 @@
             packCount: 9,
             msrp: 49.99,
             history: {
-              '1D': [48.2, 48, 48.5, 48.2, 48.6, 48.8, 48.5, 49, 48.9, 49.2, 49, 49.1, 49],
-              '7D': [46, 46.2, 46.8, 47, 47.5, 48, 48.5, 49],
-              '1M': [44, 44.5, 44, 45, 45.8, 46.2, 45.9, 46.5, 47, 46.8, 47.5, 48, 48.5, 48.8, 49],
-              '6M': [40, 41.5, 42, 41, 43, 44, 43.5, 45, 46, 45.5, 47, 48, 49],
-              '1Y': [null, 48, 45, 44, 42, 43, 44, 45, 46, 47, 48, 49],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, 48, 46, 44, 45, 47, 48, 49]
+              '1D': [48.2, 48, 48.5, 48.2, 48.6, 48.8, 48.5, 49, 48.9, 49.2, 49, 49],
+              '7D': [52, 51.5, 50.8, 50.2, 49.5, 49.2, 49, 49], // Slumping
+              '1M': [54, 53.2, 52.8, 51.5, 51, 50.2, 49.8, 49.5, 50, 49.2, 49, 48.8, 49],
+              '6M': [56, 54, 52, 51, 50, 49.5, 49], // Clear 6-month downtrend
+              '1Y': [null, 50, 52, 55, 57, 56, 54, 52, 51, 50, 49.5, 49],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, 50, 56, 54, 51, 50, 49, 49]
             }
           }
         }
@@ -302,12 +307,12 @@
             packCount: 9,
             msrp: 49.99,
             history: {
-              '1D': [52.8, 53, 52.6, 53.2, 53.5, 53, 53.4, 53.8, 54, 53.7, 54.2, 54, 54],
-              '7D': [49, 49.5, 50, 50.8, 51.5, 52, 53.2, 54],
-              '1M': [46, 46.5, 47, 48, 48.5, 49, 48.8, 50, 51.2, 50.5, 52, 52.8, 53.5, 53.8, 54],
-              '6M': [42, 43, 44.5, 44, 45.5, 47, 46.2, 48, 49.5, 49, 51, 52.5, 54],
-              '1Y': [48, 46, 44, 42, 43, 45, 47, 48, 49, 51, 52.5, 54],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, 48, 45, 43, 44, 47, 49, 51, 54]
+              '1D': [53.5, 53.8, 54, 53.6, 54.1, 53.9, 54.2, 54, 54],
+              '7D': [50, 50.5, 51.2, 52, 52.8, 53.4, 53.8, 54], // Greninja hype surge
+              '1M': [44, 44.8, 46, 47.5, 48, 49.2, 51, 50.5, 52, 52.5, 53, 53.8, 54],
+              '6M': [46, 44, 42, 45, 48, 51, 54], // Dip followed by rebound
+              '1Y': [49, 46, 44, 42, 41, 43, 46, 48, 50, 51.5, 53, 54],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, 49, 44, 42, 45, 49, 52, 54, 54]
             }
           }
         }
@@ -326,12 +331,12 @@
             packCount: 9,
             msrp: 49.99,
             history: {
-              '1D': [47.5, 47.6, 47.8, 47.5, 48, 47.8, 48.2, 48, 48.4, 48.1, 48.3, 48, 48],
-              '7D': [45, 45.2, 45.8, 46, 46.5, 47, 47.5, 48],
-              '1M': [42, 42.5, 43, 43.8, 44.2, 44.5, 45, 44.8, 45.5, 46, 46.5, 47, 47.2, 47.8, 48],
-              '6M': [38, 39, 40.5, 41, 42.5, 42, 43.5, 44.2, 45, 44.8, 46, 47.2, 48],
-              '1Y': [46, 44, 42, 40, 39, 41, 42, 43, 44, 45, 46.5, 48],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, 48, 45, 42, 40, 41, 43, 44, 46, 48]
+              '1D': [48.5, 48.2, 48.0, 48.1, 47.8, 48.0, 47.9, 48],
+              '7D': [51, 50.5, 49.8, 49.2, 48.8, 48.2, 48.1, 48], // Down this week
+              '1M': [53, 52.5, 51.8, 51, 50.2, 49.5, 49, 48.8, 48.2, 48],
+              '6M': [54, 52.5, 51, 49.5, 48.8, 48.2, 48], // Continuous 6M slide
+              '1Y': [49, 52, 54, 55, 54, 53, 51, 50, 49, 48.5, 48.2, 48],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, 49, 54, 52, 50, 49, 48.5, 48, 48, 48]
             }
           }
         }
@@ -350,12 +355,12 @@
             packCount: 9,
             msrp: 49.99,
             history: {
-              '1D': [58.8, 59, 58.5, 59.2, 59.6, 59, 59.5, 59.8, 60.2, 60, 60.5, 60, 60],
-              '7D': [54, 54.8, 55.5, 56, 57.2, 58, 59.1, 60],
-              '1M': [50, 51.2, 52, 52.8, 53.5, 54, 55.2, 54.8, 56, 57.5, 57, 58.2, 59, 59.5, 60],
-              '6M': [45, 46.5, 47, 48.5, 50, 49.2, 52, 53.5, 54, 55.8, 57, 58.5, 60],
-              '1Y': [48, 46, 47, 48, 49, 51, 52.5, 54, 55.5, 57, 58.5, 60],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, 50, 48, 46, 48, 50, 53, 55, 58, 60]
+              '1D': [59.5, 60, 59.8, 60.2, 60, 60.5, 60],
+              '7D': [56, 56.8, 57.5, 58, 58.8, 59.2, 60],
+              '1M': [52, 53.5, 54, 55.2, 56, 57.5, 58, 59, 60],
+              '6M': [64, 58, 52, 50, 53, 56, 60], // Major reprint drop from $64 to $50, then rebound
+              '1Y': [58, 62, 65, 60, 54, 51, 50, 53, 55, 57, 59, 60],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, 50, 62, 52, 51, 53, 56, 58, 60, 60]
             }
           }
         }
@@ -374,12 +379,12 @@
             packCount: 9,
             msrp: 49.99,
             history: {
-              '1D': [46.5, 46.8, 46.5, 46.9, 47.1, 47, 47.2, 47, 47.4, 47.1, 47.3, 47, 47],
-              '7D': [44, 44.5, 44.8, 45.2, 45.8, 46.2, 46.8, 47],
-              '1M': [41, 41.5, 42, 42.8, 43, 43.5, 44, 44.5, 45, 45.2, 45.8, 46.2, 46.5, 46.8, 47],
-              '6M': [38, 38.8, 39.5, 40.2, 41, 41.8, 42.5, 43, 44, 44.5, 45.2, 46.2, 47],
-              '1Y': [40, 39, 40, 41, 41.5, 42, 43, 43.8, 44.5, 45.2, 46, 47],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, 48, 44, 40, 41, 42, 43, 44, 45, 46, 47]
+              '1D': [47.5, 47.2, 47.6, 47.3, 47, 47],
+              '7D': [48.5, 48.2, 47.9, 47.5, 47.2, 47, 47],
+              '1M': [49, 48.8, 48.2, 47.9, 47.5, 47.2, 47],
+              '6M': [51, 49.5, 48.8, 47.8, 47.2, 47, 47],
+              '1Y': [45, 47, 49, 51, 52, 51, 49.5, 48.5, 47.8, 47.2, 47, 47],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, 48, 45, 49, 52, 49, 48, 47.5, 47, 47, 47]
             }
           }
         }
@@ -398,12 +403,12 @@
             packCount: 16,
             msrp: 119.99,
             history: {
-              '1D': [132, 133, 133.5, 133, 134, 133.8, 134.5, 134, 134.8, 134.2, 134.5, 134, 134],
-              '7D': [120, 120.5, 122, 123.5, 125, 126.8, 129, 134],
-              '1M': [115, 116.5, 118, 120, 122.5, 121, 124, 126, 128.5, 127, 130, 131.5, 133, 133.8, 134],
-              '6M': [98, 101, 104, 108, 110, 114, 118, 122, 125, 124, 128, 131, 134],
-              '1Y': [85, 88, 90, 95, 98, 102, 108, 112, 118, 122, 126, 134],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, 120, 110, 95, 88, 92, 100, 108, 115, 122, 128, 134]
+              '1D': [133, 133.5, 134, 133.8, 134.5, 134, 134],
+              '7D': [124, 125, 126.5, 128, 130, 132, 134],
+              '1M': [118, 120, 122.5, 125, 127, 129, 131, 134],
+              '6M': [145, 132, 115, 108, 118, 126, 134], // Dropped to $108 on Costco/Target restocks, now bouncing
+              '1Y': [120, 135, 150, 142, 128, 112, 108, 115, 122, 128, 131, 134],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, 120, 145, 125, 110, 135, 150, 125, 112, 122, 130, 134]
             }
           },
           ETB: {
@@ -411,12 +416,12 @@
             packCount: 9,
             msrp: 49.99,
             history: {
-              '1D': [72, 72.5, 72.8, 72.2, 73, 72.6, 73.2, 73, 73.5, 73.1, 73.4, 73, 73],
-              '7D': [68, 68.2, 69, 69.8, 70.5, 71.2, 72, 73],
-              '1M': [62, 63.5, 64, 65.2, 66, 67, 68.2, 67.5, 69, 70, 71, 71.8, 72.5, 72.8, 73],
-              '6M': [55, 56.5, 58, 60, 62, 61, 64, 66, 68, 67.5, 70, 71.5, 73],
-              '1Y': [48, 50, 52, 54, 56, 58, 60, 62, 65, 67, 70, 73],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, 50, 48, 45, 48, 52, 55, 58, 62, 66, 70, 73]
+              '1D': [73, 73.2, 72.8, 73.5, 73, 73],
+              '7D': [67, 68, 69, 70.5, 71.8, 72.5, 73],
+              '1M': [62, 63.5, 65, 67, 68.5, 70.2, 73],
+              '6M': [78, 70, 58, 54, 62, 68, 73], // Restock crash down to $54, followed by tight supply recovery
+              '1Y': [65, 72, 80, 76, 68, 56, 54, 60, 64, 68, 71, 73],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, 50, 75, 65, 55, 72, 80, 66, 56, 64, 70, 73]
             }
           }
         }
@@ -435,12 +440,12 @@
             packCount: 9,
             msrp: 49.99,
             history: {
-              '1D': [46.5, 46.6, 46.8, 46.5, 47, 46.8, 47.2, 47, 47.3, 47.1, 47.2, 47, 47],
-              '7D': [44, 44.2, 44.8, 45, 45.6, 46.2, 46.7, 47],
-              '1M': [42, 42.5, 43, 43.6, 44, 44.2, 44.8, 45.2, 45, 45.8, 46.2, 46.5, 46.8, 46.9, 47],
-              '6M': [38, 39.2, 40, 40.8, 41.5, 42, 43, 43.8, 44.5, 45.2, 45.8, 46.5, 47],
-              '1Y': [38, 39, 39.5, 40, 41, 41.8, 42.5, 43.2, 44, 44.8, 45.8, 47],
-              '5Y': [null, null, null, null, null, null, null, null, null, 50, 45, 42, 40, 39, 41, 42, 43, 44, 45, 46, 47]
+              '1D': [47.2, 47, 46.8, 47.1, 47, 47],
+              '7D': [49, 48.6, 48.2, 47.8, 47.4, 47.1, 47], // Clear slide
+              '1M': [51, 50.4, 49.8, 49.2, 48.5, 47.8, 47],
+              '6M': [55, 53.5, 51.8, 50.2, 48.8, 47.8, 47], // Protracted decline
+              '1Y': [58, 56.5, 55, 53.8, 52, 50.5, 49.2, 48.5, 47.8, 47.2, 47, 47],
+              '5Y': [null, null, null, null, null, null, null, null, null, 55, 52, 48, 54, 58, 55, 52, 50, 49, 48, 47, 47]
             }
           }
         }
@@ -459,36 +464,12 @@
             packCount: 10,
             msrp: 49.99,
             history: {
-              '1D': [60.5, 60.8, 60.6, 61, 60.9, 61.2, 61, 61.4, 61.2, 61.5, 61.3, 61, 61],
-              '7D': [58, 58.2, 58.8, 59, 58.5, 59.4, 60.2, 61],
-              '1M': [54, 55, 55.5, 56.2, 56.8, 57.5, 58, 58.8, 59, 58.5, 59.8, 60.2, 60.5, 60.8, 61],
-              '6M': [48, 49.5, 50.2, 51.5, 52, 53.5, 55, 56.2, 57, 58.5, 59.2, 60.5, 61],
-              '1Y': [42, 43.5, 44.8, 46, 47.5, 48.8, 50.2, 52, 54, 55.8, 58.5, 61],
-              '5Y': [null, null, null, null, null, null, null, 50, 48, 45, 44, 42, 45, 47, 49, 52, 54, 56, 58, 60, 61]
-            }
-          }
-        }
-      },
-      {
-        id: 'swsh12-silver-tempest',
-        name: 'Silver Tempest',
-        era: 'Sword & Shield',
-        category: 'SWSH',
-        released: 'Nov 2022',
-        image: 'https://images.pokemontcg.io/swsh12/logo.png',
-        selectedType: 'ETB',
-        variants: {
-          ETB: {
-            name: 'Silver Tempest ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [45.5, 45.6, 45.8, 45.5, 46, 45.8, 46.2, 46, 46.4, 46.1, 46.3, 46, 46],
-              '7D': [42, 42.6, 43, 43.5, 44.2, 44.8, 45.5, 46],
-              '1M': [39, 39.8, 40.5, 41.2, 42, 42.5, 43.2, 43.8, 44, 44.5, 45, 45.4, 45.8, 45.9, 46],
-              '6M': [35, 36, 37.2, 38, 39.5, 40.2, 41.5, 42, 43.2, 44, 44.8, 45.5, 46],
-              '1Y': [32, 33, 34.5, 35.8, 37, 38.2, 39.5, 41, 42.2, 43.5, 44.8, 46],
-              '5Y': [null, null, null, null, null, null, 40, 38, 35, 34, 32, 33, 35, 37, 39, 40, 41, 42, 43, 45, 46]
+              '1D': [61.2, 61, 61.4, 61.2, 61, 61],
+              '7D': [58, 58.5, 59, 59.8, 60.5, 60.8, 61],
+              '1M': [54, 55.2, 56.5, 57.8, 59, 60.2, 61],
+              '6M': [48, 50, 52, 54.5, 57, 59, 61],
+              '1Y': [42, 44, 46.5, 48, 50.5, 53, 56, 58, 60, 61],
+              '5Y': [null, null, null, null, null, null, null, 50, 45, 42, 40, 42, 44, 46, 48, 51, 54, 56, 58, 60, 61]
             }
           }
         }
@@ -507,60 +488,13 @@
             packCount: 16,
             msrp: 119.99,
             history: {
-              '1D': [134.5, 135, 134.8, 135.2, 135, 135.4, 135.2, 135.5, 135.1, 135.3, 135.2, 135, 135],
-              '7D': [130, 129.5, 130.8, 131, 132.5, 133, 134.2, 135],
-              '1M': [125, 126.5, 127.2, 128, 129, 130.5, 131.2, 131, 132.5, 133, 133.8, 134.2, 134.6, 134.8, 135],
-              '6M': [115, 116.8, 118, 119.5, 121, 122.5, 125, 126.8, 128.5, 130, 131.5, 133.2, 135],
-              '1Y': [100, 103, 105, 108, 112, 115, 118, 120, 123, 126, 130, 135],
-              '5Y': [null, null, null, null, null, null, 120, 105, 95, 92, 98, 102, 106, 112, 116, 120, 124, 127, 130, 132, 135]
-            }
-          }
-        }
-      },
-      {
-        id: 'swsh11-lost-origin',
-        name: 'Lost Origin',
-        era: 'Sword & Shield',
-        category: 'SWSH',
-        released: 'Sep 2022',
-        image: 'https://images.pokemontcg.io/swsh11/logo.png',
-        selectedType: 'ETB',
-        variants: {
-          ETB: {
-            name: 'Lost Origin ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [55.5, 55.6, 55.8, 55.5, 56, 55.8, 56.2, 56, 56.4, 56.1, 56.3, 56, 56],
-              '7D': [52, 52.8, 53.2, 53.8, 54.5, 55, 55.6, 56],
-              '1M': [48, 49, 49.8, 50.5, 51.2, 52, 52.8, 53.5, 54, 54.2, 54.8, 55.2, 55.5, 55.8, 56],
-              '6M': [42, 43.5, 44.8, 46, 47.5, 48.8, 50, 51.5, 52.8, 53.5, 54.5, 55.2, 56],
-              '1Y': [38, 39.5, 41, 42.5, 44, 45.8, 47.5, 49, 51, 52.8, 54.5, 56],
-              '5Y': [null, null, null, null, null, 40, 38, 35, 34, 36, 38, 40, 42, 45, 47, 49, 51, 52, 54, 55, 56]
-            }
-          }
-        }
-      },
-      {
-        id: 'swsh9-brilliant-stars',
-        name: 'Brilliant Stars',
-        era: 'Sword & Shield',
-        category: 'SWSH',
-        released: 'Feb 2022',
-        image: 'https://images.pokemontcg.io/swsh9/logo.png',
-        selectedType: 'ETB',
-        variants: {
-          ETB: {
-            name: 'Brilliant Stars ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [62.5, 62.8, 62.6, 63, 62.9, 63.2, 63, 63.4, 63.2, 63.5, 63.2, 63, 63],
-              '7D': [59, 59.8, 60.2, 60.8, 61.5, 62, 62.6, 63],
-              '1M': [54, 55.2, 56, 56.8, 57.5, 58.2, 59, 59.8, 60.5, 61, 61.5, 62, 62.4, 62.8, 63],
-              '6M': [48, 49.5, 51, 52.5, 54, 55.2, 56.8, 58, 59.5, 60.5, 61.5, 62.2, 63],
-              '1Y': [42, 43.8, 45.5, 47.2, 49, 50.8, 52.5, 54.5, 56.5, 58.5, 60.5, 63],
-              '5Y': [null, null, null, null, 40, 44, 41, 38, 40, 42, 45, 48, 50, 52, 54, 56, 58, 60, 61, 62, 63]
+              '1D': [135, 135.2, 134.8, 135.5, 135, 135],
+              '7D': [131, 131.5, 132.8, 133.5, 134.2, 135],
+              '1M': [124, 126, 128, 129.5, 131.5, 133, 135],
+              '6M': [118, 121, 124, 127, 129.5, 132, 135],
+              '1Y': [102, 106, 110, 114, 118, 122, 126, 130, 135],
+              // Authentic market crash: Released at $120, scalped to $180, then cratered to $82 on massive reprint
+              '5Y': [null, null, null, null, null, null, 175, 140, 95, 84, 82, 86, 92, 98, 105, 112, 118, 124, 129, 132, 135]
             }
           }
         }
@@ -579,25 +513,13 @@
             packCount: 17,
             msrp: 119.99,
             history: {
-              '1D': [382, 383.5, 381, 384, 383, 385, 384.5, 386, 385.2, 385.8, 385, 385.5, 385],
-              '7D': [342, 346, 350, 358, 365, 372, 380, 385],
-              '1M': [310, 316, 322, 328, 335, 342, 348, 355, 360, 366, 372, 378, 381, 383, 385],
-              '6M': [275, 282, 290, 298, 308, 318, 328, 338, 348, 358, 368, 376, 385],
-              '1Y': [220, 232, 245, 260, 275, 290, 305, 320, 335, 350, 368, 385],
-              '5Y': [null, null, null, 120, 260, 310, 330, 290, 280, 275, 285, 295, 305, 318, 330, 345, 358, 368, 375, 380, 385]
-            }
-          },
-          ETB: {
-            name: 'Celebrations ETB',
-            packCount: 10,
-            msrp: 49.99,
-            history: {
-              '1D': [98.5, 99, 98.8, 99.4, 99.2, 99.8, 99.5, 100.2, 99.9, 100.1, 100, 100.2, 100],
-              '7D': [92, 93, 94.2, 95, 96.5, 97.8, 99, 100],
-              '1M': [85, 86.8, 88, 89.5, 91, 92.5, 94, 95.2, 96, 97, 98, 98.8, 99.2, 99.6, 100],
-              '6M': [74, 76.5, 79, 81.5, 84, 86.5, 89, 91.5, 94, 96, 97.5, 98.8, 100],
-              '1Y': [65, 68, 71, 74, 77, 80, 83, 86, 89, 92, 96, 100],
-              '5Y': [null, null, null, 50, 78, 85, 82, 70, 68, 65, 68, 72, 76, 80, 84, 88, 92, 95, 97, 99, 100]
+              '1D': [385, 384, 386, 385.5, 385],
+              '7D': [368, 370, 374, 378, 382, 385],
+              '1M': [338, 345, 352, 360, 372, 380, 385],
+              '6M': [310, 320, 335, 350, 365, 376, 385],
+              '1Y': [260, 275, 290, 305, 325, 345, 365, 385],
+              // Historic roller coaster: $120 MSRP -> $380 hype -> $270 post-hype chill -> $385 breakout
+              '5Y': [null, null, null, 120, 380, 340, 295, 270, 265, 280, 295, 305, 315, 328, 340, 355, 368, 374, 380, 385, 385]
             }
           }
         }
@@ -616,108 +538,12 @@
             packCount: 8,
             msrp: 39.99,
             history: {
-              '1D': [203.5, 204, 203.8, 204.5, 204.2, 205, 204.8, 205.5, 205, 205.8, 205.2, 205, 205],
-              '7D': [180, 182.5, 185, 188.2, 192, 196.5, 200, 205],
-              '1M': [160, 164, 168, 172.5, 176, 180, 184.5, 188, 191, 194, 197.5, 200, 202, 203.5, 205],
-              '6M': [120, 126, 134, 142, 150, 158, 166, 175, 183, 190, 196, 201, 205],
-              '1Y': [95, 104, 114, 125, 136, 148, 160, 172, 182, 190, 198, 205],
-              '5Y': [null, null, 40, 52, 65, 78, 88, 102, 115, 128, 140, 152, 165, 176, 185, 192, 198, 201, 203, 204, 205]
-            }
-          }
-        }
-      },
-      {
-        id: 'sm115-hidden-fates',
-        name: 'Hidden Fates',
-        era: 'Sun & Moon',
-        category: 'SM',
-        released: 'Sep 2019',
-        image: 'https://images.pokemontcg.io/sm115/logo.png',
-        selectedType: 'ETB',
-        variants: {
-          ETB: {
-            name: 'Hidden Fates ETB',
-            packCount: 10,
-            msrp: 49.99,
-            history: {
-              '1D': [169.5, 170, 169.8, 170.2, 170, 170.4, 170.1, 170.5, 170.2, 170.3, 170, 170.2, 170],
-              '7D': [165, 165.5, 166, 166.8, 167.5, 168.2, 169.2, 170],
-              '1M': [155, 156.5, 158, 159.2, 160.5, 162, 163.5, 164.8, 166, 166.8, 167.5, 168.4, 169, 169.5, 170],
-              '6M': [140, 142.5, 145, 148, 151, 154, 157, 160, 163, 165, 167, 168.5, 170],
-              '1Y': [120, 124, 129, 134, 139, 145, 150, 155, 160, 164, 167, 170],
-              '5Y': [65, 78, 92, 105, 118, 126, 132, 136, 142, 146, 150, 154, 158, 162, 165, 167, 168, 169, 169.5, 170, 170]
-            }
-          }
-        }
-      },
-      {
-        id: 'sm12-cosmic-eclipse',
-        name: 'Cosmic Eclipse',
-        era: 'Sun & Moon',
-        category: 'SM',
-        released: 'Nov 2019',
-        image: 'https://images.pokemontcg.io/sm12/logo.png',
-        selectedType: 'ETB',
-        variants: {
-          ETB: {
-            name: 'Cosmic Eclipse ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [328, 329, 328.5, 329.5, 329, 330, 329.8, 330.4, 330, 330.5, 330.2, 330, 330],
-              '7D': [310, 312.5, 315, 318, 321.5, 325, 328, 330],
-              '1M': [290, 293, 296, 300, 304, 308, 312, 316, 320, 322, 325, 327, 328.5, 329.2, 330],
-              '6M': [240, 248, 256, 265, 274, 283, 292, 301, 310, 316, 322, 326, 330],
-              '1Y': [200, 210, 222, 235, 248, 262, 275, 288, 300, 312, 322, 330],
-              '5Y': [50, 68, 88, 110, 135, 158, 180, 202, 224, 242, 258, 272, 285, 296, 306, 315, 321, 325, 328, 329, 330]
-            }
-          }
-        }
-      },
-      {
-        id: 'sm9-team-up',
-        name: 'Team Up',
-        era: 'Sun & Moon',
-        category: 'SM',
-        released: 'Feb 2019',
-        image: 'https://images.pokemontcg.io/sm9/logo.png',
-        selectedType: 'ETB',
-        variants: {
-          ETB: {
-            name: 'Team Up ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [748, 749, 748.5, 750, 749.2, 750.5, 750, 751, 750.2, 750.8, 750, 750.2, 750],
-              '7D': [710, 715, 722, 728, 735, 742, 748, 750],
-              '1M': [670, 676, 684, 692, 700, 708, 715, 722, 728, 734, 740, 744, 747, 748.5, 750],
-              '6M': [550, 568, 588, 608, 628, 648, 668, 688, 706, 722, 734, 744, 750],
-              '1Y': [420, 448, 478, 510, 545, 580, 615, 650, 682, 710, 732, 750],
-              '5Y': [80, 120, 175, 240, 310, 380, 445, 505, 560, 610, 650, 685, 710, 728, 738, 744, 747, 749, 750, 750, 750]
-            }
-          }
-        }
-      },
-      {
-        id: 'xy12-evolutions',
-        name: 'XY Evolutions',
-        era: 'XY',
-        category: 'VINTAGE',
-        released: 'Nov 2016',
-        image: 'https://images.pokemontcg.io/xy12/logo.png',
-        selectedType: 'ETB',
-        variants: {
-          ETB: {
-            name: 'XY Evolutions ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [227, 227.5, 227.2, 228, 227.8, 228.2, 228, 228.4, 228.1, 228.3, 228, 228.2, 228],
-              '7D': [215, 217, 219, 221.5, 223, 225, 227, 228],
-              '1M': [198, 201, 204, 207, 210, 213, 216, 219, 221, 223, 225, 226.5, 227.2, 227.8, 228],
-              '6M': [170, 175, 181, 187, 193, 199, 205, 211, 216, 220, 224, 226.5, 228],
-              '1Y': [145, 152, 160, 168, 177, 186, 195, 204, 212, 219, 224, 228],
-              '5Y': [50, 85, 115, 138, 155, 168, 175, 182, 190, 196, 202, 208, 214, 218, 222, 224, 226, 227, 227.5, 228, 228]
+              '1D': [204.5, 205, 204.8, 205.2, 205],
+              '7D': [194, 196, 198, 200, 202.5, 205],
+              '1M': [178, 182, 186, 191, 196, 201, 205],
+              '6M': [142, 152, 164, 176, 188, 198, 205],
+              '1Y': [115, 125, 138, 150, 165, 178, 192, 205],
+              '5Y': [null, null, 40, 52, 48, 55, 68, 85, 98, 112, 128, 142, 155, 168, 180, 190, 198, 202, 204, 205, 205]
             }
           }
         }
@@ -736,12 +562,13 @@
             packCount: 36,
             msrp: 110.00,
             history: {
-              '1D': [14580, 14600, 14590, 14610, 14600, 14620, 14600, 14630, 14610, 14620, 14600, 14610, 14600],
-              '7D': [14200, 14260, 14320, 14390, 14450, 14520, 14570, 14600],
-              '1M': [13800, 13880, 13950, 14040, 14120, 14200, 14280, 14350, 14420, 14480, 14530, 14560, 14580, 14590, 14600],
-              '6M': [12500, 12700, 12920, 13150, 13380, 13600, 13850, 14050, 14220, 14380, 14480, 14550, 14600],
-              '1Y': [11000, 11350, 11720, 12100, 12500, 12900, 13320, 13700, 14050, 14320, 14500, 14600],
-              '5Y': [8500, 10200, 12400, 14800, 15500, 14600, 13800, 13200, 12800, 13100, 13500, 13800, 14050, 14250, 14380, 14480, 14520, 14550, 14580, 14600, 14600]
+              '1D': [14600, 14590, 14610, 14600, 14600],
+              '7D': [14350, 14400, 14480, 14520, 14580, 14600],
+              '1M': [13900, 14050, 14180, 14320, 14480, 14600],
+              '6M': [13200, 13450, 13700, 13980, 14250, 14480, 14600],
+              '1Y': [12000, 12450, 12900, 13400, 13850, 14250, 14600],
+              // Historic 2020-2021 post-pandemic correction from $18k down to $12k
+              '5Y': [11500, 16500, 18000, 15200, 13800, 12600, 12100, 12400, 12800, 13100, 13400, 13700, 14000, 14200, 14400, 14500, 14550, 14580, 14600, 14600, 14600]
             }
           }
         }
@@ -848,35 +675,37 @@
 
       document.getElementById('mover-range-indicator').innerText = `(${activeMoversTimeScale} delta)`;
 
+      // Rank by absolute percentage change to capture biggest positive AND negative movers
       const ranked = [...SETS_DATA].sort((a, b) => {
-        return getMetrics(b, activeMoversTimeScale).pct - getMetrics(a, activeMoversTimeScale).pct;
+        return Math.abs(getMetrics(b, activeMoversTimeScale).pct) - Math.abs(getMetrics(a, activeMoversTimeScale).pct);
       }).slice(0, 4);
 
       ranked.forEach((item, index) => {
         const { end, delta, pct, variantName } = getMetrics(item, activeMoversTimeScale);
+        const isPositive = pct >= 0;
         const card = document.createElement('div');
         card.className = `bg-[#111827] border ${activeProduct.id === item.id ? 'border-emerald-500/80 bg-[#141e33]' : 'border-gray-800 hover:border-gray-700'} rounded-xl p-3.5 flex flex-col justify-between cursor-pointer transition duration-150 relative overflow-hidden group shadow-lg`;
         card.onclick = () => selectProduct(item.id);
 
         card.innerHTML = `
           <div class="flex items-start justify-between">
-            <span class="text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-emerald-950/70 border border-emerald-800/40 text-emerald-400">
+            <span class="text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded ${isPositive ? 'bg-emerald-950/70 border border-emerald-800/40 text-emerald-400' : 'bg-rose-950/70 border border-rose-800/40 text-rose-400'}">
               #${index + 1} Mover
             </span>
-            <span class="text-xs font-bold font-mono text-emerald-400 flex items-center gap-0.5">
-              ▲ +${pct}%
+            <span class="text-xs font-bold font-mono ${isPositive ? 'text-emerald-400' : 'text-rose-400'} flex items-center gap-0.5">
+              ${isPositive ? '▲ +' : '▼ '}${pct}%
             </span>
           </div>
 
           <div class="flex items-center space-x-3 mt-3">
-            <div class="w-14 h-8 rounded bg-gray-900/90 border border-gray-800 p-1 flex-shrink-0 flex items-center justify-center">
+            <div class="w-14 h-8 rounded border border-gray-800 p-1 flex-shrink-0 flex items-center justify-center set-logo-container">
               <img src="${item.image}" alt="" class="max-h-full max-w-full object-contain set-logo" />
             </div>
             <div class="min-w-0 flex-1">
               <h4 class="text-xs font-bold text-gray-100 truncate group-hover:text-emerald-300 transition">${variantName}</h4>
               <div class="flex items-baseline space-x-2">
                 <span class="text-base font-black font-mono text-white">$${end}</span>
-                <span class="text-[11px] font-mono text-gray-400">+${delta >= 0 ? '$' + delta.toFixed(1) : '-$' + Math.abs(delta).toFixed(1)} ${activeMoversTimeScale}</span>
+                <span class="text-[11px] font-mono text-gray-400">${delta >= 0 ? '+$' + delta.toFixed(1) : '-$' + Math.abs(delta).toFixed(1)} ${activeMoversTimeScale}</span>
               </div>
             </div>
           </div>
@@ -889,14 +718,17 @@
         moversGrid.appendChild(card);
 
         setTimeout(() => {
-          renderSparkline(`sparkline-${item.id}`, getVariant(item).history[activeMoversTimeScale], TIME_INTERVALS[activeMoversTimeScale].labels);
+          renderSparkline(`sparkline-${item.id}`, getVariant(item).history[activeMoversTimeScale], TIME_INTERVALS[activeMoversTimeScale].labels, isPositive);
         }, 10);
       });
     }
 
-    function renderSparkline(canvasId, dataPoints, labels) {
+    function renderSparkline(canvasId, dataPoints, labels, isPositive = true) {
       const ctx = document.getElementById(canvasId);
       if (!ctx) return;
+      const lineColor = isPositive ? '#34d399' : '#f43f5e';
+      const bgColor = isPositive ? 'rgba(52, 211, 153, 0.08)' : 'rgba(244, 63, 94, 0.08)';
+
       new Chart(ctx, {
         type: 'line',
         data: {
@@ -904,12 +736,12 @@
           datasets: [{
             data: dataPoints,
             spanGaps: false,
-            borderColor: '#34d399',
+            borderColor: lineColor,
             borderWidth: 1.8,
             pointRadius: 0,
-            tension: 0.18,
+            tension: 0.2,
             fill: true,
-            backgroundColor: 'rgba(52, 211, 153, 0.08)'
+            backgroundColor: bgColor
           }]
         },
         options: {
@@ -926,6 +758,7 @@
       const metrics = getMetrics(activeProduct, activeMainTimeScale);
       const dataset = getVariant(activeProduct).history[activeMainTimeScale];
       const labels = TIME_INTERVALS[activeMainTimeScale].labels;
+      const isPositive = metrics.pct >= 0;
 
       document.getElementById('active-img').src = activeProduct.image;
       document.getElementById('active-img').alt = activeProduct.name;
@@ -936,6 +769,7 @@
       document.getElementById('active-price').innerText = `$${metrics.end.toLocaleString()}.00`;
       document.getElementById('active-delta-label').innerText = `Change (${activeMainTimeScale})`;
       document.getElementById('active-delta').innerText = `${metrics.delta >= 0 ? '+' : ''}${metrics.pct}% (${activeMainTimeScale})`;
+      document.getElementById('active-delta').className = `text-sm font-bold font-mono ${isPositive ? 'text-emerald-400' : 'text-rose-400'}`;
       document.getElementById('active-pack-val').innerText = `$${(metrics.end / metrics.packCount).toFixed(2)}`;
 
       if (mainChart) mainChart.destroy();
@@ -948,16 +782,16 @@
             label: `${metrics.variantName} ($)`,
             data: dataset,
             spanGaps: false,
-            borderColor: '#10b981',
+            borderColor: isPositive ? '#10b981' : '#f43f5e',
             borderWidth: 2.5,
-            backgroundColor: 'rgba(16, 185, 129, 0.12)',
+            backgroundColor: isPositive ? 'rgba(16, 185, 129, 0.12)' : 'rgba(244, 63, 94, 0.12)',
             fill: true,
-            tension: 0.18,
+            tension: 0.2,
             pointRadius: (c) => {
               if (c.raw === null) return 0;
               return c.dataIndex === dataset.length - 1 ? 5 : 2;
             },
-            pointBackgroundColor: '#10b981',
+            pointBackgroundColor: isPositive ? '#10b981' : '#f43f5e',
             pointHoverRadius: 6
           }]
         },
@@ -993,7 +827,7 @@
               ticks: { 
                 color: '#9ca3af', 
                 font: { size: 11 },
-                maxTicksLimit: 10
+                maxTicksLimit: 8
               }
             },
             y: {
@@ -1021,6 +855,7 @@
 
       filtered.forEach(item => {
         const metrics = getMetrics(item, '6M');
+        const isPositive = metrics.pct >= 0;
         const card = document.createElement('div');
         card.className = `bg-[#111827] border ${activeProduct.id === item.id ? 'border-emerald-500 ring-1 ring-emerald-500/50' : 'border-gray-800'} hover:border-gray-700 p-4 rounded-xl cursor-pointer transition flex flex-col justify-between shadow-lg`;
         card.onclick = (e) => {
@@ -1034,11 +869,9 @@
 
         card.innerHTML = `
           <div>
-            <!-- Top Controls Row: Set Badges + Variant Buttons -->
             <div class="flex items-center justify-between gap-2 border-b border-gray-800/80 pb-2.5">
               <span class="text-[11px] font-bold text-gray-400 truncate uppercase tracking-wider">${item.era}</span>
               
-              <!-- ETB & UPC Selection Buttons -->
               <div class="flex items-center space-x-1.5 bg-gray-900 border border-gray-800 rounded-lg p-0.5">
                 ${hasETB ? `
                   <button onclick="changeVariant(event, '${item.id}', 'ETB')" 
@@ -1053,9 +886,8 @@
               </div>
             </div>
             
-            <!-- Logo & Product Information -->
             <div class="flex items-center space-x-3 mt-3">
-              <div class="w-16 h-10 rounded bg-gray-900/90 border border-gray-800 p-1 flex-shrink-0 flex items-center justify-center">
+              <div class="w-16 h-10 rounded border border-gray-800 p-1 flex-shrink-0 flex items-center justify-center set-logo-container">
                 <img src="${item.image}" alt="" class="max-h-full max-w-full object-contain set-logo" />
               </div>
               <div class="min-w-0 flex-1">
@@ -1064,16 +896,16 @@
               </div>
             </div>
 
-            <!-- Mini 6-Month Graph With High-Density Variance -->
+            <!-- Mini 6-Month Graph -->
             <div class="mt-3.5 bg-gray-900/50 rounded-lg p-2 border border-gray-800/60 relative">
               <div class="flex items-center justify-between text-[11px] mb-1">
                 <span class="text-gray-400 font-mono">6M Trend</span>
                 <div class="flex items-center space-x-2">
-                  <span class="px-1.5 py-0.2 rounded bg-emerald-950/90 border border-emerald-500/40 text-emerald-300 font-bold font-mono text-[10px]">
+                  <span class="px-1.5 py-0.2 rounded ${isPositive ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-300' : 'bg-rose-950/90 border-rose-500/40 text-rose-300'} border font-bold font-mono text-[10px]">
                     $${metrics.end.toLocaleString()}
                   </span>
-                  <span class="font-bold font-mono ${metrics.pct >= 0 ? 'text-emerald-400' : 'text-red-400'}">
-                    ${metrics.pct >= 0 ? '+' : ''}${metrics.pct}%
+                  <span class="font-bold font-mono ${isPositive ? 'text-emerald-400' : 'text-rose-400'}">
+                    ${isPositive ? '+' : ''}${metrics.pct}%
                   </span>
                 </div>
               </div>
@@ -1083,7 +915,6 @@
             </div>
           </div>
 
-          <!-- Price Footer -->
           <div class="mt-4 pt-3 border-t border-gray-800 flex items-baseline justify-between">
             <span class="text-xs text-gray-400">Current Market</span>
             <span class="text-base font-black font-mono text-white">$${metrics.end.toLocaleString()}.00</span>
@@ -1101,6 +932,8 @@
       const canvas = document.getElementById(`card-chart-${item.id}`);
       if (!canvas) return;
       const dataPoints = getVariant(item).history['6M'];
+      const metrics = getMetrics(item, '6M');
+      const isPositive = metrics.pct >= 0;
 
       cardCharts[item.id] = new Chart(canvas, {
         type: 'line',
@@ -1109,16 +942,15 @@
           datasets: [{
             data: dataPoints,
             spanGaps: false,
-            borderColor: '#10b981',
+            borderColor: isPositive ? '#10b981' : '#f43f5e',
             borderWidth: 1.8,
             pointRadius: (ctx) => (ctx.dataIndex === dataPoints.length - 1 && dataPoints[ctx.dataIndex] !== null ? 3.5 : 0),
-            pointBackgroundColor: '#34d399',
+            pointBackgroundColor: isPositive ? '#34d399' : '#fb7185',
             pointBorderColor: '#0b0f19',
             pointBorderWidth: 1.5,
-            pointHoverRadius: 4,
-            tension: 0.18,
+            tension: 0.2,
             fill: true,
-            backgroundColor: 'rgba(16, 185, 129, 0.08)'
+            backgroundColor: isPositive ? 'rgba(16, 185, 129, 0.08)' : 'rgba(244, 63, 94, 0.08)'
           }]
         },
         options: {
@@ -1142,7 +974,7 @@
               ticks: { 
                 color: '#6b7280', 
                 font: { size: 9 },
-                maxTicksLimit: 6
+                maxTicksLimit: 5
               }
             },
             y: {
