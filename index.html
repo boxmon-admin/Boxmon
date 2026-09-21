@@ -166,7 +166,7 @@
         </div>
       </div>
 
-      <!-- Product Cards Table / Grid -->
+      <!-- Product Cards Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="catalog-grid">
         <!-- Dynamically Rendered by JS -->
       </div>
@@ -744,6 +744,77 @@
       return { start, end, delta, pct: parseFloat(pct), variantName: v.name, packCount: v.packCount, msrp: v.msrp };
     }
 
+    // Custom Chart.js Plugin for Drawing Current Price Pin & Dotted Price Line
+    const currentPricePinPlugin = {
+      id: 'currentPricePin',
+      afterDatasetsDraw(chart) {
+        const meta = chart.getDatasetMeta(0);
+        if (!meta || !meta.data || meta.data.length === 0) return;
+
+        const lastPoint = meta.data[meta.data.length - 1];
+        const ctx = chart.ctx;
+        const x = lastPoint.x;
+        const y = lastPoint.y;
+        const priceValue = chart.data.datasets[0].data[meta.data.length - 1];
+        const text = `$${priceValue.toLocaleString()}`;
+
+        ctx.save();
+
+        // 1. Subtle horizontal dashed guideline to the right axis
+        ctx.beginPath();
+        ctx.setLineDash([3, 3]);
+        ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)';
+        ctx.lineWidth = 1;
+        ctx.moveTo(chart.chartArea.left, y);
+        ctx.lineTo(chart.chartArea.right, y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // 2. Pulsing Glow Rings on the Final Point
+        ctx.beginPath();
+        ctx.arc(x, y, 7, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(16, 185, 129, 0.25)';
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(x, y, 4, 0, Math.PI * 2);
+        ctx.fillStyle = '#10b981';
+        ctx.fill();
+
+        // 3. Price Pill Badge above/next to the point
+        ctx.font = 'bold 11px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace';
+        const textWidth = ctx.measureText(text).width;
+        const boxWidth = textWidth + 14;
+        const boxHeight = 20;
+        
+        let boxX = x - boxWidth - 8;
+        if (boxX < chart.chartArea.left) {
+          boxX = x - (boxWidth / 2);
+        }
+        let boxY = y - 10;
+        if (boxY < chart.chartArea.top + 2) {
+          boxY = y + 10;
+        }
+
+        // Draw pill background
+        ctx.fillStyle = '#064e3b';
+        ctx.strokeStyle = '#34d399';
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 5);
+        ctx.fill();
+        ctx.stroke();
+
+        // Text
+        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(text, boxX + boxWidth / 2, boxY + boxHeight / 2);
+
+        ctx.restore();
+      }
+    };
+
     function renderMarketMovers() {
       const moversGrid = document.getElementById('movers-grid');
       moversGrid.innerHTML = '';
@@ -807,7 +878,8 @@
             data: dataPoints,
             borderColor: '#34d399',
             borderWidth: 2,
-            pointRadius: 0,
+            pointRadius: (ctx) => (ctx.dataIndex === dataPoints.length - 1 ? 3 : 0),
+            pointBackgroundColor: '#10b981',
             tension: 0.35,
             fill: true,
             backgroundColor: 'rgba(52, 211, 153, 0.08)'
@@ -834,7 +906,7 @@
       document.getElementById('active-era').innerText = `${activeProduct.era} Era • Released ${activeProduct.released}`;
       document.getElementById('active-type-badge').innerText = activeProduct.selectedType;
       document.getElementById('active-type-badge').className = `px-2 py-0.5 rounded text-[11px] font-bold border ${activeProduct.selectedType === 'UPC' ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' : 'bg-blue-500/20 text-blue-300 border-blue-500/30'}`;
-      document.getElementById('active-price').innerText = `$${metrics.end}.00`;
+      document.getElementById('active-price').innerText = `$${metrics.end.toLocaleString()}.00`;
       document.getElementById('active-delta-label').innerText = `Change (${activeMainTimeScale})`;
       document.getElementById('active-delta').innerText = `${metrics.delta >= 0 ? '+' : ''}${metrics.pct}% (${activeMainTimeScale})`;
       document.getElementById('active-pack-val').innerText = `$${(metrics.end / metrics.packCount).toFixed(2)}`;
@@ -853,13 +925,18 @@
             backgroundColor: 'rgba(16, 185, 129, 0.12)',
             fill: true,
             tension: 0.3,
+            pointRadius: (c) => (c.dataIndex === dataset.length - 1 ? 5 : 2),
             pointBackgroundColor: '#10b981',
             pointHoverRadius: 6
           }]
         },
+        plugins: [currentPricePinPlugin],
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          layout: {
+            padding: { right: 20, top: 15 }
+          },
           interaction: { intersect: false, mode: 'index' },
           plugins: {
             legend: { display: false },
@@ -872,7 +949,7 @@
               padding: 10,
               displayColors: false,
               callbacks: {
-                label: (ctx) => ` Price: $${ctx.parsed.y}.00`
+                label: (ctx) => ` Price: $${ctx.parsed.y.toLocaleString()}.00`
               }
             }
           },
@@ -886,7 +963,7 @@
               ticks: {
                 color: '#9ca3af',
                 font: { size: 11 },
-                callback: (val) => `$${val}`
+                callback: (val) => `$${val.toLocaleString()}`
               }
             }
           }
@@ -901,7 +978,6 @@
       const filtered = SETS_DATA.filter(p => activeFilter === 'ALL' || p.category === activeFilter);
       document.getElementById('product-count').innerText = filtered.length;
 
-      // Clean up previous sub-charts
       Object.values(cardCharts).forEach(c => c.destroy());
       cardCharts = {};
 
@@ -950,13 +1026,18 @@
               </div>
             </div>
 
-            <!-- Mini 6-Month Graph In Every Box -->
-            <div class="mt-3.5 bg-gray-900/50 rounded-lg p-2 border border-gray-800/60">
+            <!-- Mini 6-Month Graph With In-Line Price Point Indicator -->
+            <div class="mt-3.5 bg-gray-900/50 rounded-lg p-2 border border-gray-800/60 relative">
               <div class="flex items-center justify-between text-[11px] mb-1">
                 <span class="text-gray-400 font-mono">6M Trend</span>
-                <span class="font-bold font-mono ${metrics.pct >= 0 ? 'text-emerald-400' : 'text-red-400'}">
-                  ${metrics.pct >= 0 ? '+' : ''}${metrics.pct}%
-                </span>
+                <div class="flex items-center space-x-2">
+                  <span class="px-1.5 py-0.2 rounded bg-emerald-950/90 border border-emerald-500/40 text-emerald-300 font-bold font-mono text-[10px]">
+                    $${metrics.end.toLocaleString()}
+                  </span>
+                  <span class="font-bold font-mono ${metrics.pct >= 0 ? 'text-emerald-400' : 'text-red-400'}">
+                    ${metrics.pct >= 0 ? '+' : ''}${metrics.pct}%
+                  </span>
+                </div>
               </div>
               <div class="h-20 w-full">
                 <canvas id="card-chart-${item.id}"></canvas>
@@ -967,7 +1048,7 @@
           <!-- Price Footer -->
           <div class="mt-4 pt-3 border-t border-gray-800 flex items-baseline justify-between">
             <span class="text-xs text-gray-400">Current Market</span>
-            <span class="text-base font-black font-mono text-white">$${metrics.end}.00</span>
+            <span class="text-base font-black font-mono text-white">$${metrics.end.toLocaleString()}.00</span>
           </div>
         `;
         grid.appendChild(card);
@@ -991,7 +1072,10 @@
             data: dataPoints,
             borderColor: '#10b981',
             borderWidth: 2,
-            pointRadius: 0,
+            pointRadius: (ctx) => (ctx.dataIndex === dataPoints.length - 1 ? 4 : 0),
+            pointBackgroundColor: '#34d399',
+            pointBorderColor: '#0b0f19',
+            pointBorderWidth: 1.5,
             pointHoverRadius: 4,
             tension: 0.3,
             fill: true,
@@ -1006,7 +1090,7 @@
             tooltip: {
               enabled: true,
               callbacks: {
-                label: (c) => ` $${c.parsed.y}.00`
+                label: (c) => ` $${c.parsed.y.toLocaleString()}.00`
               }
             }
           },
