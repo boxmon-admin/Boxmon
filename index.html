@@ -69,14 +69,23 @@
   <!-- MAIN CONTAINER -->
   <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
     
-    <!-- 4 BIGGEST MARKET MOVERS OF THE WEEK -->
-    <section>
-      <div class="flex items-center justify-between mb-3">
+    <!-- TOP MARKET MOVERS SECTION -->
+    <section class="space-y-3">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div class="flex items-center space-x-2">
           <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
-          <h2 class="text-sm font-bold uppercase tracking-wider text-gray-300">Top Market Movers This Week (7D)</h2>
+          <h2 class="text-sm font-bold uppercase tracking-wider text-gray-300">Top Market Movers</h2>
+          <span id="mover-range-indicator" class="text-xs text-gray-500 font-mono">(7D delta)</span>
         </div>
-        <span class="text-xs text-gray-500">Calculated via 7-day moving price delta</span>
+        
+        <!-- Movers Time Scale Buttons -->
+        <div class="flex items-center bg-gray-900 border border-gray-800 rounded-lg p-0.5 space-x-1" id="movers-time-selector">
+          <button onclick="setMoversTimeScale('1D')" class="mover-time-btn px-2.5 py-1 text-[11px] font-semibold rounded text-gray-400 hover:text-white transition">1D</button>
+          <button onclick="setMoversTimeScale('7D')" class="mover-time-btn active px-2.5 py-1 text-[11px] font-semibold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition">7D</button>
+          <button onclick="setMoversTimeScale('1M')" class="mover-time-btn px-2.5 py-1 text-[11px] font-semibold rounded text-gray-400 hover:text-white transition">1M</button>
+          <button onclick="setMoversTimeScale('6M')" class="mover-time-btn px-2.5 py-1 text-[11px] font-semibold rounded text-gray-400 hover:text-white transition">6M</button>
+          <button onclick="setMoversTimeScale('1Y')" class="mover-time-btn px-2.5 py-1 text-[11px] font-semibold rounded text-gray-400 hover:text-white transition">1Y</button>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="movers-grid">
@@ -109,7 +118,7 @@
             <p id="active-price" class="text-2xl font-black text-white font-mono">$385.00</p>
           </div>
           <div>
-            <p class="text-[11px] text-gray-400 uppercase tracking-wider">7D Change</p>
+            <p class="text-[11px] text-gray-400 uppercase tracking-wider" id="active-delta-label">Change (7D)</p>
             <p id="active-delta" class="text-sm font-bold font-mono text-emerald-400">+12.4%</p>
           </div>
           <div>
@@ -122,6 +131,18 @@
       <!-- Main Canvas -->
       <div class="relative w-full h-72 sm:h-80">
         <canvas id="mainChart"></canvas>
+      </div>
+
+      <!-- Main Chart Time Scale Buttons -->
+      <div class="flex items-center justify-between pt-2 border-t border-gray-800">
+        <span class="text-xs text-gray-500">Historical performance view</span>
+        <div class="flex items-center bg-gray-900 border border-gray-800 rounded-lg p-1 space-x-1" id="main-time-selector">
+          <button onclick="setMainTimeScale('1D')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">1D</button>
+          <button onclick="setMainTimeScale('7D')" class="main-time-btn active px-3 py-1 text-xs font-semibold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition">7D</button>
+          <button onclick="setMainTimeScale('1M')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">1M</button>
+          <button onclick="setMainTimeScale('6M')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">6M</button>
+          <button onclick="setMainTimeScale('1Y')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">1Y</button>
+        </div>
       </div>
     </section>
 
@@ -155,6 +176,14 @@
 
   <!-- APPLICATION LOGIC & DATA -->
   <script>
+    const TIME_INTERVALS = {
+      '1D': { label: '24 Hours', labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', 'Now'] },
+      '7D': { label: '7 Days', labels: ['6D Ago', '5D Ago', '4D Ago', '3D Ago', '2D Ago', 'Yesterday', 'Today'] },
+      '1M': { label: '30 Days', labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Today'] },
+      '6M': { label: '6 Months', labels: ['Month 1', 'Month 2', 'Month 3', 'Month 4', 'Month 5', 'Month 6'] },
+      '1Y': { label: '1 Year', labels: ['Q1', 'Q2', 'Q3', 'Q4', 'Q5', 'Q6', 'Q7', 'Q8'] }
+    };
+
     const PRODUCTS = [
       {
         id: 'celebrations-upc',
@@ -165,8 +194,13 @@
         packCount: 17,
         msrp: 119.99,
         image: 'https://images.pokemontcg.io/cel25/logo.png',
-        history7D: [342, 345, 350, 360, 368, 375, 385],
-        history30D: [310, 315, 320, 335, 342, 350, 368, 385]
+        history: {
+          '1D': [382, 383, 380, 384, 383, 385, 385],
+          '7D': [342, 345, 350, 360, 368, 375, 385],
+          '1M': [310, 325, 345, 368, 385],
+          '6M': [275, 290, 305, 330, 355, 385],
+          '1Y': [220, 235, 250, 280, 300, 330, 360, 385]
+        }
       },
       {
         id: 'evolving-skies-etb',
@@ -177,8 +211,13 @@
         packCount: 8,
         msrp: 39.99,
         image: 'https://images.pokemontcg.io/swsh7/logo.png',
-        history7D: [180, 182, 185, 188, 192, 198, 205],
-        history30D: [160, 165, 172, 178, 182, 190, 205]
+        history: {
+          '1D': [204, 203, 205, 204, 206, 205, 205],
+          '7D': [180, 182, 185, 188, 192, 198, 205],
+          '1M': [160, 172, 185, 195, 205],
+          '6M': [120, 135, 150, 170, 185, 205],
+          '1Y': [95, 110, 125, 140, 160, 175, 190, 205]
+        }
       },
       {
         id: '151-upc',
@@ -189,8 +228,13 @@
         packCount: 16,
         msrp: 119.99,
         image: 'https://images.pokemontcg.io/sv3pt5/logo.png',
-        history7D: [120, 120, 122, 123, 125, 128, 134],
-        history30D: [115, 116, 118, 120, 122, 125, 134]
+        history: {
+          '1D': [133, 133, 134, 133, 134, 134, 134],
+          '7D': [120, 120, 122, 123, 125, 128, 134],
+          '1M': [115, 118, 122, 128, 134],
+          '6M': [98, 104, 110, 118, 125, 134],
+          '1Y': [85, 90, 95, 102, 112, 120, 126, 134]
+        }
       },
       {
         id: 'prismatic-evolutions-etb',
@@ -201,8 +245,13 @@
         packCount: 9,
         msrp: 49.99,
         image: 'https://images.pokemontcg.io/sv8pt5/logo.png',
-        history7D: [72, 74, 76, 78, 80, 84, 88],
-        history30D: [60, 65, 68, 72, 75, 80, 88]
+        history: {
+          '1D': [87, 87, 88, 87, 88, 88, 88],
+          '7D': [72, 74, 76, 78, 80, 84, 88],
+          '1M': [60, 68, 74, 80, 88],
+          '6M': [50, 55, 62, 70, 78, 88],
+          '1Y': [45, 48, 50, 58, 65, 72, 80, 88]
+        }
       },
       {
         id: 'charizard-upc',
@@ -213,8 +262,13 @@
         packCount: 16,
         msrp: 119.99,
         image: 'https://images.pokemontcg.io/swsh12pt5/logo.png',
-        history7D: [130, 129, 131, 130, 132, 133, 135],
-        history30D: [125, 126, 128, 130, 130, 132, 135]
+        history: {
+          '1D': [135, 134, 135, 135, 135, 135, 135],
+          '7D': [130, 129, 131, 130, 132, 133, 135],
+          '1M': [125, 128, 130, 132, 135],
+          '6M': [115, 118, 120, 125, 130, 135],
+          '1Y': [100, 105, 110, 115, 120, 125, 130, 135]
+        }
       },
       {
         id: '151-etb',
@@ -225,8 +279,13 @@
         packCount: 9,
         msrp: 49.99,
         image: 'https://images.pokemontcg.io/sv3pt5/logo.png',
-        history7D: [68, 68, 69, 70, 71, 71, 73],
-        history30D: [62, 64, 65, 68, 69, 70, 73]
+        history: {
+          '1D': [73, 72, 73, 73, 73, 73, 73],
+          '7D': [68, 68, 69, 70, 71, 71, 73],
+          '1M': [62, 65, 68, 70, 73],
+          '6M': [55, 58, 60, 64, 68, 73],
+          '1Y': [48, 50, 52, 56, 60, 65, 68, 73]
+        }
       },
       {
         id: 'hidden-fates-etb',
@@ -237,8 +296,13 @@
         packCount: 10,
         msrp: 49.99,
         image: 'https://images.pokemontcg.io/sm115/logo.png',
-        history7D: [165, 165, 166, 166, 167, 168, 170],
-        history30D: [155, 158, 160, 162, 165, 168, 170]
+        history: {
+          '1D': [170, 170, 170, 170, 170, 170, 170],
+          '7D': [165, 165, 166, 166, 167, 168, 170],
+          '1M': [155, 160, 164, 167, 170],
+          '6M': [140, 145, 150, 158, 164, 170],
+          '1Y': [120, 128, 135, 142, 150, 156, 162, 170]
+        }
       },
       {
         id: 'crown-zenith-etb',
@@ -249,18 +313,26 @@
         packCount: 10,
         msrp: 49.99,
         image: 'https://images.pokemontcg.io/swsh12pt5/logo.png',
-        history7D: [58, 58, 59, 58, 59, 60, 61],
-        history30D: [54, 55, 56, 57, 58, 60, 61]
+        history: {
+          '1D': [61, 60, 61, 61, 61, 61, 61],
+          '7D': [58, 58, 59, 58, 59, 60, 61],
+          '1M': [54, 56, 58, 59, 61],
+          '6M': [48, 50, 52, 55, 58, 61],
+          '1Y': [42, 44, 46, 48, 52, 55, 58, 61]
+        }
       }
     ];
 
     let activeProduct = PRODUCTS[0];
     let activeFilter = 'ALL';
+    let activeMainTimeScale = '7D';
+    let activeMoversTimeScale = '7D';
     let mainChart = null;
 
-    function calculateMoverMetrics(product) {
-      const start = product.history7D[0];
-      const end = product.history7D[product.history7D.length - 1];
+    function getMetrics(product, timeScale) {
+      const arr = product.history[timeScale];
+      const start = arr[0];
+      const end = arr[arr.length - 1];
       const delta = end - start;
       const pct = ((delta / start) * 100).toFixed(1);
       return { start, end, delta, pct: parseFloat(pct) };
@@ -270,12 +342,14 @@
       const moversGrid = document.getElementById('movers-grid');
       moversGrid.innerHTML = '';
 
+      document.getElementById('mover-range-indicator').innerText = `(${activeMoversTimeScale} delta)`;
+
       const ranked = [...PRODUCTS].sort((a, b) => {
-        return calculateMoverMetrics(b).pct - calculateMoverMetrics(a).pct;
+        return getMetrics(b, activeMoversTimeScale).pct - getMetrics(a, activeMoversTimeScale).pct;
       }).slice(0, 4);
 
       ranked.forEach((item, index) => {
-        const { end, delta, pct } = calculateMoverMetrics(item);
+        const { end, delta, pct } = getMetrics(item, activeMoversTimeScale);
         const card = document.createElement('div');
         card.className = `bg-[#111827] border ${activeProduct.id === item.id ? 'border-emerald-500/80 bg-[#141e33]' : 'border-gray-800 hover:border-gray-700'} rounded-xl p-3.5 flex flex-col justify-between cursor-pointer transition duration-150 relative overflow-hidden group shadow-lg`;
         card.onclick = () => selectProduct(item.id);
@@ -298,7 +372,7 @@
               <h4 class="text-xs font-bold text-gray-100 truncate group-hover:text-emerald-300 transition">${item.name}</h4>
               <div class="flex items-baseline space-x-2">
                 <span class="text-base font-black font-mono text-white">$${end}</span>
-                <span class="text-[11px] font-mono text-gray-400">+$${delta} 7D</span>
+                <span class="text-[11px] font-mono text-gray-400">+${delta >= 0 ? '$' + delta : '-$' + Math.abs(delta)} ${activeMoversTimeScale}</span>
               </div>
             </div>
           </div>
@@ -311,18 +385,18 @@
         moversGrid.appendChild(card);
 
         setTimeout(() => {
-          renderSparkline(`sparkline-${item.id}`, item.history7D);
+          renderSparkline(`sparkline-${item.id}`, item.history[activeMoversTimeScale], TIME_INTERVALS[activeMoversTimeScale].labels);
         }, 10);
       });
     }
 
-    function renderSparkline(canvasId, dataPoints) {
+    function renderSparkline(canvasId, dataPoints, labels) {
       const ctx = document.getElementById(canvasId);
       if (!ctx) return;
       new Chart(ctx, {
         type: 'line',
         data: {
-          labels: ['-6D', '-5D', '-4D', '-3D', '-2D', '-1D', 'Now'],
+          labels: labels,
           datasets: [{
             data: dataPoints,
             borderColor: '#34d399',
@@ -348,7 +422,9 @@
 
     function updateMainChart() {
       const ctx = document.getElementById('mainChart').getContext('2d');
-      const metrics = calculateMoverMetrics(activeProduct);
+      const metrics = getMetrics(activeProduct, activeMainTimeScale);
+      const dataset = activeProduct.history[activeMainTimeScale];
+      const labels = TIME_INTERVALS[activeMainTimeScale].labels;
 
       document.getElementById('active-img').src = activeProduct.image;
       document.getElementById('active-img').alt = activeProduct.name;
@@ -357,7 +433,8 @@
       document.getElementById('active-type-badge').innerText = activeProduct.type;
       document.getElementById('active-type-badge').className = `px-2 py-0.5 rounded text-[11px] font-bold border ${activeProduct.type === 'UPC' ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' : 'bg-blue-500/20 text-blue-300 border-blue-500/30'}`;
       document.getElementById('active-price').innerText = `$${metrics.end}.00`;
-      document.getElementById('active-delta').innerText = `+${metrics.pct}% (7D)`;
+      document.getElementById('active-delta-label').innerText = `Change (${activeMainTimeScale})`;
+      document.getElementById('active-delta').innerText = `${metrics.delta >= 0 ? '+' : ''}${metrics.pct}% (${activeMainTimeScale})`;
       document.getElementById('active-pack-val').innerText = `$${(metrics.end / activeProduct.packCount).toFixed(2)}`;
 
       if (mainChart) mainChart.destroy();
@@ -365,10 +442,10 @@
       mainChart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: ['6 Days Ago', '5 Days Ago', '4 Days Ago', '3 Days Ago', '2 Days Ago', 'Yesterday', 'Today'],
+          labels: labels,
           datasets: [{
             label: `${activeProduct.name} ($)`,
-            data: activeProduct.history7D,
+            data: dataset,
             borderColor: '#10b981',
             borderWidth: 3,
             backgroundColor: 'rgba(16, 185, 129, 0.12)',
@@ -415,6 +492,30 @@
       });
     }
 
+    function setMoversTimeScale(scale) {
+      activeMoversTimeScale = scale;
+      document.querySelectorAll('.mover-time-btn').forEach(btn => {
+        if (btn.innerText === scale) {
+          btn.className = 'mover-time-btn active px-2.5 py-1 text-[11px] font-semibold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition';
+        } else {
+          btn.className = 'mover-time-btn px-2.5 py-1 text-[11px] font-semibold rounded text-gray-400 hover:text-white transition';
+        }
+      });
+      renderMarketMovers();
+    }
+
+    function setMainTimeScale(scale) {
+      activeMainTimeScale = scale;
+      document.querySelectorAll('.main-time-btn').forEach(btn => {
+        if (btn.innerText === scale) {
+          btn.className = 'main-time-btn active px-3 py-1 text-xs font-semibold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition';
+        } else {
+          btn.className = 'main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition';
+        }
+      });
+      updateMainChart();
+    }
+
     function renderCatalog() {
       const grid = document.getElementById('catalog-grid');
       grid.innerHTML = '';
@@ -423,7 +524,7 @@
       document.getElementById('product-count').innerText = filtered.length;
 
       filtered.forEach(item => {
-        const { end, pct } = calculateMoverMetrics(item);
+        const { end, pct } = getMetrics(item, '7D');
         const card = document.createElement('div');
         card.className = `bg-[#111827] border ${activeProduct.id === item.id ? 'border-emerald-500' : 'border-gray-800'} hover:border-gray-700 p-4 rounded-xl cursor-pointer transition flex flex-col justify-between`;
         card.onclick = () => selectProduct(item.id);
@@ -434,7 +535,7 @@
               <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${item.type === 'UPC' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-blue-500/10 text-blue-400 border border-blue-500/20'}">
                 ${item.type}
               </span>
-              <span class="text-xs font-mono font-bold text-emerald-400">+${pct}%</span>
+              <span class="text-xs font-mono font-bold text-emerald-400">+${pct}% (7D)</span>
             </div>
             
             <div class="flex items-center space-x-3 mt-3">
