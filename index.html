@@ -36,27 +36,33 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
-    /* Ambient backlit glow container */
+    /* Ambient illuminated backlit glow */
     .set-logo-container {
       position: relative;
-      background: radial-gradient(circle at center, rgba(16, 185, 129, 0.16) 0%, rgba(17, 24, 39, 0.95) 75%);
-      box-shadow: 0 0 16px -2px rgba(16, 185, 129, 0.25), inset 0 0 10px 0 rgba(16, 185, 129, 0.12);
-      border: 1px solid rgba(16, 185, 129, 0.35);
-      transition: all 0.2s ease-in-out;
+      background: radial-gradient(circle at center, rgba(16, 185, 129, 0.28) 0%, rgba(17, 24, 39, 0.95) 75%);
+      box-shadow: 0 0 18px 0 rgba(16, 185, 129, 0.32), inset 0 0 12px 0 rgba(16, 185, 129, 0.16);
+      border: 1px solid rgba(16, 185, 129, 0.45);
+      transition: all 0.25s ease-in-out;
     }
     .group:hover .set-logo-container,
     .set-logo-container:hover {
-      box-shadow: 0 0 22px 2px rgba(16, 185, 129, 0.40), inset 0 0 14px 0 rgba(16, 185, 129, 0.22);
-      border-color: rgba(52, 211, 153, 0.6);
+      box-shadow: 0 0 28px 2px rgba(16, 185, 129, 0.55), inset 0 0 16px 0 rgba(16, 185, 129, 0.3);
+      border-color: rgba(52, 211, 153, 0.75);
     }
 
-    /* Crisp drop shadow & soft glow for the logo graphic */
+    /* Crisp drop shadow & soft glow for set logos */
     .set-logo {
-      filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.45)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.7));
-      transition: filter 0.2s ease;
+      filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.5)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
+      transition: filter 0.2s ease, transform 0.2s ease;
     }
     .group:hover .set-logo {
-      filter: drop-shadow(0 0 10px rgba(52, 211, 153, 0.7)) drop-shadow(0 2px 5px rgba(0, 0, 0, 0.8));
+      filter: drop-shadow(0 0 12px rgba(52, 211, 153, 0.8)) drop-shadow(0 3px 6px rgba(0, 0, 0, 0.9));
+      transform: scale(1.03);
+    }
+
+    /* Text Glow for Bolder Prices */
+    .price-glow {
+      text-shadow: 0 0 12px rgba(16, 185, 129, 0.35);
     }
   </style>
 </head>
@@ -66,7 +72,7 @@
   <header class="border-b border-gray-800 bg-[#0e1424]/80 backdrop-blur sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <div class="flex items-center space-x-3 cursor-pointer" onclick="resetFilters()">
-        <div class="w-9 h-9 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-black text-xl shadow-lg shadow-emerald-500/10">
+        <div class="w-10 h-10 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-black text-2xl shadow-lg shadow-emerald-500/10">
           ⬡
         </div>
         <div>
@@ -93,7 +99,7 @@
     <section class="space-y-3">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div class="flex items-center space-x-2">
-          <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span>
           <h2 class="text-sm font-bold uppercase tracking-wider text-gray-300">Top Market Movers</h2>
           <span id="mover-range-indicator" class="text-xs text-gray-500 font-mono">(7D delta)</span>
         </div>
@@ -117,39 +123,38 @@
     </section>
 
     <!-- MAIN CHART & SPOTLIGHT SECTION -->
-    <section class="bg-[#111827] rounded-xl border border-gray-800 p-5 shadow-2xl space-y-4">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-800 pb-4">
-        <div class="flex items-center space-x-4">
-          <!-- Main Product Set Logo Banner with Ambient Backlit Glow -->
-          <div class="w-32 h-16 rounded-xl p-2 flex-shrink-0 flex items-center justify-center overflow-hidden set-logo-container">
+    <section class="bg-[#111827] rounded-xl border border-gray-800 p-5 sm:p-6 shadow-2xl space-y-4">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-5 border-b border-gray-800 pb-5">
+        <div class="flex items-center space-x-5">
+          <!-- Larger Spotlight Logo Container with Ambient Back-Glow -->
+          <div class="w-36 h-20 rounded-xl p-2.5 flex-shrink-0 flex items-center justify-center overflow-hidden set-logo-container">
             <img id="active-img" src="" alt="" class="max-h-full max-w-full object-contain set-logo" onerror="handleImageFallback(this)" />
           </div>
 
           <div>
             <div class="flex flex-wrap items-center gap-2">
-              <h3 id="active-title" class="text-xl font-bold text-white tracking-tight">Pitch Black</h3>
-              <!-- Multi-Variant Selector Inside Main Spotlight -->
-              <div id="active-variant-ribbon" class="flex items-center space-x-1 bg-gray-900 border border-gray-800 rounded-lg p-0.5">
+              <h3 id="active-title" class="text-2xl font-black text-white tracking-tight">30th Celebration</h3>
+              <div id="active-variant-ribbon" class="flex items-center space-x-1.5 bg-gray-900 border border-gray-800 rounded-lg p-1">
                 <!-- Injected via JS -->
               </div>
             </div>
-            <p id="active-era" class="text-xs text-gray-400 mt-0.5">Mega Evolution Series • Released Jul 2026</p>
+            <p id="active-era" class="text-xs text-gray-400 mt-1 font-medium">30th Anniversary • Released Oct 2026</p>
           </div>
         </div>
 
-        <!-- Metric Ribbon -->
-        <div class="flex items-center space-x-6">
+        <!-- Metric Ribbon with Bolder Typography -->
+        <div class="flex items-center space-x-6 sm:space-x-8">
           <div>
-            <p class="text-[11px] text-gray-400 uppercase tracking-wider">Market Price</p>
-            <p id="active-price" class="text-2xl font-black text-white font-mono">$275.00</p>
+            <p class="text-[11px] text-gray-400 uppercase tracking-widest font-semibold">Market Price</p>
+            <p id="active-price" class="text-3xl sm:text-4xl font-black text-emerald-400 font-mono tracking-tight price-glow">$650.00</p>
           </div>
           <div>
-            <p class="text-[11px] text-gray-400 uppercase tracking-wider" id="active-delta-label">Change (6M)</p>
-            <p id="active-delta" class="text-sm font-bold font-mono text-emerald-400">+70.1%</p>
+            <p class="text-[11px] text-gray-400 uppercase tracking-widest font-semibold" id="active-delta-label">Change (6M)</p>
+            <p id="active-delta" class="text-base font-extrabold font-mono text-emerald-400">+62.5%</p>
           </div>
           <div>
-            <p class="text-[11px] text-gray-400 uppercase tracking-wider">Est. / Pack</p>
-            <p id="active-pack-val" class="text-sm font-bold font-mono text-gray-200">$7.64</p>
+            <p class="text-[11px] text-gray-400 uppercase tracking-widest font-semibold">Est. / Pack</p>
+            <p id="active-pack-val" class="text-base font-extrabold font-mono text-gray-200">$36.11</p>
           </div>
         </div>
       </div>
@@ -179,17 +184,19 @@
     <section class="space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div class="flex items-center space-x-2">
-          <h2 class="text-base font-bold text-white">Sealed Products</h2>
-          <span id="product-count" class="text-xs px-2 py-0.5 rounded-full bg-gray-800 text-gray-400 font-mono">0</span>
+          <h2 class="text-base font-black text-white">Sealed Products Catalog</h2>
+          <span id="product-count" class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-950/70 border border-emerald-800/40 text-emerald-400 font-mono font-bold">0</span>
         </div>
 
         <!-- Filter Controls -->
         <div class="flex items-center space-x-2 flex-wrap gap-y-2">
-          <button onclick="setFilter('ALL')" class="filter-btn active px-3 py-1 text-xs font-semibold rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">All Sets</button>
-          <button onclick="setFilter('ME')" class="filter-btn px-3 py-1 text-xs font-semibold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">Mega Evolution</button>
-          <button onclick="setFilter('SV')" class="filter-btn px-3 py-1 text-xs font-semibold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">Scarlet & Violet</button>
-          <button onclick="setFilter('SWSH')" class="filter-btn px-3 py-1 text-xs font-semibold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">Sword & Shield</button>
-          <button onclick="setFilter('VINTAGE')" class="filter-btn px-3 py-1 text-xs font-semibold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">Vintage & Classic</button>
+          <button onclick="setFilter('ALL')" class="filter-btn active px-3 py-1 text-xs font-bold rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">All Sets</button>
+          <button onclick="setFilter('ME')" class="filter-btn px-3 py-1 text-xs font-bold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">Mega Evolution & 30th</button>
+          <button onclick="setFilter('SV')" class="filter-btn px-3 py-1 text-xs font-bold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">Scarlet & Violet</button>
+          <button onclick="setFilter('SWSH')" class="filter-btn px-3 py-1 text-xs font-bold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">Sword & Shield</button>
+          <button onclick="setFilter('SM')" class="filter-btn px-3 py-1 text-xs font-bold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">Sun & Moon</button>
+          <button onclick="setFilter('XY')" class="filter-btn px-3 py-1 text-xs font-bold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">XY Series</button>
+          <button onclick="setFilter('VINTAGE')" class="filter-btn px-3 py-1 text-xs font-bold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">Vintage Classic</button>
         </div>
       </div>
 
@@ -202,7 +209,7 @@
   </main>
 
   <footer class="border-t border-gray-800 py-6 text-center text-xs text-gray-500 mt-12">
-    <p>Boxmon © 2026. Sealed Pokémon TCG pricing indexes and market analytics.</p>
+    <p>Boxmon © 2026. Sealed Pokémon TCG pricing indexes and institutional-grade analytics.</p>
   </footer>
 
   <!-- APPLICATION LOGIC & DATA -->
@@ -235,7 +242,48 @@
     }
 
     const SETS_DATA = [
-      // MEGA EVOLUTION SERIES (2026)
+      // --- 30TH CELEBRATION & MEGA EVOLUTION (2026) ---
+      {
+        id: '30th-celebration',
+        name: '30th Celebration',
+        era: 'Anniversary 2026',
+        category: 'ME',
+        released: 'Oct 2026',
+        image: 'https://images.pokemontcg.io/cel25/logo.png',
+        selectedType: 'UPC',
+        variants: {
+          UPC: {
+            name: '30th Celebration Ultra-Premium Collection',
+            packCount: 18,
+            msrp: 149.99,
+            history: {
+              '1D': [648, 650, 649, 651, 650],
+              '7D': [630, 635, 640, 645, 648, 650],
+              '1M': [580, 595, 610, 625, 640, 650],
+              '6M': [400, 440, 490, 550, 610, 650],
+              '1Y': [null, null, null, 250, 320, 400, 490, 580, 650],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 250, 450, 650],
+              '10Y': [null, null, null, null, null, null, null, null, null, null, 650],
+              '20Y': [null, null, null, null, null, null, null, null, null, null, 650]
+            }
+          },
+          ETB: {
+            name: '30th Celebration ETB',
+            packCount: 10,
+            msrp: 59.99,
+            history: {
+              '1D': [164, 165, 164.5, 165.2, 165],
+              '7D': [158, 160, 161.5, 163, 165],
+              '1M': [145, 148, 152, 158, 165],
+              '6M': [110, 120, 132, 145, 158, 165],
+              '1Y': [null, null, null, 80, 95, 110, 130, 150, 165],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 80, 125, 165],
+              '10Y': [null, null, null, null, null, null, null, null, null, null, 165],
+              '20Y': [null, null, null, null, null, null, null, null, null, null, 165]
+            }
+          }
+        }
+      },
       {
         id: 'me05-pitch-black',
         name: 'Pitch Black',
@@ -365,8 +413,8 @@
               '1D': [259, 260, 259.5, 260.2, 260],
               '7D': [250, 252, 255, 258, 259, 260],
               '1M': [234, 240, 246, 252, 256, 260],
-              '6M': [162, 185, 205, 225, 245, 255, 260],
-              '1Y': [null, null, null, null, null, 162, 185, 205, 225, 245, 255, 260],
+              '6M': [162, 185, 205, 225, 245, 260],
+              '1Y': [null, null, null, null, null, 162, 185, 205, 225, 245, 260],
               '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 162, 205, 245, 260],
               '10Y': [null, null, null, null, null, null, null, null, null, null, 260],
               '20Y': [null, null, null, null, null, null, null, null, null, null, 260]
@@ -380,8 +428,8 @@
               '1D': [39.8, 40, 39.9, 40.1, 40],
               '7D': [37.5, 38, 38.8, 39.2, 39.8, 40],
               '1M': [34, 35.5, 36.8, 38, 39, 40],
-              '6M': [27, 30, 33, 36, 38, 39.5, 40],
-              '1Y': [null, null, null, null, null, 27, 30, 33, 36, 38, 39.5, 40],
+              '6M': [27, 30, 33, 36, 38, 40],
+              '1Y': [null, null, null, null, null, 27, 30, 33, 36, 38, 40],
               '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 27, 33, 38, 40],
               '10Y': [null, null, null, null, null, null, null, null, null, null, 40],
               '20Y': [null, null, null, null, null, null, null, null, null, null, 40]
@@ -395,8 +443,8 @@
               '1D': [67.5, 68, 67.8, 68.2, 68],
               '7D': [64, 65, 66, 66.8, 67.5, 68],
               '1M': [58, 60, 62, 64.5, 66.5, 68],
-              '6M': [50, 54, 58, 62, 65, 67, 68],
-              '1Y': [null, null, null, null, null, 50, 54, 58, 62, 65, 67, 68],
+              '6M': [50, 54, 58, 62, 65, 68],
+              '1Y': [null, null, null, null, null, 50, 54, 58, 62, 65, 68],
               '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 50, 58, 65, 68],
               '10Y': [null, null, null, null, null, null, null, null, null, null, 68],
               '20Y': [null, null, null, null, null, null, null, null, null, null, 68]
@@ -421,9 +469,9 @@
               '1D': [239, 240, 239.5, 240.2, 240],
               '7D': [230, 232, 235, 237, 239, 240],
               '1M': [212, 218, 225, 232, 236, 240],
-              '6M': [145, 165, 185, 205, 222, 235, 240],
-              '1Y': [null, null, null, 120, 145, 165, 185, 205, 222, 235, 240],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 120, 165, 205, 235, 240],
+              '6M': [145, 165, 185, 205, 222, 240],
+              '1Y': [null, null, null, 120, 145, 165, 185, 205, 240],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 120, 165, 205, 240],
               '10Y': [null, null, null, null, null, null, null, null, null, null, 240],
               '20Y': [null, null, null, null, null, null, null, null, null, null, 240]
             }
@@ -436,9 +484,9 @@
               '1D': [84.5, 85, 84.8, 85.2, 85],
               '7D': [81, 82, 83, 83.8, 84.5, 85],
               '1M': [74, 76, 78.5, 81, 83, 85],
-              '6M': [54, 60, 66, 73, 79, 83, 85],
-              '1Y': [null, null, null, 50, 54, 60, 66, 73, 79, 83, 85],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 50, 66, 79, 83, 85],
+              '6M': [54, 60, 66, 73, 79, 85],
+              '1Y': [null, null, null, 50, 54, 60, 66, 73, 85],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 50, 66, 79, 85],
               '10Y': [null, null, null, null, null, null, null, null, null, null, 85],
               '20Y': [null, null, null, null, null, null, null, null, null, null, 85]
             }
@@ -451,9 +499,9 @@
               '1D': [47.5, 48, 47.8, 48.2, 48],
               '7D': [45, 45.8, 46.5, 47.2, 47.8, 48],
               '1M': [40, 41.5, 43, 45, 46.8, 48],
-              '6M': [28, 32, 36, 40, 44, 46.5, 48],
-              '1Y': [null, null, null, 27, 28, 32, 36, 40, 44, 46.5, 48],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 27, 36, 44, 46.5, 48],
+              '6M': [28, 32, 36, 40, 44, 48],
+              '1Y': [null, null, null, 27, 28, 32, 36, 40, 48],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 27, 36, 44, 48],
               '10Y': [null, null, null, null, null, null, null, null, null, null, 48],
               '20Y': [null, null, null, null, null, null, null, null, null, null, 48]
             }
@@ -461,7 +509,89 @@
         }
       },
 
-      // SCARLET & VIOLET ERA
+      // --- SCARLET & VIOLET ERA ---
+      {
+        id: 'sv-white-flare',
+        name: 'White Flare',
+        era: 'Scarlet & Violet',
+        category: 'SV',
+        released: 'Jul 2025',
+        image: 'https://images.pokemontcg.io/sv8/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'White Flare Booster Box',
+            packCount: 36,
+            msrp: 161.64,
+            history: {
+              '1D': [174, 175, 174.5, 175.2, 175],
+              '7D': [168, 170, 171.5, 173, 175],
+              '1M': [155, 158, 162, 168, 175],
+              '6M': [130, 140, 150, 162, 175],
+              '1Y': [null, 115, 125, 138, 152, 175],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 115, 135, 155, 175],
+              '10Y': [null, null, null, null, null, null, null, null, null, 115, 175],
+              '20Y': [null, null, null, null, null, null, null, null, null, 115, 175]
+            }
+          },
+          BUNDLE: {
+            name: 'White Flare Booster Bundle',
+            packCount: 6,
+            msrp: 26.94,
+            history: {
+              '1D': [29.8, 30, 29.9, 30.1, 30],
+              '7D': [28.5, 28.8, 29.2, 29.8, 30],
+              '1M': [26, 26.8, 27.5, 28.5, 30],
+              '6M': [22, 23.5, 25.5, 28, 30],
+              '1Y': [null, 20, 21.5, 23.5, 26, 30],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 20, 23.5, 27, 30],
+              '10Y': [null, null, null, null, null, null, null, null, null, 20, 30],
+              '20Y': [null, null, null, null, null, null, null, null, null, 20, 30]
+            }
+          }
+        }
+      },
+      {
+        id: 'sv-destined-rivals',
+        name: 'Destined Rivals',
+        era: 'Scarlet & Violet',
+        category: 'SV',
+        released: 'May 2025',
+        image: 'https://images.pokemontcg.io/sv7/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Destined Rivals Booster Box',
+            packCount: 36,
+            msrp: 161.64,
+            history: {
+              '1D': [179, 180, 179.5, 180.2, 180],
+              '7D': [172, 174, 176, 178, 180],
+              '1M': [160, 164, 168, 174, 180],
+              '6M': [135, 145, 155, 168, 180],
+              '1Y': [null, 115, 128, 142, 160, 180],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, 115, 138, 158, 180],
+              '10Y': [null, null, null, null, null, null, null, null, null, 115, 180],
+              '20Y': [null, null, null, null, null, null, null, null, null, 115, 180]
+            }
+          },
+          ETB: {
+            name: 'Destined Rivals ETB',
+            packCount: 9,
+            msrp: 49.99,
+            history: {
+              '1D': [67.5, 68, 67.8, 68.2, 68],
+              '7D': [64, 65, 66, 67, 68],
+              '1M': [58, 60, 62, 65, 68],
+              '6M': [48, 52, 56, 62, 68],
+              '1Y': [null, 42, 46, 51, 58, 68],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, 42, 50, 60, 68],
+              '10Y': [null, null, null, null, null, null, null, null, null, 42, 68],
+              '20Y': [null, null, null, null, null, null, null, null, null, 42, 68]
+            }
+          }
+        }
+      },
       {
         id: 'sv9-journey-together',
         name: 'Journey Together',
@@ -477,11 +607,11 @@
             msrp: 161.64,
             history: {
               '1D': [164, 165, 164.5, 165.2, 165],
-              '7D': [158, 160, 161.5, 163, 164, 165],
-              '1M': [148, 150, 153, 157, 161, 165],
-              '6M': [130, 136, 142, 150, 158, 165],
-              '1Y': [null, 115, 120, 128, 135, 145, 155, 165],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 115, 130, 145, 158, 165],
+              '7D': [158, 160, 161.5, 163, 165],
+              '1M': [148, 150, 153, 157, 165],
+              '6M': [130, 136, 142, 150, 165],
+              '1Y': [null, 115, 120, 128, 145, 165],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 115, 130, 165],
               '10Y': [null, null, null, null, null, null, null, null, null, 115, 165],
               '20Y': [null, null, null, null, null, null, null, null, null, 115, 165]
             }
@@ -492,11 +622,11 @@
             msrp: 26.94,
             history: {
               '1D': [28.8, 29, 28.9, 29.1, 29],
-              '7D': [27.5, 28, 28.2, 28.6, 28.9, 29],
-              '1M': [25, 25.8, 26.5, 27.2, 28.1, 29],
-              '6M': [22, 23.5, 24.8, 26, 27.5, 29],
-              '1Y': [null, 20, 21, 22.5, 24, 25.5, 27.2, 29],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 20, 22.5, 25.5, 27.5, 29],
+              '7D': [27.5, 28, 28.2, 28.6, 29],
+              '1M': [25, 25.8, 26.5, 27.5, 29],
+              '6M': [22, 23.5, 24.8, 26.5, 29],
+              '1Y': [null, 20, 21, 22.5, 25.5, 29],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 20, 23.5, 29],
               '10Y': [null, null, null, null, null, null, null, null, null, 20, 29],
               '20Y': [null, null, null, null, null, null, null, null, null, 20, 29]
             }
@@ -507,11 +637,11 @@
             msrp: 49.99,
             history: {
               '1D': [59.5, 60, 59.8, 60.2, 60],
-              '7D': [57, 57.8, 58.5, 59.1, 59.6, 60],
-              '1M': [52, 53.5, 55, 56.8, 58.5, 60],
-              '6M': [44, 47, 50, 53, 56.5, 60],
-              '1Y': [null, 40, 42, 44.5, 47.5, 51, 55, 60],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 40, 44.5, 51, 56.5, 60],
+              '7D': [57, 57.8, 58.5, 59.5, 60],
+              '1M': [52, 53.5, 55, 57.5, 60],
+              '6M': [44, 47, 50, 54, 60],
+              '1Y': [null, 40, 42, 45, 52, 60],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 40, 48, 60],
               '10Y': [null, null, null, null, null, null, null, null, null, 40, 60],
               '20Y': [null, null, null, null, null, null, null, null, null, 40, 60]
             }
@@ -532,12 +662,12 @@
             packCount: 9,
             msrp: 49.99,
             history: {
-              '1D': [144, 144.5, 145, 144.8, 145.2, 145],
-              '7D': [140, 141, 142.5, 143, 144, 145],
-              '1M': [132, 134, 136, 138, 140, 145],
-              '6M': [95, 105, 120, 135, 140, 145],
-              '1Y': [50, 65, 80, 95, 110, 125, 135, 145],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 50, 85, 120, 140, 145],
+              '1D': [144, 144.5, 145, 144.8, 145],
+              '7D': [140, 141, 142.5, 144, 145],
+              '1M': [132, 134, 136, 140, 145],
+              '6M': [95, 105, 120, 135, 145],
+              '1Y': [50, 65, 80, 95, 125, 145],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 50, 85, 120, 145],
               '10Y': [null, null, null, null, null, null, null, null, null, 50, 145],
               '20Y': [null, null, null, null, null, null, null, null, null, 50, 145]
             }
@@ -548,11 +678,11 @@
             msrp: 26.94,
             history: {
               '1D': [47.8, 48, 47.9, 48.1, 48],
-              '7D': [45.5, 46, 46.8, 47.2, 47.8, 48],
-              '1M': [41, 42.5, 44, 45.5, 47, 48],
-              '6M': [32, 35, 39, 43, 46, 48],
-              '1Y': [27, 29, 32, 36, 40, 44, 48],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 27, 35, 42, 46, 48],
+              '7D': [45.5, 46, 46.8, 47.5, 48],
+              '1M': [41, 42.5, 44, 46, 48],
+              '6M': [32, 35, 39, 43, 48],
+              '1Y': [27, 29, 32, 38, 44, 48],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 27, 36, 44, 48],
               '10Y': [null, null, null, null, null, null, null, null, null, 27, 48],
               '20Y': [null, null, null, null, null, null, null, null, null, 27, 48]
             }
@@ -574,11 +704,11 @@
             msrp: 161.64,
             history: {
               '1D': [234, 235, 234.5, 235.2, 235],
-              '7D': [225, 227, 229, 231, 233, 235],
-              '1M': [205, 210, 215, 222, 228, 235],
-              '6M': [160, 172, 188, 204, 220, 235],
-              '1Y': [null, 135, 145, 160, 178, 198, 218, 235],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, 120, 145, 175, 205, 225, 235],
+              '7D': [225, 227, 229, 232, 235],
+              '1M': [205, 210, 215, 225, 235],
+              '6M': [160, 172, 188, 210, 235],
+              '1Y': [null, 135, 145, 165, 195, 235],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, 120, 145, 185, 235],
               '10Y': [null, null, null, null, null, null, null, null, null, 120, 235],
               '20Y': [null, null, null, null, null, null, null, null, null, 120, 235]
             }
@@ -589,11 +719,11 @@
             msrp: 26.94,
             history: {
               '1D': [37.8, 38, 37.9, 38.1, 38],
-              '7D': [35.5, 36, 36.8, 37.2, 37.8, 38],
-              '1M': [32, 33.5, 34.8, 36, 37, 38],
-              '6M': [27, 29, 32, 34.5, 36.5, 38],
-              '1Y': [null, 24, 25.5, 27.5, 30, 33, 36, 38],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, 24, 27.5, 31, 34.5, 37, 38],
+              '7D': [35.5, 36, 36.8, 37.5, 38],
+              '1M': [32, 33.5, 34.8, 36.5, 38],
+              '6M': [27, 29, 32, 35, 38],
+              '1Y': [null, 24, 25.5, 28, 33, 38],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, 24, 28, 34, 38],
               '10Y': [null, null, null, null, null, null, null, null, null, 24, 38],
               '20Y': [null, null, null, null, null, null, null, null, null, 24, 38]
             }
@@ -604,11 +734,11 @@
             msrp: 49.99,
             history: {
               '1D': [121, 122, 121.5, 122.4, 122],
-              '7D': [116, 117.5, 119, 120.5, 121, 122],
-              '1M': [104, 108, 112, 115, 118, 122],
-              '6M': [72, 80, 92, 104, 114, 122],
-              '1Y': [null, 50, 62, 75, 88, 98, 108, 116, 122],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, 50, 70, 90, 110, 118, 122],
+              '7D': [116, 117.5, 119, 121, 122],
+              '1M': [104, 108, 112, 116, 122],
+              '6M': [72, 80, 92, 106, 122],
+              '1Y': [null, 50, 62, 78, 102, 122],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, 50, 72, 98, 122],
               '10Y': [null, null, null, null, null, null, null, null, null, 50, 122],
               '20Y': [null, null, null, null, null, null, null, null, null, 50, 122]
             }
@@ -630,11 +760,11 @@
             msrp: 161.64,
             history: {
               '1D': [154, 155, 154.5, 155.2, 155],
-              '7D': [148, 150, 151.5, 153, 154, 155],
-              '1M': [138, 141, 144, 148, 152, 155],
-              '6M': [120, 126, 132, 140, 148, 155],
-              '1Y': [110, 114, 118, 124, 132, 142, 155],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, 110, 118, 128, 140, 150, 155],
+              '7D': [148, 150, 151.5, 153, 155],
+              '1M': [138, 141, 144, 149, 155],
+              '6M': [120, 126, 132, 142, 155],
+              '1Y': [110, 114, 118, 128, 142, 155],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, 110, 122, 138, 155],
               '10Y': [null, null, null, null, null, null, null, null, null, 110, 155],
               '20Y': [null, null, null, null, null, null, null, null, null, 110, 155]
             }
@@ -645,11 +775,11 @@
             msrp: 26.94,
             history: {
               '1D': [26.8, 27, 26.9, 27.1, 27],
-              '7D': [25.5, 25.8, 26.2, 26.5, 26.8, 27],
-              '1M': [23.5, 24.2, 24.8, 25.5, 26.2, 27],
-              '6M': [21, 22, 23.2, 24.5, 25.8, 27],
-              '1Y': [19, 20, 21, 22.2, 23.8, 25.2, 27],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, 19, 21, 23, 25, 26.5, 27],
+              '7D': [25.5, 25.8, 26.2, 26.6, 27],
+              '1M': [23.5, 24.2, 24.8, 25.8, 27],
+              '6M': [21, 22, 23.2, 25, 27],
+              '1Y': [19, 20, 21, 22.8, 25.2, 27],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, 19, 21.5, 24.5, 27],
               '10Y': [null, null, null, null, null, null, null, null, null, 19, 27],
               '20Y': [null, null, null, null, null, null, null, null, null, 19, 27]
             }
@@ -660,11 +790,11 @@
             msrp: 49.99,
             history: {
               '1D': [81.5, 82, 82.2, 81.8, 82],
-              '7D': [80, 80.5, 81, 81.2, 81.8, 82],
-              '1M': [76, 77.5, 78, 79.5, 81, 82],
-              '6M': [64, 68, 72, 75, 78, 82],
-              '1Y': [50, 54, 58, 63, 68, 72, 76, 82],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, 50, 58, 66, 74, 80, 82],
+              '7D': [80, 80.5, 81, 81.5, 82],
+              '1M': [76, 77.5, 78, 80, 82],
+              '6M': [64, 68, 72, 76, 82],
+              '1Y': [50, 54, 58, 66, 76, 82],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, 50, 60, 72, 82],
               '10Y': [null, null, null, null, null, null, null, null, null, 50, 82],
               '20Y': [null, null, null, null, null, null, null, null, null, 50, 82]
             }
@@ -686,11 +816,11 @@
             msrp: 161.64,
             history: {
               '1D': [194, 195, 194.5, 195.2, 195],
-              '7D': [186, 188, 190, 192, 194, 195],
-              '1M': [172, 176, 182, 188, 192, 195],
-              '6M': [135, 145, 158, 172, 185, 195],
-              '1Y': [115, 122, 130, 142, 158, 178, 195],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, 115, 125, 140, 160, 180, 195],
+              '7D': [186, 188, 190, 193, 195],
+              '1M': [172, 176, 182, 189, 195],
+              '6M': [135, 145, 158, 175, 195],
+              '1Y': [115, 122, 130, 155, 180, 195],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, 115, 130, 155, 180, 195],
               '10Y': [null, null, null, null, null, null, null, null, 115, 160, 195],
               '20Y': [null, null, null, null, null, null, null, null, 115, 160, 195]
             }
@@ -701,11 +831,11 @@
             msrp: 26.94,
             history: {
               '1D': [31.8, 32, 31.9, 32.1, 32],
-              '7D': [30, 30.5, 31, 31.5, 31.8, 32],
-              '1M': [27.5, 28.2, 29.2, 30.2, 31.2, 32],
-              '6M': [22, 23.5, 25.5, 27.8, 30, 32],
-              '1Y': [19, 20.2, 21.5, 23.5, 26, 29, 32],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, 19, 21, 24, 27.5, 30.5, 32],
+              '7D': [30, 30.5, 31, 31.6, 32],
+              '1M': [27.5, 28.2, 29.2, 30.5, 32],
+              '6M': [22, 23.5, 25.5, 28.5, 32],
+              '1Y': [19, 20.2, 21.5, 25, 29, 32],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, 19, 22, 26, 30, 32],
               '10Y': [null, null, null, null, null, null, null, null, 19, 27, 32],
               '20Y': [null, null, null, null, null, null, null, null, 19, 27, 32]
             }
@@ -716,11 +846,11 @@
             msrp: 49.99,
             history: {
               '1D': [107.5, 108, 107.8, 108.2, 108],
-              '7D': [102, 103.5, 105, 106, 107, 108],
-              '1M': [92, 94.5, 98, 101, 104, 108],
-              '6M': [65, 72, 80, 89, 98, 108],
-              '1Y': [50, 55, 62, 70, 78, 88, 98, 108],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, 50, 58, 68, 80, 92, 102, 108],
+              '7D': [102, 103.5, 105, 107, 108],
+              '1M': [92, 94.5, 98, 103, 108],
+              '6M': [65, 72, 80, 94, 108],
+              '1Y': [50, 55, 62, 78, 98, 108],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, 50, 62, 82, 102, 108],
               '10Y': [null, null, null, null, null, null, null, null, 50, 85, 108],
               '20Y': [null, null, null, null, null, null, null, null, 50, 85, 108]
             }
@@ -742,11 +872,11 @@
             msrp: 161.64,
             history: {
               '1D': [184, 185, 184.5, 185.2, 185],
-              '7D': [176, 178, 180, 182, 184, 185],
-              '1M': [160, 164, 170, 176, 181, 185],
-              '6M': [125, 134, 146, 160, 174, 185],
-              '1Y': [110, 116, 124, 135, 148, 166, 185],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, 110, 120, 135, 152, 172, 185],
+              '7D': [176, 178, 180, 183, 185],
+              '1M': [160, 164, 170, 178, 185],
+              '6M': [125, 134, 146, 166, 185],
+              '1Y': [110, 116, 124, 148, 172, 185],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, 110, 122, 144, 168, 185],
               '10Y': [null, null, null, null, null, null, null, null, 110, 150, 185],
               '20Y': [null, null, null, null, null, null, null, null, 110, 150, 185]
             }
@@ -757,11 +887,11 @@
             msrp: 26.94,
             history: {
               '1D': [29.8, 30, 29.9, 30.1, 30],
-              '7D': [28.2, 28.6, 29.1, 29.5, 29.8, 30],
-              '1M': [25.5, 26.2, 27.2, 28.2, 29.1, 30],
-              '6M': [20.5, 22, 23.8, 25.8, 28, 30],
-              '1Y': [18, 19, 20.2, 22, 24.2, 27, 30],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, 18, 20, 23, 26, 28.5, 30],
+              '7D': [28.2, 28.6, 29.1, 29.6, 30],
+              '1M': [25.5, 26.2, 27.2, 28.6, 30],
+              '6M': [20.5, 22, 23.8, 26.5, 30],
+              '1Y': [18, 19, 20.2, 23.5, 28, 30],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, 18, 21, 24.5, 28.5, 30],
               '10Y': [null, null, null, null, null, null, null, null, 18, 25, 30],
               '20Y': [null, null, null, null, null, null, null, null, 18, 25, 30]
             }
@@ -772,11 +902,11 @@
             msrp: 49.99,
             history: {
               '1D': [137.5, 138, 138.2, 137.9, 138],
-              '7D': [132, 133.5, 135, 136, 137, 138],
-              '1M': [118, 122, 126, 130, 134, 138],
-              '6M': [78, 88, 98, 110, 122, 138],
-              '1Y': [50, 56, 64, 75, 88, 105, 120, 138],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, 50, 60, 75, 95, 115, 130, 138],
+              '7D': [132, 133.5, 135, 137, 138],
+              '1M': [118, 122, 126, 132, 138],
+              '6M': [78, 88, 98, 116, 138],
+              '1Y': [50, 56, 64, 88, 118, 138],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, null, 50, 68, 98, 125, 138],
               '10Y': [null, null, null, null, null, null, null, null, 50, 90, 138],
               '20Y': [null, null, null, null, null, null, null, null, 50, 90, 138]
             }
@@ -798,11 +928,11 @@
             msrp: 49.99,
             history: {
               '1D': [84.5, 85, 84.8, 85.2, 85],
-              '7D': [81, 81.8, 82.5, 83.2, 84, 85],
-              '1M': [74, 76, 78, 80, 82.5, 85],
-              '6M': [62, 66, 70, 74, 78, 85],
-              '1Y': [50, 54, 58, 64, 70, 76, 82, 85],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, 50, 56, 64, 72, 78, 82, 85],
+              '7D': [81, 81.8, 82.5, 84, 85],
+              '1M': [74, 76, 78, 82, 85],
+              '6M': [62, 66, 70, 77, 85],
+              '1Y': [50, 54, 58, 68, 79, 85],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, 50, 58, 68, 79, 85],
               '10Y': [null, null, null, null, null, null, null, null, 50, 70, 85],
               '20Y': [null, null, null, null, null, null, null, null, 50, 70, 85]
             }
@@ -813,11 +943,11 @@
             msrp: 26.94,
             history: {
               '1D': [35.8, 36, 35.9, 36.1, 36],
-              '7D': [34.2, 34.6, 35, 35.4, 35.8, 36],
-              '1M': [31.5, 32.2, 33.1, 34.2, 35.2, 36],
-              '6M': [26.5, 28, 29.8, 31.8, 34, 36],
-              '1Y': [22, 23.2, 24.8, 26.8, 29.5, 32.8, 36],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, 22, 24.8, 28, 31.5, 34.5, 36],
+              '7D': [34.2, 34.6, 35, 35.6, 36],
+              '1M': [31.5, 32.2, 33.1, 34.5, 36],
+              '6M': [26.5, 28, 29.8, 33, 36],
+              '1Y': [22, 23.2, 24.8, 28.5, 33, 36],
+              '5Y': [null, null, null, null, null, null, null, null, null, null, 22, 25.5, 30, 36],
               '10Y': [null, null, null, null, null, null, null, null, 22, 30, 36],
               '20Y': [null, null, null, null, null, null, null, null, 22, 30, 36]
             }
@@ -839,11 +969,11 @@
             msrp: 161.64,
             history: {
               '1D': [144, 145, 144.5, 145.2, 145],
-              '7D': [138, 140, 141.5, 143, 144, 145],
-              '1M': [128, 131, 135, 139, 142, 145],
-              '6M': [110, 116, 122, 130, 138, 145],
-              '1Y': [98, 102, 108, 116, 126, 136, 145],
-              '5Y': [null, null, null, null, null, null, null, null, 98, 106, 116, 128, 138, 145],
+              '7D': [138, 140, 141.5, 143.5, 145],
+              '1M': [128, 131, 135, 141, 145],
+              '6M': [110, 116, 122, 134, 145],
+              '1Y': [98, 102, 108, 122, 138, 145],
+              '5Y': [null, null, null, null, null, null, null, null, 98, 108, 122, 138, 145],
               '10Y': [null, null, null, null, null, null, null, 98, 120, 145],
               '20Y': [null, null, null, null, null, null, null, 98, 120, 145]
             }
@@ -854,11 +984,11 @@
             msrp: 26.94,
             history: {
               '1D': [25.8, 26, 25.9, 26.1, 26],
-              '7D': [24.5, 24.8, 25.2, 25.6, 25.9, 26],
-              '1M': [22.8, 23.4, 24.1, 24.8, 25.5, 26],
-              '6M': [19.5, 20.8, 22, 23.2, 24.8, 26],
-              '1Y': [17.5, 18.2, 19.2, 20.6, 22.4, 24.2, 26],
-              '5Y': [null, null, null, null, null, null, null, null, 17.5, 19, 21, 23, 24.8, 26],
+              '7D': [24.5, 24.8, 25.2, 25.7, 26],
+              '1M': [22.8, 23.4, 24.1, 25.1, 26],
+              '6M': [19.5, 20.8, 22, 24.2, 26],
+              '1Y': [17.5, 18.2, 19.2, 21.8, 24.5, 26],
+              '5Y': [null, null, null, null, null, null, null, null, 17.5, 19.5, 22.5, 26],
               '10Y': [null, null, null, null, null, null, null, 17.5, 22, 26],
               '20Y': [null, null, null, null, null, null, null, 17.5, 22, 26]
             }
@@ -869,13 +999,13 @@
             msrp: 49.99,
             history: {
               '1D': [73.5, 74, 73.8, 74.2, 74],
-              '7D': [70, 71, 72, 72.8, 73.5, 74],
-              '1M': [64, 66, 68, 70, 72, 74],
-              '6M': [52, 56, 60, 64, 68, 74],
-              '1Y': [45, 48, 52, 56, 61, 66, 70, 74],
-              '5Y': [null, null, null, null, null, null, null, null, null, 48, 52, 58, 64, 68, 72, 74],
-              '10Y': [null, null, null, null, null, null, null, 48, 55, 65, 74],
-              '20Y': [null, null, null, null, null, null, null, 48, 55, 65, 74]
+              '7D': [70, 71, 72, 73.2, 74],
+              '1M': [64, 66, 68, 71.5, 74],
+              '6M': [52, 56, 60, 68, 74],
+              '1Y': [45, 48, 52, 62, 70, 74],
+              '5Y': [null, null, null, null, null, null, null, null, null, 48, 56, 66, 74],
+              '10Y': [null, null, null, null, null, null, null, 48, 55, 74],
+              '20Y': [null, null, null, null, null, null, null, 48, 55, 74]
             }
           }
         }
@@ -895,13 +1025,13 @@
             msrp: 119.99,
             history: {
               '1D': [922, 924, 923.5, 925, 925],
-              '7D': [900, 905, 912, 918, 922, 925],
-              '1M': [850, 865, 880, 895, 910, 925],
-              '6M': [520, 580, 650, 740, 830, 925],
-              '1Y': [240, 310, 420, 530, 650, 780, 925],
-              '5Y': [null, null, null, null, null, null, null, null, 120, 160, 240, 390, 550, 750, 925],
-              '10Y': [null, null, null, null, null, null, null, 120, 240, 650, 925],
-              '20Y': [null, null, null, null, null, null, null, 120, 240, 650, 925]
+              '7D': [900, 905, 912, 920, 925],
+              '1M': [850, 865, 880, 905, 925],
+              '6M': [520, 580, 650, 770, 925],
+              '1Y': [240, 310, 420, 610, 810, 925],
+              '5Y': [null, null, null, null, null, null, null, null, 120, 180, 320, 550, 820, 925],
+              '10Y': [null, null, null, null, null, null, null, 120, 350, 720, 925],
+              '20Y': [null, null, null, null, null, null, null, 120, 350, 720, 925]
             }
           },
           ETB: {
@@ -910,13 +1040,13 @@
             msrp: 49.99,
             history: {
               '1D': [508, 510, 509.5, 511, 510],
-              '7D': [490, 495, 500, 504, 508, 510],
-              '1M': [450, 462, 475, 488, 498, 510],
-              '6M': [280, 320, 370, 415, 460, 510],
-              '1Y': [110, 145, 190, 250, 330, 420, 510],
-              '5Y': [null, null, null, null, null, null, null, null, 50, 75, 120, 210, 340, 450, 510],
-              '10Y': [null, null, null, null, null, null, null, 50, 140, 380, 510],
-              '20Y': [null, null, null, null, null, null, null, 50, 140, 380, 510]
+              '7D': [490, 495, 500, 506, 510],
+              '1M': [450, 462, 475, 492, 510],
+              '6M': [280, 320, 370, 430, 510],
+              '1Y': [110, 145, 190, 290, 420, 510],
+              '5Y': [null, null, null, null, null, null, null, null, 50, 90, 180, 320, 460, 510],
+              '10Y': [null, null, null, null, null, null, null, 50, 160, 410, 510],
+              '20Y': [null, null, null, null, null, null, null, 50, 160, 410, 510]
             }
           },
           BUNDLE: {
@@ -925,11 +1055,11 @@
             msrp: 26.94,
             history: {
               '1D': [47.8, 48, 47.9, 48.1, 48],
-              '7D': [45.5, 46, 46.8, 47.2, 47.8, 48],
-              '1M': [41, 42.5, 44, 45.5, 47, 48],
-              '6M': [32, 35, 38.5, 42, 45.5, 48],
-              '1Y': [27, 29, 31.5, 35, 39, 43.5, 48],
-              '5Y': [null, null, null, null, null, null, null, null, 27, 32, 37, 42, 45.5, 48],
+              '7D': [45.5, 46, 46.8, 47.5, 48],
+              '1M': [41, 42.5, 44, 46, 48],
+              '6M': [32, 35, 38.5, 43.5, 48],
+              '1Y': [27, 29, 31.5, 38, 44, 48],
+              '5Y': [null, null, null, null, null, null, null, null, 27, 33, 39, 48],
               '10Y': [null, null, null, null, null, null, null, 27, 38, 48],
               '20Y': [null, null, null, null, null, null, null, 27, 38, 48]
             }
@@ -951,11 +1081,11 @@
             msrp: 161.64,
             history: {
               '1D': [159, 160, 159.5, 160.2, 160],
-              '7D': [152, 154, 156, 158, 159, 160],
-              '1M': [142, 146, 150, 154, 158, 160],
-              '6M': [122, 128, 136, 145, 154, 160],
-              '1Y': [105, 110, 118, 128, 140, 152, 160],
-              '5Y': [null, null, null, null, null, null, null, 105, 115, 128, 142, 154, 160],
+              '7D': [152, 154, 156, 158.5, 160],
+              '1M': [142, 146, 150, 156, 160],
+              '6M': [122, 128, 136, 148, 160],
+              '1Y': [105, 110, 118, 135, 154, 160],
+              '5Y': [null, null, null, null, null, null, null, 105, 118, 136, 154, 160],
               '10Y': [null, null, null, null, null, null, 105, 135, 160],
               '20Y': [null, null, null, null, null, null, 105, 135, 160]
             }
@@ -966,11 +1096,11 @@
             msrp: 26.94,
             history: {
               '1D': [27.8, 28, 27.9, 28.1, 28],
-              '7D': [26.5, 26.8, 27.2, 27.5, 27.8, 28],
-              '1M': [24.5, 25.2, 26, 26.8, 27.5, 28],
-              '6M': [21, 22.2, 23.5, 25, 26.8, 28],
-              '1Y': [18.5, 19.5, 20.8, 22.5, 24.5, 26.5, 28],
-              '5Y': [null, null, null, null, null, null, null, 18.5, 20.5, 23, 25.5, 27, 28],
+              '7D': [26.5, 26.8, 27.2, 27.6, 28],
+              '1M': [24.5, 25.2, 26, 27.2, 28],
+              '6M': [21, 22.2, 23.5, 25.8, 28],
+              '1Y': [18.5, 19.5, 20.8, 23.5, 26.5, 28],
+              '5Y': [null, null, null, null, null, null, null, 18.5, 21.5, 25, 28],
               '10Y': [null, null, null, null, null, null, 18.5, 24, 28],
               '20Y': [null, null, null, null, null, null, 18.5, 24, 28]
             }
@@ -981,60 +1111,19 @@
             msrp: 49.99,
             history: {
               '1D': [94.5, 95, 94.8, 95.2, 95],
-              '7D': [91, 92, 92.8, 93.5, 94.2, 95],
-              '1M': [84, 86, 88, 90.5, 93, 95],
-              '6M': [68, 72, 78, 83, 88, 95],
-              '1Y': [50, 55, 61, 68, 76, 85, 95],
-              '5Y': [null, null, null, null, null, null, null, 50, 58, 66, 75, 84, 95],
-              '10Y': [null, null, null, null, null, null, 50, 65, 80, 95],
-              '20Y': [null, null, null, null, null, null, 50, 65, 80, 95]
+              '7D': [91, 92, 92.8, 94, 95],
+              '1M': [84, 86, 88, 92, 95],
+              '6M': [68, 72, 78, 86, 95],
+              '1Y': [50, 55, 61, 74, 88, 95],
+              '5Y': [null, null, null, null, null, null, null, 50, 62, 78, 95],
+              '10Y': [null, null, null, null, null, null, 50, 72, 95],
+              '20Y': [null, null, null, null, null, null, 50, 72, 95]
             }
           }
         }
       },
 
-      // SWORD & SHIELD & VINTAGE
-      {
-        id: 'swsh7-evolving-skies',
-        name: 'Evolving Skies',
-        era: 'Sword & Shield',
-        category: 'SWSH',
-        released: 'Aug 2021',
-        image: 'https://images.pokemontcg.io/swsh7/logo.png',
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Evolving Skies Booster Box',
-            packCount: 36,
-            msrp: 143.64,
-            history: {
-              '1D': [918, 920, 919, 921, 920],
-              '7D': [890, 895, 905, 912, 918, 920],
-              '1M': [820, 840, 865, 885, 905, 920],
-              '6M': [620, 680, 740, 810, 870, 920],
-              '1Y': [420, 480, 560, 650, 740, 840, 920],
-              '5Y': [null, 140, 180, 240, 320, 420, 550, 700, 840, 920],
-              '10Y': [null, null, null, null, 140, 280, 550, 800, 920],
-              '20Y': [null, null, null, null, 140, 280, 550, 800, 920]
-            }
-          },
-          ETB: {
-            name: 'Evolving Skies ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [518, 520, 519, 521, 520],
-              '7D': [498, 502, 508, 512, 516, 520],
-              '1M': [460, 470, 482, 495, 508, 520],
-              '6M': [340, 370, 405, 440, 475, 520],
-              '1Y': [220, 260, 305, 355, 410, 470, 520],
-              '5Y': [null, 40, 55, 75, 110, 155, 210, 280, 360, 450, 520],
-              '10Y': [null, null, null, null, 40, 75, 160, 310, 460, 520],
-              '20Y': [null, null, null, null, 40, 75, 160, 310, 460, 520]
-            }
-          }
-        }
-      },
+      // --- SWORD & SHIELD ERA ---
       {
         id: 'swsh12pt5-crown-zenith',
         name: 'Crown Zenith',
@@ -1050,39 +1139,136 @@
             msrp: 49.99,
             history: {
               '1D': [314, 315, 314.5, 315.5, 315],
-              '7D': [302, 305, 308, 310, 312, 315],
-              '1M': [280, 286, 292, 298, 305, 315],
-              '6M': [195, 215, 240, 265, 290, 315],
-              '1Y': [110, 135, 165, 200, 240, 280, 315],
-              '5Y': [null, null, null, null, null, null, 50, 58, 72, 95, 130, 185, 245, 290, 315],
-              '10Y': [null, null, null, null, null, null, 50, 90, 160, 260, 315],
-              '20Y': [null, null, null, null, null, null, 50, 90, 160, 260, 315]
+              '7D': [302, 305, 308, 312, 315],
+              '1M': [280, 286, 292, 304, 315],
+              '6M': [195, 215, 240, 275, 315],
+              '1Y': [110, 135, 165, 220, 280, 315],
+              '5Y': [null, null, null, null, null, null, 50, 68, 95, 165, 260, 315],
+              '10Y': [null, null, null, null, null, null, 50, 95, 180, 315],
+              '20Y': [null, null, null, null, null, null, 50, 95, 180, 315]
             }
           }
         }
       },
       {
-        id: 'swsh-charizard-upc',
-        name: 'Sword & Shield Ultra-Premium',
+        id: 'swsh12-silver-tempest',
+        name: 'Silver Tempest',
         era: 'Sword & Shield',
         category: 'SWSH',
-        released: 'Oct 2022',
-        image: 'https://images.pokemontcg.io/swsh12pt5/logo.png',
-        selectedType: 'UPC',
+        released: 'Nov 2022',
+        image: 'https://images.pokemontcg.io/swsh12/logo.png',
+        selectedType: 'BBOX',
         variants: {
-          UPC: {
-            name: 'Sword & Shield Charizard UPC',
-            packCount: 16,
-            msrp: 119.99,
+          BBOX: {
+            name: 'Silver Tempest Booster Box',
+            packCount: 36,
+            msrp: 143.64,
             history: {
-              '1D': [164, 165, 164.8, 165.2, 165],
-              '7D': [158, 160, 161.5, 163, 164, 165],
-              '1M': [145, 148, 152, 156, 160, 165],
-              '6M': [128, 134, 140, 146, 153, 165],
-              '1Y': [105, 112, 120, 128, 138, 150, 165],
-              '5Y': [null, null, null, null, 175, 140, 95, 88, 96, 110, 125, 140, 155, 165],
-              '10Y': [null, null, null, null, null, 175, 95, 110, 140, 165],
-              '20Y': [null, null, null, null, null, 175, 95, 110, 140, 165]
+              '1D': [174, 175, 174.5, 175.2, 175],
+              '7D': [168, 170, 172, 174, 175],
+              '1M': [155, 160, 165, 170, 175],
+              '6M': [135, 142, 150, 162, 175],
+              '1Y': [118, 124, 132, 148, 165, 175],
+              '5Y': [null, null, null, null, null, 110, 118, 128, 145, 165, 175],
+              '10Y': [null, null, null, null, null, 110, 132, 160, 175],
+              '20Y': [null, null, null, null, null, 110, 132, 160, 175]
+            }
+          },
+          ETB: {
+            name: 'Silver Tempest ETB',
+            packCount: 8,
+            msrp: 39.99,
+            history: {
+              '1D': [54.5, 55, 54.8, 55.2, 55],
+              '7D': [52, 52.8, 53.5, 54.2, 55],
+              '1M': [48, 49.5, 51, 53, 55],
+              '6M': [42, 44.5, 47, 51, 55],
+              '1Y': [36, 38, 40.5, 46, 51, 55],
+              '5Y': [null, null, null, null, null, 36, 40, 44, 48, 55],
+              '10Y': [null, null, null, null, null, 36, 42, 50, 55],
+              '20Y': [null, null, null, null, null, 36, 42, 50, 55]
+            }
+          }
+        }
+      },
+      {
+        id: 'swsh10-astral-radiance',
+        name: 'Astral Radiance',
+        era: 'Sword & Shield',
+        category: 'SWSH',
+        released: 'May 2022',
+        image: 'https://images.pokemontcg.io/swsh10/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Astral Radiance Booster Box',
+            packCount: 36,
+            msrp: 143.64,
+            history: {
+              '1D': [184, 185, 184.5, 185.2, 185],
+              '7D': [178, 180, 182, 184, 185],
+              '1M': [165, 170, 174, 180, 185],
+              '6M': [142, 150, 160, 172, 185],
+              '1Y': [120, 128, 138, 154, 174, 185],
+              '5Y': [null, null, null, null, 110, 118, 130, 148, 168, 185],
+              '10Y': [null, null, null, null, 110, 135, 165, 185],
+              '20Y': [null, null, null, null, 110, 135, 165, 185]
+            }
+          },
+          ETB: {
+            name: 'Astral Radiance ETB',
+            packCount: 8,
+            msrp: 39.99,
+            history: {
+              '1D': [55.5, 56, 55.8, 56.2, 56],
+              '7D': [53, 53.8, 54.5, 55.2, 56],
+              '1M': [49, 50.5, 52, 54, 56],
+              '6M': [43, 45.5, 48, 52, 56],
+              '1Y': [37, 39, 41.5, 47, 52, 56],
+              '5Y': [null, null, null, null, 36, 40, 44, 49, 56],
+              '10Y': [null, null, null, null, 36, 44, 52, 56],
+              '20Y': [null, null, null, null, 36, 44, 52, 56]
+            }
+          }
+        }
+      },
+      {
+        id: 'swsh8-fusion-strike',
+        name: 'Fusion Strike',
+        era: 'Sword & Shield',
+        category: 'SWSH',
+        released: 'Nov 2021',
+        image: 'https://images.pokemontcg.io/swsh8/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Fusion Strike Booster Box',
+            packCount: 36,
+            msrp: 143.64,
+            history: {
+              '1D': [264, 265, 264.5, 265.2, 265],
+              '7D': [255, 258, 260, 263, 265],
+              '1M': [235, 242, 250, 258, 265],
+              '6M': [180, 195, 215, 240, 265],
+              '1Y': [135, 150, 172, 205, 245, 265],
+              '5Y': [null, null, null, 110, 120, 138, 165, 215, 265],
+              '10Y': [null, null, null, 110, 150, 210, 265],
+              '20Y': [null, null, null, 110, 150, 210, 265]
+            }
+          },
+          ETB: {
+            name: 'Fusion Strike ETB',
+            packCount: 8,
+            msrp: 39.99,
+            history: {
+              '1D': [64.5, 65, 64.8, 65.2, 65],
+              '7D': [61, 62, 63, 64, 65],
+              '1M': [55, 57, 59, 62, 65],
+              '6M': [45, 48, 52, 58, 65],
+              '1Y': [38, 41, 44, 52, 60, 65],
+              '5Y': [null, null, null, 36, 40, 46, 54, 65],
+              '10Y': [null, null, null, 36, 46, 58, 65],
+              '20Y': [null, null, null, 36, 46, 58, 65]
             }
           }
         }
@@ -1097,18 +1283,18 @@
         selectedType: 'UPC',
         variants: {
           UPC: {
-            name: 'Celebrations UPC',
+            name: 'Celebrations UPC (Classic)',
             packCount: 17,
             msrp: 119.99,
             history: {
               '1D': [448, 450, 449, 451, 450],
-              '7D': [435, 438, 442, 445, 448, 450],
-              '1M': [410, 418, 425, 432, 440, 450],
-              '6M': [350, 368, 385, 405, 425, 450],
-              '1Y': [290, 310, 335, 360, 390, 420, 450],
-              '5Y': [null, null, 120, 380, 320, 270, 285, 310, 340, 375, 410, 450],
-              '10Y': [null, null, null, null, 120, 320, 290, 360, 420, 450],
-              '20Y': [null, null, null, null, 120, 320, 290, 360, 420, 450]
+              '7D': [435, 438, 442, 446, 450],
+              '1M': [410, 418, 425, 438, 450],
+              '6M': [350, 368, 385, 415, 450],
+              '1Y': [290, 310, 335, 380, 425, 450],
+              '5Y': [null, null, 120, 380, 320, 270, 310, 375, 450],
+              '10Y': [null, null, null, null, 120, 320, 360, 450],
+              '20Y': [null, null, null, null, 120, 320, 360, 450]
             }
           },
           ETB: {
@@ -1117,13 +1303,680 @@
             msrp: 49.99,
             history: {
               '1D': [109, 110, 109.5, 110.5, 110],
-              '7D': [105, 106, 107.5, 109, 109.8, 110],
-              '1M': [96, 98.5, 101, 104, 107, 110],
-              '6M': [78, 84, 90, 96, 104, 110],
-              '1Y': [65, 70, 76, 82, 92, 102, 110],
-              '5Y': [null, null, 50, 75, 65, 55, 62, 74, 85, 96, 110],
-              '10Y': [null, null, null, null, 50, 70, 85, 98, 110],
-              '20Y': [null, null, null, null, 50, 70, 85, 98, 110]
+              '7D': [105, 106, 107.5, 109, 110],
+              '1M': [96, 98.5, 101, 106, 110],
+              '6M': [78, 84, 90, 100, 110],
+              '1Y': [65, 70, 76, 88, 102, 110],
+              '5Y': [null, null, 50, 75, 65, 55, 74, 92, 110],
+              '10Y': [null, null, null, null, 50, 70, 92, 110],
+              '20Y': [null, null, null, null, 50, 70, 92, 110]
+            }
+          }
+        }
+      },
+      {
+        id: 'swsh7-evolving-skies',
+        name: 'Evolving Skies',
+        era: 'Sword & Shield',
+        category: 'SWSH',
+        released: 'Aug 2021',
+        image: 'https://images.pokemontcg.io/swsh7/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Evolving Skies Booster Box',
+            packCount: 36,
+            msrp: 143.64,
+            history: {
+              '1D': [918, 920, 919, 921, 920],
+              '7D': [890, 895, 905, 915, 920],
+              '1M': [820, 840, 865, 895, 920],
+              '6M': [620, 680, 740, 830, 920],
+              '1Y': [420, 480, 560, 700, 850, 920],
+              '5Y': [null, 140, 180, 240, 340, 480, 680, 850, 920],
+              '10Y': [null, null, null, null, 140, 310, 650, 920],
+              '20Y': [null, null, null, null, 140, 310, 650, 920]
+            }
+          },
+          ETB: {
+            name: 'Evolving Skies ETB',
+            packCount: 8,
+            msrp: 39.99,
+            history: {
+              '1D': [518, 520, 519, 521, 520],
+              '7D': [498, 502, 508, 515, 520],
+              '1M': [460, 470, 482, 505, 520],
+              '6M': [340, 370, 405, 465, 520],
+              '1Y': [220, 260, 305, 390, 480, 520],
+              '5Y': [null, 40, 55, 75, 125, 220, 360, 470, 520],
+              '10Y': [null, null, null, null, 40, 95, 280, 520],
+              '20Y': [null, null, null, null, 40, 95, 280, 520]
+            }
+          }
+        }
+      },
+      {
+        id: 'swsh6-chilling-reign',
+        name: 'Chilling Reign',
+        era: 'Sword & Shield',
+        category: 'SWSH',
+        released: 'Jun 2021',
+        image: 'https://images.pokemontcg.io/swsh6/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Chilling Reign Booster Box',
+            packCount: 36,
+            msrp: 143.64,
+            history: {
+              '1D': [244, 245, 244.5, 245.2, 245],
+              '7D': [236, 238, 240, 243, 245],
+              '1M': [218, 224, 230, 238, 245],
+              '6M': [175, 185, 200, 225, 245],
+              '1Y': [135, 145, 160, 190, 225, 245],
+              '5Y': [null, 110, 118, 128, 145, 180, 220, 245],
+              '10Y': [null, null, null, null, 110, 160, 220, 245],
+              '20Y': [null, null, null, null, 110, 160, 220, 245]
+            }
+          },
+          ETB: {
+            name: 'Chilling Reign ETB',
+            packCount: 8,
+            msrp: 39.99,
+            history: {
+              '1D': [67.5, 68, 67.8, 68.2, 68],
+              '7D': [64, 65, 66, 67.2, 68],
+              '1M': [58, 60, 62, 65, 68],
+              '6M': [48, 51, 55, 61, 68],
+              '1Y': [38, 41, 45, 54, 62, 68],
+              '5Y': [null, 36, 38, 42, 48, 56, 68],
+              '10Y': [null, null, null, null, 36, 48, 62, 68],
+              '20Y': [null, null, null, null, 36, 48, 62, 68]
+            }
+          }
+        }
+      },
+      {
+        id: 'swsh5-battle-styles',
+        name: 'Battle Styles',
+        era: 'Sword & Shield',
+        category: 'SWSH',
+        released: 'Mar 2021',
+        image: 'https://images.pokemontcg.io/swsh5/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Battle Styles Booster Box',
+            packCount: 36,
+            msrp: 143.64,
+            history: {
+              '1D': [164, 165, 164.5, 165.2, 165],
+              '7D': [158, 160, 161.5, 163.5, 165],
+              '1M': [148, 152, 156, 161, 165],
+              '6M': [125, 132, 140, 152, 165],
+              '1Y': [108, 114, 122, 138, 154, 165],
+              '5Y': [null, 110, 100, 95, 110, 128, 150, 165],
+              '10Y': [null, null, null, null, 110, 120, 150, 165],
+              '20Y': [null, null, null, null, 110, 120, 150, 165]
+            }
+          },
+          ETB: {
+            name: 'Battle Styles ETB',
+            packCount: 8,
+            msrp: 39.99,
+            history: {
+              '1D': [47.8, 48, 47.9, 48.1, 48],
+              '7D': [45.5, 46, 46.8, 47.5, 48],
+              '1M': [42, 43.5, 45, 46.8, 48],
+              '6M': [36, 38.5, 41, 44.5, 48],
+              '1Y': [32, 34, 36.5, 41, 45, 48],
+              '5Y': [null, 36, 34, 32, 36, 41, 48],
+              '10Y': [null, null, null, null, 36, 40, 48],
+              '20Y': [null, null, null, null, 36, 40, 48]
+            }
+          }
+        }
+      },
+      {
+        id: 'swsh45-shining-fates',
+        name: 'Shining Fates',
+        era: 'Sword & Shield',
+        category: 'SWSH',
+        released: 'Feb 2021',
+        image: 'https://images.pokemontcg.io/swsh45/logo.png',
+        selectedType: 'ETB',
+        variants: {
+          ETB: {
+            name: 'Shining Fates ETB',
+            packCount: 10,
+            msrp: 49.99,
+            history: {
+              '1D': [74.5, 75, 74.8, 75.2, 75],
+              '7D': [71, 72, 72.8, 74, 75],
+              '1M': [65, 67, 69, 72, 75],
+              '6M': [54, 58, 62, 68, 75],
+              '1Y': [46, 49, 53, 62, 70, 75],
+              '5Y': [null, 110, 85, 65, 55, 64, 75],
+              '10Y': [null, null, null, null, 110, 70, 75],
+              '20Y': [null, null, null, null, 110, 70, 75]
+            }
+          }
+        }
+      },
+      {
+        id: 'swsh4-vivid-voltage',
+        name: 'Vivid Voltage',
+        era: 'Sword & Shield',
+        category: 'SWSH',
+        released: 'Nov 2020',
+        image: 'https://images.pokemontcg.io/swsh4/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Vivid Voltage Booster Box',
+            packCount: 36,
+            msrp: 143.64,
+            history: {
+              '1D': [169, 170, 169.5, 170.2, 170],
+              '7D': [162, 164, 166, 168.5, 170],
+              '1M': [150, 154, 158, 164, 170],
+              '6M': [128, 135, 144, 156, 170],
+              '1Y': [112, 118, 126, 142, 160, 170],
+              '5Y': [140, 160, 130, 115, 125, 145, 170],
+              '10Y': [null, null, null, null, 140, 145, 170],
+              '20Y': [null, null, null, null, 140, 145, 170]
+            }
+          },
+          ETB: {
+            name: 'Vivid Voltage ETB',
+            packCount: 8,
+            msrp: 39.99,
+            history: {
+              '1D': [51.8, 52, 51.9, 52.1, 52],
+              '7D': [49.5, 50, 50.8, 51.5, 52],
+              '1M': [45, 46.5, 48, 50, 52],
+              '6M': [38, 40.5, 43, 47, 52],
+              '1Y': [33, 35, 37.5, 42, 48, 52],
+              '5Y': [45, 55, 42, 36, 40, 48, 52],
+              '10Y': [null, null, null, null, 45, 45, 52],
+              '20Y': [null, null, null, null, 45, 45, 52]
+            }
+          }
+        }
+      },
+      {
+        id: 'swsh35-champions-path',
+        name: "Champion's Path",
+        era: 'Sword & Shield',
+        category: 'SWSH',
+        released: 'Sep 2020',
+        image: 'https://images.pokemontcg.io/swsh35/logo.png',
+        selectedType: 'ETB',
+        variants: {
+          ETB: {
+            name: "Champion's Path ETB",
+            packCount: 10,
+            msrp: 49.99,
+            history: {
+              '1D': [124, 125, 124.5, 125.2, 125],
+              '7D': [118, 120, 122, 124, 125],
+              '1M': [110, 112, 115, 120, 125],
+              '6M': [95, 102, 108, 118, 125],
+              '1Y': [82, 86, 92, 104, 116, 125],
+              '5Y': [150, 110, 95, 85, 92, 110, 125],
+              '10Y': [null, null, null, null, 150, 105, 125],
+              '20Y': [null, null, null, null, 150, 105, 125]
+            }
+          }
+        }
+      },
+      {
+        id: 'swsh3-darkness-ablaze',
+        name: 'Darkness Ablaze',
+        era: 'Sword & Shield',
+        category: 'SWSH',
+        released: 'Aug 2020',
+        image: 'https://images.pokemontcg.io/swsh3/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Darkness Ablaze Booster Box',
+            packCount: 36,
+            msrp: 143.64,
+            history: {
+              '1D': [167, 168, 167.5, 168.2, 168],
+              '7D': [160, 162, 164, 166.5, 168],
+              '1M': [148, 152, 156, 162, 168],
+              '6M': [126, 134, 142, 155, 168],
+              '1Y': [110, 116, 125, 140, 158, 168],
+              '5Y': [150, 135, 115, 110, 122, 145, 168],
+              '10Y': [null, null, null, null, 150, 135, 168],
+              '20Y': [null, null, null, null, 150, 135, 168]
+            }
+          },
+          ETB: {
+            name: 'Darkness Ablaze ETB',
+            packCount: 8,
+            msrp: 39.99,
+            history: {
+              '1D': [49.8, 50, 49.9, 50.1, 50],
+              '7D': [47.5, 48, 48.8, 49.5, 50],
+              '1M': [43, 44.5, 46, 48, 50],
+              '6M': [36, 38.5, 41, 45, 50],
+              '1Y': [30, 32, 35, 40, 46, 50],
+              '5Y': [50, 45, 38, 35, 40, 50],
+              '10Y': [null, null, null, null, 50, 45, 50],
+              '20Y': [null, null, null, null, 50, 45, 50]
+            }
+          }
+        }
+      },
+      {
+        id: 'swsh2-rebel-clash',
+        name: 'Rebel Clash',
+        era: 'Sword & Shield',
+        category: 'SWSH',
+        released: 'May 2020',
+        image: 'https://images.pokemontcg.io/swsh2/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Rebel Clash Booster Box',
+            packCount: 36,
+            msrp: 143.64,
+            history: {
+              '1D': [239, 240, 239.5, 240.2, 240],
+              '7D': [230, 232, 235, 238, 240],
+              '1M': [215, 220, 226, 234, 240],
+              '6M': [180, 192, 205, 222, 240],
+              '1Y': [150, 160, 172, 195, 220, 240],
+              '5Y': [120, 135, 145, 160, 185, 215, 240],
+              '10Y': [null, null, null, null, 120, 180, 240],
+              '20Y': [null, null, null, null, 120, 180, 240]
+            }
+          },
+          ETB: {
+            name: 'Rebel Clash ETB',
+            packCount: 8,
+            msrp: 39.99,
+            history: {
+              '1D': [69.5, 70, 69.8, 70.2, 70],
+              '7D': [66, 67, 68, 69, 70],
+              '1M': [60, 62, 64, 67, 70],
+              '6M': [50, 53, 57, 63, 70],
+              '1Y': [42, 45, 48, 56, 64, 70],
+              '5Y': [36, 42, 48, 54, 62, 70],
+              '10Y': [null, null, null, null, 36, 55, 70],
+              '20Y': [null, null, null, null, 36, 55, 70]
+            }
+          }
+        }
+      },
+      {
+        id: 'swsh1-base',
+        name: 'Sword & Shield Base',
+        era: 'Sword & Shield',
+        category: 'SWSH',
+        released: 'Feb 2020',
+        image: 'https://images.pokemontcg.io/swsh1/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Sword & Shield Base Booster Box',
+            packCount: 36,
+            msrp: 143.64,
+            history: {
+              '1D': [308, 310, 309, 311, 310],
+              '7D': [295, 298, 302, 306, 310],
+              '1M': [275, 282, 290, 300, 310],
+              '6M': [230, 245, 260, 285, 310],
+              '1Y': [190, 205, 222, 255, 285, 310],
+              '5Y': [130, 150, 175, 205, 245, 280, 310],
+              '10Y': [null, null, null, null, 130, 220, 310],
+              '20Y': [null, null, null, null, 130, 220, 310]
+            }
+          },
+          ETB: {
+            name: 'Sword & Shield Base ETB',
+            packCount: 8,
+            msrp: 39.99,
+            history: {
+              '1D': [77.5, 78, 77.8, 78.2, 78],
+              '7D': [74, 75, 76, 77.2, 78],
+              '1M': [68, 70, 72, 75, 78],
+              '6M': [56, 60, 64, 70, 78],
+              '1Y': [46, 49, 54, 62, 72, 78],
+              '5Y': [36, 45, 52, 60, 70, 78],
+              '10Y': [null, null, null, null, 36, 60, 78],
+              '20Y': [null, null, null, null, 36, 60, 78]
+            }
+          }
+        }
+      },
+
+      // --- SUN & MOON ERA ---
+      {
+        id: 'sm12-cosmic-eclipse',
+        name: 'Cosmic Eclipse',
+        era: 'Sun & Moon',
+        category: 'SM',
+        released: 'Nov 2019',
+        image: 'https://images.pokemontcg.io/sm12/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Cosmic Eclipse Booster Box',
+            packCount: 36,
+            msrp: 143.64,
+            history: {
+              '1D': [978, 980, 979, 981, 980],
+              '7D': [950, 955, 965, 972, 980],
+              '1M': [890, 910, 930, 955, 980],
+              '6M': [720, 780, 840, 910, 980],
+              '1Y': [540, 610, 690, 790, 900, 980],
+              '5Y': [240, 360, 480, 620, 780, 900, 980],
+              '10Y': [null, null, null, 140, 360, 680, 980],
+              '20Y': [null, null, null, 140, 360, 680, 980]
+            }
+          },
+          ETB: {
+            name: 'Cosmic Eclipse ETB',
+            packCount: 8,
+            msrp: 39.99,
+            history: {
+              '1D': [358, 360, 359, 361, 360],
+              '7D': [345, 348, 352, 356, 360],
+              '1M': [320, 328, 336, 348, 360],
+              '6M': [260, 280, 305, 335, 360],
+              '1Y': [190, 215, 245, 285, 330, 360],
+              '5Y': [90, 140, 180, 240, 300, 360],
+              '10Y': [null, null, null, 40, 140, 260, 360],
+              '20Y': [null, null, null, 40, 140, 260, 360]
+            }
+          }
+        }
+      },
+      {
+        id: 'sma-hidden-fates',
+        name: 'Hidden Fates',
+        era: 'Sun & Moon',
+        category: 'SM',
+        released: 'Aug 2019',
+        image: 'https://images.pokemontcg.io/sma/logo.png',
+        selectedType: 'ETB',
+        variants: {
+          ETB: {
+            name: 'Hidden Fates ETB',
+            packCount: 10,
+            msrp: 49.99,
+            history: {
+              '1D': [214, 215, 214.5, 215.2, 215],
+              '7D': [206, 208, 210, 213, 215],
+              '1M': [192, 196, 202, 208, 215],
+              '6M': [160, 172, 184, 198, 215],
+              '1Y': [130, 142, 155, 175, 198, 215],
+              '5Y': [140, 160, 145, 155, 175, 195, 215],
+              '10Y': [null, null, null, 60, 150, 190, 215],
+              '20Y': [null, null, null, 60, 150, 190, 215]
+            }
+          }
+        }
+      },
+      {
+        id: 'sm3pt5-shining-legends',
+        name: 'Shining Legends',
+        era: 'Sun & Moon',
+        category: 'SM',
+        released: 'Oct 2017',
+        image: 'https://images.pokemontcg.io/sm3pt5/logo.png',
+        selectedType: 'ETB',
+        variants: {
+          ETB: {
+            name: 'Shining Legends Super Premium / ETB',
+            packCount: 10,
+            msrp: 49.99,
+            history: {
+              '1D': [338, 340, 339, 341, 340],
+              '7D': [325, 328, 332, 336, 340],
+              '1M': [300, 310, 320, 330, 340],
+              '6M': [250, 270, 290, 315, 340],
+              '1Y': [200, 220, 245, 275, 310, 340],
+              '5Y': [120, 160, 210, 260, 300, 340],
+              '10Y': [null, 50, 90, 160, 260, 340],
+              '20Y': [null, 50, 90, 160, 260, 340]
+            }
+          }
+        }
+      },
+
+      // --- XY ERA ---
+      {
+        id: 'xy11-steam-siege',
+        name: 'Steam Siege',
+        era: 'XY Series',
+        category: 'XY',
+        released: 'Aug 2016',
+        image: 'https://images.pokemontcg.io/xy11/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Steam Siege Booster Box',
+            packCount: 36,
+            msrp: 143.64,
+            history: {
+              '1D': [518, 520, 519, 521, 520],
+              '7D': [500, 505, 510, 515, 520],
+              '1M': [470, 480, 492, 505, 520],
+              '6M': [380, 410, 445, 485, 520],
+              '1Y': [290, 330, 375, 430, 480, 520],
+              '5Y': [140, 210, 290, 380, 460, 520],
+              '10Y': [95, 140, 220, 340, 460, 520],
+              '20Y': [null, null, 95, 220, 340, 520]
+            }
+          },
+          ETB: {
+            name: 'Steam Siege ETB',
+            packCount: 8,
+            msrp: 39.99,
+            history: {
+              '1D': [159, 160, 159.5, 160.2, 160],
+              '7D': [152, 154, 156, 158, 160],
+              '1M': [140, 145, 150, 155, 160],
+              '6M': [115, 125, 136, 148, 160],
+              '1Y': [88, 98, 112, 130, 148, 160],
+              '5Y': [45, 68, 95, 125, 160],
+              '10Y': [35, 55, 85, 125, 160],
+              '20Y': [null, null, 35, 85, 160]
+            }
+          }
+        }
+      },
+      {
+        id: 'xy10-fates-collide',
+        name: 'Fates Collide',
+        era: 'XY Series',
+        category: 'XY',
+        released: 'May 2016',
+        image: 'https://images.pokemontcg.io/xy10/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Fates Collide Booster Box',
+            packCount: 36,
+            msrp: 143.64,
+            history: {
+              '1D': [648, 650, 649, 651, 650],
+              '7D': [625, 630, 638, 644, 650],
+              '1M': [580, 595, 615, 632, 650],
+              '6M': [470, 510, 555, 605, 650],
+              '1Y': [360, 410, 465, 530, 600, 650],
+              '5Y': [160, 250, 360, 480, 580, 650],
+              '10Y': [95, 160, 260, 420, 580, 650],
+              '20Y': [null, null, 95, 260, 420, 650]
+            }
+          },
+          ETB: {
+            name: 'Fates Collide ETB',
+            packCount: 8,
+            msrp: 39.99,
+            history: {
+              '1D': [194, 195, 194.5, 195.2, 195],
+              '7D': [185, 188, 190, 193, 195],
+              '1M': [170, 176, 182, 188, 195],
+              '6M': [135, 148, 162, 178, 195],
+              '1Y': [105, 118, 134, 155, 178, 195],
+              '5Y': [50, 80, 115, 155, 195],
+              '10Y': [35, 65, 105, 155, 195],
+              '20Y': [null, null, 35, 105, 195]
+            }
+          }
+        }
+      },
+      {
+        id: 'g1-generations',
+        name: 'Generations 20th',
+        era: 'XY Series',
+        category: 'XY',
+        released: 'Feb 2016',
+        image: 'https://images.pokemontcg.io/g1/logo.png',
+        selectedType: 'ETB',
+        variants: {
+          ETB: {
+            name: 'Generations 20th Anniversary ETB',
+            packCount: 10,
+            msrp: 49.99,
+            history: {
+              '1D': [848, 850, 849, 851, 850],
+              '7D': [820, 825, 832, 842, 850],
+              '1M': [760, 780, 805, 828, 850],
+              '6M': [620, 670, 725, 790, 850],
+              '1Y': [480, 540, 610, 700, 800, 850],
+              '5Y': [220, 340, 480, 640, 760, 850],
+              '10Y': [50, 120, 240, 450, 720, 850],
+              '20Y': [null, null, 50, 240, 520, 850]
+            }
+          }
+        }
+      },
+      {
+        id: 'xy8-breakthrough',
+        name: 'Breakthrough',
+        era: 'XY Series',
+        category: 'XY',
+        released: 'Nov 2015',
+        image: 'https://images.pokemontcg.io/xy8/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Breakthrough Booster Box',
+            packCount: 36,
+            msrp: 143.64,
+            history: {
+              '1D': [778, 780, 779, 781, 780],
+              '7D': [750, 755, 765, 772, 780],
+              '1M': [700, 715, 735, 760, 780],
+              '6M': [560, 610, 665, 725, 780],
+              '1Y': [430, 490, 555, 635, 720, 780],
+              '5Y': [190, 290, 420, 560, 700, 780],
+              '10Y': [95, 180, 310, 510, 720, 780],
+              '20Y': [null, null, 95, 310, 560, 780]
+            }
+          },
+          ETB: {
+            name: 'Breakthrough ETB',
+            packCount: 8,
+            msrp: 39.99,
+            history: {
+              '1D': [239, 240, 239.5, 240.2, 240],
+              '7D': [228, 230, 234, 238, 240],
+              '1M': [210, 216, 224, 232, 240],
+              '6M': [165, 180, 196, 218, 240],
+              '1Y': [125, 140, 160, 188, 218, 240],
+              '5Y': [60, 95, 135, 185, 240],
+              '10Y': [35, 75, 125, 185, 240],
+              '20Y': [null, null, 35, 125, 240]
+            }
+          }
+        }
+      },
+      {
+        id: 'xy7-ancient-origins',
+        name: 'Ancient Origins',
+        era: 'XY Series',
+        category: 'XY',
+        released: 'Aug 2015',
+        image: 'https://images.pokemontcg.io/xy7/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Ancient Origins Booster Box',
+            packCount: 36,
+            msrp: 143.64,
+            history: {
+              '1D': [1095, 1100, 1098, 1102, 1100],
+              '7D': [1060, 1070, 1082, 1092, 1100],
+              '1M': [980, 1010, 1040, 1070, 1100],
+              '6M': [780, 850, 920, 1010, 1100],
+              '1Y': [600, 680, 770, 880, 1010, 1100],
+              '5Y': [260, 390, 560, 750, 950, 1100],
+              '10Y': [95, 220, 420, 720, 1000, 1100],
+              '20Y': [null, null, 95, 380, 750, 1100]
+            }
+          },
+          ETB: {
+            name: 'Ancient Origins ETB',
+            packCount: 8,
+            msrp: 39.99,
+            history: {
+              '1D': [318, 320, 319, 321, 320],
+              '7D': [305, 308, 312, 316, 320],
+              '1M': [280, 290, 300, 310, 320],
+              '6M': [220, 240, 265, 292, 320],
+              '1Y': [170, 192, 220, 258, 295, 320],
+              '5Y': [80, 125, 180, 245, 320],
+              '10Y': [35, 90, 160, 245, 320],
+              '20Y': [null, null, 35, 160, 320]
+            }
+          }
+        }
+      },
+      {
+        id: 'xy5-primal-clash',
+        name: 'Primal Clash',
+        era: 'XY Series',
+        category: 'XY',
+        released: 'Feb 2015',
+        image: 'https://images.pokemontcg.io/xy5/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Primal Clash Booster Box',
+            packCount: 36,
+            msrp: 143.64,
+            history: {
+              '1D': [948, 950, 949, 951, 950],
+              '7D': [920, 925, 935, 942, 950],
+              '1M': [860, 880, 905, 928, 950],
+              '6M': [680, 740, 805, 880, 950],
+              '1Y': [520, 590, 670, 770, 880, 950],
+              '5Y': [220, 340, 480, 650, 840, 950],
+              '10Y': [95, 180, 350, 600, 880, 950],
+              '20Y': [null, null, 95, 320, 680, 950]
+            }
+          },
+          ETB: {
+            name: 'Primal Clash ETB',
+            packCount: 8,
+            msrp: 39.99,
+            history: {
+              '1D': [288, 290, 289, 291, 290],
+              '7D': [275, 278, 282, 286, 290],
+              '1M': [250, 260, 270, 280, 290],
+              '6M': [195, 215, 238, 265, 290],
+              '1Y': [150, 170, 195, 230, 268, 290],
+              '5Y': [70, 110, 160, 220, 290],
+              '10Y': [35, 80, 140, 220, 290],
+              '20Y': [null, null, 35, 140, 290]
             }
           }
         }
@@ -1131,8 +1984,8 @@
       {
         id: 'xy12-evolutions',
         name: 'XY Evolutions',
-        era: 'XY',
-        category: 'VINTAGE',
+        era: 'XY Series',
+        category: 'XY',
         released: 'Nov 2016',
         image: 'https://images.pokemontcg.io/xy12/logo.png',
         selectedType: 'BBOX',
@@ -1143,13 +1996,13 @@
             msrp: 143.64,
             history: {
               '1D': [1148, 1150, 1149, 1151, 1150],
-              '7D': [1120, 1125, 1132, 1140, 1148, 1150],
-              '1M': [1050, 1070, 1090, 1115, 1135, 1150],
-              '6M': [850, 900, 960, 1020, 1090, 1150],
-              '1Y': [700, 760, 820, 890, 970, 1060, 1150],
-              '5Y': [380, 520, 680, 780, 840, 920, 1000, 1080, 1150],
-              '10Y': [100, 120, 180, 350, 650, 920, 1150],
-              '20Y': [null, null, 100, 180, 350, 650, 1150]
+              '7D': [1120, 1125, 1132, 1140, 1150],
+              '1M': [1050, 1070, 1090, 1120, 1150],
+              '6M': [850, 900, 960, 1040, 1150],
+              '1Y': [700, 760, 820, 920, 1050, 1150],
+              '5Y': [380, 520, 680, 800, 980, 1150],
+              '10Y': [100, 140, 240, 480, 850, 1150],
+              '20Y': [null, null, 100, 240, 650, 1150]
             }
           },
           ETB: {
@@ -1158,17 +2011,60 @@
             msrp: 39.99,
             history: {
               '1D': [259, 260, 259.5, 260.5, 260],
-              '7D': [252, 254, 256, 258, 259, 260],
-              '1M': [240, 244, 248, 252, 256, 260],
-              '6M': [210, 218, 226, 235, 244, 260],
-              '1Y': [180, 192, 204, 216, 230, 245, 260],
-              '5Y': [80, 115, 140, 165, 185, 205, 225, 245, 260],
-              '10Y': [40, 50, 70, 115, 160, 205, 240, 260],
-              '20Y': [null, null, 40, 70, 115, 160, 205, 260]
+              '7D': [252, 254, 256, 258, 260],
+              '1M': [240, 244, 248, 254, 260],
+              '6M': [210, 218, 226, 242, 260],
+              '1Y': [180, 192, 204, 225, 248, 260],
+              '5Y': [80, 115, 140, 185, 235, 260],
+              '10Y': [40, 60, 95, 160, 235, 260],
+              '20Y': [null, null, 40, 95, 200, 260]
             }
           }
         }
       },
+      {
+        id: 'xy1-base',
+        name: 'XY Base Set',
+        era: 'XY Series',
+        category: 'XY',
+        released: 'Feb 2014',
+        image: 'https://images.pokemontcg.io/xy1/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'XY Base Booster Box',
+            packCount: 36,
+            msrp: 143.64,
+            history: {
+              '1D': [1395, 1400, 1398, 1402, 1400],
+              '7D': [1360, 1370, 1380, 1392, 1400],
+              '1M': [1280, 1310, 1340, 1375, 1400],
+              '6M': [1050, 1120, 1200, 1300, 1400],
+              '1Y': [820, 910, 1020, 1160, 1300, 1400],
+              '5Y': [380, 540, 750, 980, 1240, 1400],
+              '10Y': [100, 240, 480, 850, 1250, 1400],
+              '20Y': [null, null, 100, 480, 950, 1400]
+            }
+          },
+          ETB: {
+            name: 'XY Base ETB',
+            packCount: 8,
+            msrp: 39.99,
+            history: {
+              '1D': [338, 340, 339, 341, 340],
+              '7D': [325, 328, 332, 336, 340],
+              '1M': [300, 310, 320, 330, 340],
+              '6M': [250, 270, 290, 315, 340],
+              '1Y': [190, 215, 245, 285, 325, 340],
+              '5Y': [85, 130, 185, 255, 340],
+              '10Y': [35, 90, 160, 255, 340],
+              '20Y': [null, null, 35, 160, 340]
+            }
+          }
+        }
+      },
+
+      // --- VINTAGE ---
       {
         id: 'base-set',
         name: 'Base Set (Vintage)',
@@ -1184,13 +2080,13 @@
             msrp: 110.00,
             history: {
               '1D': [16500, 16480, 16510, 16500, 16500],
-              '7D': [16200, 16250, 16350, 16400, 16450, 16500],
-              '1M': [15600, 15800, 16000, 16200, 16350, 16500],
-              '6M': [14200, 14600, 15000, 15500, 16000, 16500],
-              '1Y': [13000, 13500, 14000, 14600, 15200, 15900, 16500],
-              '5Y': [11500, 18000, 15200, 13200, 13800, 14400, 15000, 15600, 16100, 16500],
-              '10Y': [4200, 6800, 11500, 18000, 13400, 14500, 15500, 16500],
-              '20Y': [750, 1800, 3400, 4200, 11500, 13400, 15500, 16500]
+              '7D': [16200, 16250, 16350, 16450, 16500],
+              '1M': [15600, 15800, 16000, 16300, 16500],
+              '6M': [14200, 14600, 15000, 15800, 16500],
+              '1Y': [13000, 13500, 14000, 15200, 16500],
+              '5Y': [11500, 18000, 15200, 13800, 15000, 16500],
+              '10Y': [4200, 6800, 11500, 18000, 14500, 16500],
+              '20Y': [750, 1800, 3400, 4200, 12800, 16500]
             }
           }
         }
@@ -1252,34 +2148,34 @@
         ctx.setLineDash([]);
 
         ctx.beginPath();
-        ctx.arc(x, y, 7, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(16, 185, 129, 0.25)';
+        ctx.arc(x, y, 8, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(16, 185, 129, 0.3)';
         ctx.fill();
 
         ctx.beginPath();
-        ctx.arc(x, y, 4, 0, Math.PI * 2);
+        ctx.arc(x, y, 4.5, 0, Math.PI * 2);
         ctx.fillStyle = '#10b981';
         ctx.fill();
 
-        ctx.font = 'bold 11px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace';
+        ctx.font = 'bold 12px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace';
         const textWidth = ctx.measureText(text).width;
-        const boxWidth = textWidth + 14;
-        const boxHeight = 20;
+        const boxWidth = textWidth + 16;
+        const boxHeight = 22;
         
-        let boxX = x - boxWidth - 8;
+        let boxX = x - boxWidth - 10;
         if (boxX < chart.chartArea.left) {
           boxX = x - (boxWidth / 2);
         }
-        let boxY = y - 10;
+        let boxY = y - 11;
         if (boxY < chart.chartArea.top + 2) {
-          boxY = y + 10;
+          boxY = y + 12;
         }
 
         ctx.fillStyle = '#064e3b';
         ctx.strokeStyle = '#34d399';
-        ctx.lineWidth = 1.2;
+        ctx.lineWidth = 1.4;
         ctx.beginPath();
-        ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 5);
+        ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 6);
         ctx.fill();
         ctx.stroke();
 
@@ -1311,23 +2207,23 @@
 
         card.innerHTML = `
           <div class="flex items-start justify-between">
-            <span class="text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded ${isPositive ? 'bg-emerald-950/70 border border-emerald-800/40 text-emerald-400' : 'bg-rose-950/70 border border-rose-800/40 text-rose-400'}">
+            <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded ${isPositive ? 'bg-emerald-950/80 border border-emerald-800/50 text-emerald-400' : 'bg-rose-950/80 border border-rose-800/50 text-rose-400'}">
               #${index + 1} Mover
             </span>
-            <span class="text-xs font-bold font-mono ${isPositive ? 'text-emerald-400' : 'text-rose-400'} flex items-center gap-0.5">
+            <span class="text-xs font-black font-mono ${isPositive ? 'text-emerald-400' : 'text-rose-400'} flex items-center gap-0.5">
               ${isPositive ? '▲ +' : '▼ '}${pct}%
             </span>
           </div>
 
-          <div class="flex items-center space-x-3 mt-3">
-            <div class="w-16 h-10 rounded-lg p-1.5 flex-shrink-0 flex items-center justify-center set-logo-container">
+          <div class="flex items-center space-x-3.5 mt-3">
+            <div class="w-18 h-12 rounded-lg p-1.5 flex-shrink-0 flex items-center justify-center set-logo-container">
               <img src="${item.image}" alt="" class="max-h-full max-w-full object-contain set-logo" onerror="handleImageFallback(this)" />
             </div>
             <div class="min-w-0 flex-1">
-              <h4 class="text-xs font-bold text-gray-100 truncate group-hover:text-emerald-300 transition">${variantName}</h4>
-              <div class="flex items-baseline space-x-2">
-                <span class="text-base font-black font-mono text-white">$${end}</span>
-                <span class="text-[11px] font-mono text-gray-400">${delta >= 0 ? '+$' + delta.toFixed(1) : '-$' + Math.abs(delta).toFixed(1)} ${activeMoversTimeScale}</span>
+              <h4 class="text-xs font-black text-gray-100 truncate group-hover:text-emerald-300 transition">${variantName}</h4>
+              <div class="flex items-baseline space-x-2 mt-0.5">
+                <span class="text-lg font-black font-mono text-emerald-400 tracking-tight">$${end.toLocaleString()}</span>
+                <span class="text-[11px] font-mono text-gray-400">${delta >= 0 ? '+$' + delta.toFixed(1) : '-$' + Math.abs(delta).toFixed(1)}</span>
               </div>
             </div>
           </div>
@@ -1393,9 +2289,9 @@
         const btn = document.createElement('button');
         const isActive = activeProduct.selectedType === varType;
         btn.onclick = (e) => changeVariant(e, activeProduct.id, varType);
-        btn.className = `px-2.5 py-0.5 text-xs font-bold rounded transition ${
+        btn.className = `px-3 py-1 text-xs font-black rounded-md transition ${
           isActive 
-            ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm' 
+            ? 'bg-emerald-500/25 text-emerald-300 border border-emerald-500/50 shadow-[0_0_10px_rgba(16,185,129,0.3)]' 
             : 'text-gray-400 hover:text-white'
         }`;
         btn.innerText = varType;
@@ -1405,7 +2301,7 @@
       document.getElementById('active-price').innerText = `$${metrics.end.toLocaleString()}.00`;
       document.getElementById('active-delta-label').innerText = `Change (${activeMainTimeScale})`;
       document.getElementById('active-delta').innerText = `${metrics.delta >= 0 ? '+' : ''}${metrics.pct}% (${activeMainTimeScale})`;
-      document.getElementById('active-delta').className = `text-sm font-bold font-mono ${isPositive ? 'text-emerald-400' : 'text-rose-400'}`;
+      document.getElementById('active-delta').className = `text-base font-extrabold font-mono ${isPositive ? 'text-emerald-400' : 'text-rose-400'}`;
       document.getElementById('active-pack-val').innerText = `$${(metrics.end / metrics.packCount).toFixed(2)}`;
 
       if (mainChart) mainChart.destroy();
@@ -1436,7 +2332,7 @@
           responsive: true,
           maintainAspectRatio: false,
           layout: {
-            padding: { right: 20, top: 15 }
+            padding: { right: 25, top: 15 }
           },
           interaction: { intersect: false, mode: 'index' },
           plugins: {
@@ -1489,7 +2385,7 @@
         const metrics = getMetrics(item, '6M');
         const isPositive = metrics.pct >= 0;
         const card = document.createElement('div');
-        card.className = `bg-[#111827] border ${activeProduct.id === item.id ? 'border-emerald-500 ring-1 ring-emerald-500/50' : 'border-gray-800'} hover:border-gray-700 p-4 rounded-xl cursor-pointer transition flex flex-col justify-between shadow-lg group`;
+        card.className = `bg-[#111827] border ${activeProduct.id === item.id ? 'border-emerald-500 ring-1 ring-emerald-500/50' : 'border-gray-800'} hover:border-gray-700 p-4 sm:p-5 rounded-xl cursor-pointer transition flex flex-col justify-between shadow-lg group`;
         card.onclick = (e) => {
           if (!e.target.closest('button')) {
             selectProduct(item.id);
@@ -1503,39 +2399,40 @@
           const isSel = item.selectedType === vKey;
           variantButtonsHtml += `
             <button onclick="changeVariant(event, '${item.id}', '${vKey}')" 
-              class="px-2 py-0.5 text-[10px] font-bold rounded transition ${isSel ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm' : 'text-gray-400 hover:text-white'}">
+              class="px-2.5 py-0.5 text-[10px] font-black rounded transition ${isSel ? 'bg-emerald-500/25 text-emerald-300 border border-emerald-500/50 shadow-sm' : 'text-gray-400 hover:text-white'}">
               ${vKey}
             </button>`;
         });
 
         card.innerHTML = `
           <div>
-            <div class="flex items-center justify-between gap-2 border-b border-gray-800/80 pb-2.5">
-              <span class="text-[11px] font-bold text-gray-400 truncate uppercase tracking-wider">${item.era}</span>
-              <div class="flex items-center space-x-1 bg-gray-900 border border-gray-800 rounded-lg p-0.5">
+            <div class="flex items-center justify-between gap-2 border-b border-gray-800/80 pb-3">
+              <span class="text-[11px] font-black text-gray-400 truncate uppercase tracking-widest">${item.era}</span>
+              <div class="flex items-center space-x-1.5 bg-gray-900 border border-gray-800 rounded-lg p-0.5">
                 ${variantButtonsHtml}
               </div>
             </div>
             
-            <div class="flex items-center space-x-3 mt-3">
-              <div class="w-16 h-10 rounded-lg p-1.5 flex-shrink-0 flex items-center justify-center set-logo-container">
+            <div class="flex items-center space-x-3.5 mt-3.5">
+              <!-- Larger Catalog Logo Container -->
+              <div class="w-20 h-12 rounded-lg p-1.5 flex-shrink-0 flex items-center justify-center set-logo-container">
                 <img src="${item.image}" alt="" class="max-h-full max-w-full object-contain set-logo" onerror="handleImageFallback(this)" />
               </div>
               <div class="min-w-0 flex-1">
-                <h4 class="text-sm font-bold text-white leading-snug truncate group-hover:text-emerald-300 transition">${metrics.variantName}</h4>
-                <p class="text-[11px] text-gray-400 mt-0.5">${metrics.packCount} Packs • MSRP $${metrics.msrp}</p>
+                <h4 class="text-sm font-black text-white leading-snug truncate group-hover:text-emerald-300 transition">${metrics.variantName}</h4>
+                <p class="text-[11px] font-medium text-gray-400 mt-0.5">${metrics.packCount} Packs • MSRP $${metrics.msrp}</p>
               </div>
             </div>
 
             <!-- Mini 6-Month Trend Graph -->
-            <div class="mt-3.5 bg-gray-900/50 rounded-lg p-2 border border-gray-800/60 relative">
+            <div class="mt-4 bg-gray-900/50 rounded-lg p-2.5 border border-gray-800/60 relative">
               <div class="flex items-center justify-between text-[11px] mb-1">
-                <span class="text-gray-400 font-mono">6M Trend</span>
+                <span class="text-gray-400 font-mono font-semibold">6M Trend</span>
                 <div class="flex items-center space-x-2">
-                  <span class="px-1.5 py-0.2 rounded ${isPositive ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-300' : 'bg-rose-950/90 border-rose-500/40 text-rose-300'} border font-bold font-mono text-[10px]">
+                  <span class="px-2 py-0.5 rounded ${isPositive ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-300' : 'bg-rose-950/90 border-rose-500/40 text-rose-300'} border font-black font-mono text-[11px]">
                     $${metrics.end.toLocaleString()}
                   </span>
-                  <span class="font-bold font-mono ${isPositive ? 'text-emerald-400' : 'text-rose-400'}">
+                  <span class="font-black font-mono ${isPositive ? 'text-emerald-400' : 'text-rose-400'}">
                     ${isPositive ? '+' : ''}${metrics.pct}%
                   </span>
                 </div>
@@ -1547,8 +2444,8 @@
           </div>
 
           <div class="mt-4 pt-3 border-t border-gray-800 flex items-baseline justify-between">
-            <span class="text-xs text-gray-400">Current Market</span>
-            <span class="text-base font-black font-mono text-white">$${metrics.end.toLocaleString()}.00</span>
+            <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Current Market</span>
+            <span class="text-xl font-black font-mono text-emerald-400 tracking-tight price-glow">$${metrics.end.toLocaleString()}.00</span>
           </div>
         `;
         grid.appendChild(card);
@@ -1574,8 +2471,8 @@
             data: dataPoints,
             spanGaps: false,
             borderColor: isPositive ? '#10b981' : '#f43f5e',
-            borderWidth: 1.8,
-            pointRadius: (ctx) => (ctx.dataIndex === dataPoints.length - 1 && dataPoints[ctx.dataIndex] !== null ? 3.5 : 0),
+            borderWidth: 2,
+            pointRadius: (ctx) => (ctx.dataIndex === dataPoints.length - 1 && dataPoints[ctx.dataIndex] !== null ? 4 : 0),
             pointBackgroundColor: isPositive ? '#34d399' : '#fb7185',
             pointBorderColor: '#0b0f19',
             pointBorderWidth: 1.5,
@@ -1666,11 +2563,13 @@
           (category === 'ME' && btn.innerText.includes('Mega')) ||
           (category === 'SV' && btn.innerText.includes('Scarlet')) ||
           (category === 'SWSH' && btn.innerText.includes('Sword')) ||
+          (category === 'SM' && btn.innerText.includes('Sun')) ||
+          (category === 'XY' && btn.innerText.includes('XY')) ||
           (category === 'VINTAGE' && btn.innerText.includes('Vintage'))
         ) {
-          btn.className = 'filter-btn active px-3 py-1 text-xs font-semibold rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40';
+          btn.className = 'filter-btn active px-3 py-1 text-xs font-bold rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40';
         } else {
-          btn.className = 'filter-btn px-3 py-1 text-xs font-semibold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white';
+          btn.className = 'filter-btn px-3 py-1 text-xs font-bold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white';
         }
       });
       renderCatalog();
