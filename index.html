@@ -35,12 +35,28 @@
       color: #f3f4f6;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
+
+    /* Ambient backlit glow container */
     .set-logo-container {
-      box-shadow: 0 0 16px -2px rgba(16, 185, 129, 0.18), inset 0 0 8px 0 rgba(16, 185, 129, 0.08);
-      background: radial-gradient(circle at center, rgba(16, 185, 129, 0.08) 0%, rgba(17, 24, 39, 0.95) 75%);
+      position: relative;
+      background: radial-gradient(circle at center, rgba(16, 185, 129, 0.16) 0%, rgba(17, 24, 39, 0.95) 75%);
+      box-shadow: 0 0 16px -2px rgba(16, 185, 129, 0.25), inset 0 0 10px 0 rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      transition: all 0.2s ease-in-out;
     }
+    .group:hover .set-logo-container,
+    .set-logo-container:hover {
+      box-shadow: 0 0 22px 2px rgba(16, 185, 129, 0.40), inset 0 0 14px 0 rgba(16, 185, 129, 0.22);
+      border-color: rgba(52, 211, 153, 0.6);
+    }
+
+    /* Crisp drop shadow & soft glow for the logo graphic */
     .set-logo {
-      filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.65));
+      filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.45)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.7));
+      transition: filter 0.2s ease;
+    }
+    .group:hover .set-logo {
+      filter: drop-shadow(0 0 10px rgba(52, 211, 153, 0.7)) drop-shadow(0 2px 5px rgba(0, 0, 0, 0.8));
     }
   </style>
 </head>
@@ -104,9 +120,9 @@
     <section class="bg-[#111827] rounded-xl border border-gray-800 p-5 shadow-2xl space-y-4">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-800 pb-4">
         <div class="flex items-center space-x-4">
-          <!-- Main Product Set Logo Banner -->
-          <div class="w-28 h-14 rounded-lg border border-emerald-500/30 p-1.5 flex-shrink-0 flex items-center justify-center overflow-hidden set-logo-container">
-            <img id="active-img" src="" alt="" class="max-h-full max-w-full object-contain set-logo" />
+          <!-- Main Product Set Logo Banner with Ambient Backlit Glow -->
+          <div class="w-32 h-16 rounded-xl p-2 flex-shrink-0 flex items-center justify-center overflow-hidden set-logo-container">
+            <img id="active-img" src="" alt="" class="max-h-full max-w-full object-contain set-logo" onerror="handleImageFallback(this)" />
           </div>
 
           <div>
@@ -167,7 +183,7 @@
           <span id="product-count" class="text-xs px-2 py-0.5 rounded-full bg-gray-800 text-gray-400 font-mono">0</span>
         </div>
 
-        <!-- Filter Controls Re-Categorized -->
+        <!-- Filter Controls -->
         <div class="flex items-center space-x-2 flex-wrap gap-y-2">
           <button onclick="setFilter('ALL')" class="filter-btn active px-3 py-1 text-xs font-semibold rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">All Sets</button>
           <button onclick="setFilter('ME')" class="filter-btn px-3 py-1 text-xs font-semibold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">Mega Evolution</button>
@@ -212,6 +228,11 @@
       '10Y': { label: '10 Years', labels: ['Jan \'16', 'Jan \'17', 'Jan \'18', 'Jan \'19', 'Jan \'20', 'Jan \'21', 'Jan \'22', 'Jan \'23', 'Jan \'24', 'Jan \'25', '2026'] },
       '20Y': { label: '20 Years', labels: ['Jan \'06', 'Jan \'08', 'Jan \'10', 'Jan \'12', 'Jan \'14', 'Jan \'16', 'Jan \'18', 'Jan \'20', 'Jan \'22', 'Jan \'24', '2026'] }
     };
+
+    function handleImageFallback(img) {
+      img.onerror = null;
+      img.src = 'https://images.pokemontcg.io/sv8pt5/logo.png';
+    }
 
     const SETS_DATA = [
       // MEGA EVOLUTION SERIES (2026)
@@ -447,7 +468,7 @@
         era: 'Scarlet & Violet',
         category: 'SV',
         released: 'Mar 2025',
-        image: 'https://images.pokemontcg.io/sv8pt5/logo.png',
+        image: 'https://images.pokemontcg.io/sv9/logo.png',
         selectedType: 'BBOX',
         variants: {
           BBOX: {
@@ -1299,8 +1320,8 @@
           </div>
 
           <div class="flex items-center space-x-3 mt-3">
-            <div class="w-14 h-8 rounded border border-gray-800 p-1 flex-shrink-0 flex items-center justify-center set-logo-container">
-              <img src="${item.image}" alt="" class="max-h-full max-w-full object-contain set-logo" />
+            <div class="w-16 h-10 rounded-lg p-1.5 flex-shrink-0 flex items-center justify-center set-logo-container">
+              <img src="${item.image}" alt="" class="max-h-full max-w-full object-contain set-logo" onerror="handleImageFallback(this)" />
             </div>
             <div class="min-w-0 flex-1">
               <h4 class="text-xs font-bold text-gray-100 truncate group-hover:text-emerald-300 transition">${variantName}</h4>
@@ -1366,7 +1387,6 @@
       document.getElementById('active-title').innerText = metrics.variantName;
       document.getElementById('active-era').innerText = `${activeProduct.era} • Released ${activeProduct.released}`;
       
-      // Build spotlight variant buttons with BBOX naming
       const variantRibbon = document.getElementById('active-variant-ribbon');
       variantRibbon.innerHTML = '';
       Object.keys(activeProduct.variants).forEach(varType => {
@@ -1469,7 +1489,7 @@
         const metrics = getMetrics(item, '6M');
         const isPositive = metrics.pct >= 0;
         const card = document.createElement('div');
-        card.className = `bg-[#111827] border ${activeProduct.id === item.id ? 'border-emerald-500 ring-1 ring-emerald-500/50' : 'border-gray-800'} hover:border-gray-700 p-4 rounded-xl cursor-pointer transition flex flex-col justify-between shadow-lg`;
+        card.className = `bg-[#111827] border ${activeProduct.id === item.id ? 'border-emerald-500 ring-1 ring-emerald-500/50' : 'border-gray-800'} hover:border-gray-700 p-4 rounded-xl cursor-pointer transition flex flex-col justify-between shadow-lg group`;
         card.onclick = (e) => {
           if (!e.target.closest('button')) {
             selectProduct(item.id);
@@ -1498,11 +1518,11 @@
             </div>
             
             <div class="flex items-center space-x-3 mt-3">
-              <div class="w-16 h-10 rounded border border-gray-800 p-1 flex-shrink-0 flex items-center justify-center set-logo-container">
-                <img src="${item.image}" alt="" class="max-h-full max-w-full object-contain set-logo" />
+              <div class="w-16 h-10 rounded-lg p-1.5 flex-shrink-0 flex items-center justify-center set-logo-container">
+                <img src="${item.image}" alt="" class="max-h-full max-w-full object-contain set-logo" onerror="handleImageFallback(this)" />
               </div>
               <div class="min-w-0 flex-1">
-                <h4 class="text-sm font-bold text-white leading-snug truncate">${metrics.variantName}</h4>
+                <h4 class="text-sm font-bold text-white leading-snug truncate group-hover:text-emerald-300 transition">${metrics.variantName}</h4>
                 <p class="text-[11px] text-gray-400 mt-0.5">${metrics.packCount} Packs • MSRP $${metrics.msrp}</p>
               </div>
             </div>
