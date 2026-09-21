@@ -105,10 +105,10 @@
 
           <div>
             <div class="flex flex-wrap items-center gap-2">
-              <h3 id="active-title" class="text-xl font-bold text-white tracking-tight">Celebrations Ultra-Premium Collection</h3>
-              <span id="active-type-badge" class="px-2 py-0.5 rounded text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">UPC</span>
+              <h3 id="active-title" class="text-xl font-bold text-white tracking-tight">Prismatic Evolutions</h3>
+              <span id="active-type-badge" class="px-2 py-0.5 rounded text-[11px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">ETB</span>
             </div>
-            <p id="active-era" class="text-xs text-gray-400 mt-0.5">Sword & Shield Era • Released Oct 2021</p>
+            <p id="active-era" class="text-xs text-gray-400 mt-0.5">Scarlet & Violet Era • Released Jan 2025</p>
           </div>
         </div>
 
@@ -116,15 +116,15 @@
         <div class="flex items-center space-x-6">
           <div>
             <p class="text-[11px] text-gray-400 uppercase tracking-wider">Market Price</p>
-            <p id="active-price" class="text-2xl font-black text-white font-mono">$385.00</p>
+            <p id="active-price" class="text-2xl font-black text-white font-mono">$88.00</p>
           </div>
           <div>
-            <p class="text-[11px] text-gray-400 uppercase tracking-wider" id="active-delta-label">Change (7D)</p>
-            <p id="active-delta" class="text-sm font-bold font-mono text-emerald-400">+12.4%</p>
+            <p class="text-[11px] text-gray-400 uppercase tracking-wider" id="active-delta-label">Change (6M)</p>
+            <p id="active-delta" class="text-sm font-bold font-mono text-emerald-400">+76.0%</p>
           </div>
           <div>
             <p class="text-[11px] text-gray-400 uppercase tracking-wider">Est. / Pack</p>
-            <p id="active-pack-val" class="text-sm font-bold font-mono text-gray-200">$22.64</p>
+            <p id="active-pack-val" class="text-sm font-bold font-mono text-gray-200">$9.78</p>
           </div>
         </div>
       </div>
@@ -139,34 +139,36 @@
         <span class="text-xs text-gray-500">Historical performance view</span>
         <div class="flex items-center bg-gray-900 border border-gray-800 rounded-lg p-1 space-x-1" id="main-time-selector">
           <button onclick="setMainTimeScale('1D')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">1D</button>
-          <button onclick="setMainTimeScale('7D')" class="main-time-btn active px-3 py-1 text-xs font-semibold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition">7D</button>
+          <button onclick="setMainTimeScale('7D')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">7D</button>
           <button onclick="setMainTimeScale('1M')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">1M</button>
-          <button onclick="setMainTimeScale('6M')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">6M</button>
+          <button onclick="setMainTimeScale('6M')" class="main-time-btn active px-3 py-1 text-xs font-semibold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition">6M</button>
           <button onclick="setMainTimeScale('1Y')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">1Y</button>
           <button onclick="setMainTimeScale('5Y')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">5Y</button>
         </div>
       </div>
     </section>
 
-    <!-- CATALOG & COMPARISON SELECTOR -->
+    <!-- SEALED PRODUCTS CATALOG -->
     <section class="space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div class="flex items-center space-x-2">
-          <h2 class="text-base font-bold text-white">Tracked Sealed Products</h2>
-          <span id="product-count" class="text-xs px-2 py-0.5 rounded-full bg-gray-800 text-gray-400 font-mono">8</span>
+          <h2 class="text-base font-bold text-white">Sealed Products</h2>
+          <span id="product-count" class="text-xs px-2 py-0.5 rounded-full bg-gray-800 text-gray-400 font-mono">0</span>
         </div>
 
         <!-- Filter Controls -->
         <div class="flex items-center space-x-2">
-          <button onclick="setFilter('ALL')" class="filter-btn active px-3 py-1 text-xs font-semibold rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">All</button>
-          <button onclick="setFilter('ETB')" class="filter-btn px-3 py-1 text-xs font-semibold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">ETBs</button>
-          <button onclick="setFilter('UPC')" class="filter-btn px-3 py-1 text-xs font-semibold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">UPCs</button>
+          <button onclick="setFilter('ALL')" class="filter-btn active px-3 py-1 text-xs font-semibold rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">All Sets</button>
+          <button onclick="setFilter('SV')" class="filter-btn px-3 py-1 text-xs font-semibold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">Scarlet & Violet</button>
+          <button onclick="setFilter('SWSH')" class="filter-btn px-3 py-1 text-xs font-semibold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">Sword & Shield</button>
+          <button onclick="setFilter('SM')" class="filter-btn px-3 py-1 text-xs font-semibold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">Sun & Moon</button>
+          <button onclick="setFilter('VINTAGE')" class="filter-btn px-3 py-1 text-xs font-semibold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">Vintage / Classic</button>
         </div>
       </div>
 
       <!-- Product Cards Table / Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="catalog-grid">
-        <!-- Rendered by JS -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="catalog-grid">
+        <!-- Dynamically Rendered by JS -->
       </div>
     </section>
 
@@ -181,172 +183,565 @@
     const TIME_INTERVALS = {
       '1D': { label: '24 Hours', labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', 'Now'] },
       '7D': { label: '7 Days', labels: ['6D Ago', '5D Ago', '4D Ago', '3D Ago', '2D Ago', 'Yesterday', 'Today'] },
-      '1M': { label: '30 Days', labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Today'] },
-      '6M': { label: '6 Months', labels: ['Month 1', 'Month 2', 'Month 3', 'Month 4', 'Month 5', 'Month 6'] },
+      '1M': { label: '30 Days', labels: ['Wk 1', 'Wk 2', 'Wk 3', 'Wk 4', 'Today'] },
+      '6M': { label: '6 Months', labels: ['M1', 'M2', 'M3', 'M4', 'M5', 'M6'] },
       '1Y': { label: '1 Year', labels: ['Q1', 'Q2', 'Q3', 'Q4', 'Q5', 'Q6', 'Q7', 'Q8'] },
       '5Y': { label: '5 Years', labels: ['2021', '2022', '2023', '2024', '2025', '2026'] }
     };
 
-    const PRODUCTS = [
+    // Full chronologically ordered list (Recent top -> Older bottom)
+    const SETS_DATA = [
       {
-        id: 'celebrations-upc',
-        name: 'Celebrations Ultra-Premium Collection',
-        type: 'UPC',
-        era: 'Sword & Shield',
-        released: 'Oct 2021',
-        packCount: 17,
-        msrp: 119.99,
-        image: 'https://images.pokemontcg.io/cel25/logo.png',
-        history: {
-          '1D': [382, 383, 380, 384, 383, 385, 385],
-          '7D': [342, 345, 350, 360, 368, 375, 385],
-          '1M': [310, 325, 345, 368, 385],
-          '6M': [275, 290, 305, 330, 355, 385],
-          '1Y': [220, 235, 250, 280, 300, 330, 360, 385],
-          '5Y': [120, 280, 320, 290, 340, 385]
-        }
-      },
-      {
-        id: 'evolving-skies-etb',
-        name: 'Evolving Skies Elite Trainer Box',
-        type: 'ETB',
-        era: 'Sword & Shield',
-        released: 'Aug 2021',
-        packCount: 8,
-        msrp: 39.99,
-        image: 'https://images.pokemontcg.io/swsh7/logo.png',
-        history: {
-          '1D': [204, 203, 205, 204, 206, 205, 205],
-          '7D': [180, 182, 185, 188, 192, 198, 205],
-          '1M': [160, 172, 185, 195, 205],
-          '6M': [120, 135, 150, 170, 185, 205],
-          '1Y': [95, 110, 125, 140, 160, 175, 190, 205],
-          '5Y': [40, 55, 85, 120, 165, 205]
-        }
-      },
-      {
-        id: '151-upc',
-        name: 'Scarlet & Violet 151 UPC',
-        type: 'UPC',
+        id: 'sv8pt5-prismatic',
+        name: 'Prismatic Evolutions',
         era: 'Scarlet & Violet',
-        released: 'Oct 2023',
-        packCount: 16,
-        msrp: 119.99,
-        image: 'https://images.pokemontcg.io/sv3pt5/logo.png',
-        history: {
-          '1D': [133, 133, 134, 133, 134, 134, 134],
-          '7D': [120, 120, 122, 123, 125, 128, 134],
-          '1M': [115, 118, 122, 128, 134],
-          '6M': [98, 104, 110, 118, 125, 134],
-          '1Y': [85, 90, 95, 102, 112, 120, 126, 134],
-          '5Y': [120, 120, 120, 95, 115, 134]
-        }
-      },
-      {
-        id: 'prismatic-evolutions-etb',
-        name: 'Prismatic Evolutions ETB',
-        type: 'ETB',
-        era: 'Scarlet & Violet',
+        category: 'SV',
         released: 'Jan 2025',
-        packCount: 9,
-        msrp: 49.99,
         image: 'https://images.pokemontcg.io/sv8pt5/logo.png',
-        history: {
-          '1D': [87, 87, 88, 87, 88, 88, 88],
-          '7D': [72, 74, 76, 78, 80, 84, 88],
-          '1M': [60, 68, 74, 80, 88],
-          '6M': [50, 55, 62, 70, 78, 88],
-          '1Y': [45, 48, 50, 58, 65, 72, 80, 88],
-          '5Y': [50, 50, 50, 50, 55, 88]
+        selectedType: 'ETB',
+        variants: {
+          ETB: {
+            name: 'Prismatic Evolutions ETB',
+            packCount: 9,
+            msrp: 49.99,
+            history: {
+              '1D': [87, 87, 88, 87, 88, 88, 88],
+              '7D': [72, 74, 76, 78, 80, 84, 88],
+              '1M': [60, 68, 74, 80, 88],
+              '6M': [50, 55, 62, 70, 78, 88],
+              '1Y': [45, 48, 50, 58, 65, 72, 80, 88],
+              '5Y': [50, 50, 50, 50, 55, 88]
+            }
+          }
         }
       },
       {
-        id: 'charizard-upc',
-        name: 'Sword & Shield Charizard UPC',
-        type: 'UPC',
-        era: 'Sword & Shield',
-        released: 'Oct 2022',
-        packCount: 16,
-        msrp: 119.99,
-        image: 'https://images.pokemontcg.io/swsh12pt5/logo.png',
-        history: {
-          '1D': [135, 134, 135, 135, 135, 135, 135],
-          '7D': [130, 129, 131, 130, 132, 133, 135],
-          '1M': [125, 128, 130, 132, 135],
-          '6M': [115, 118, 120, 125, 130, 135],
-          '1Y': [100, 105, 110, 115, 120, 125, 130, 135],
-          '5Y': [120, 120, 100, 105, 120, 135]
-        }
-      },
-      {
-        id: '151-etb',
-        name: 'Scarlet & Violet 151 ETB',
-        type: 'ETB',
+        id: 'sv8-surging-sparks',
+        name: 'Surging Sparks',
         era: 'Scarlet & Violet',
+        category: 'SV',
+        released: 'Nov 2024',
+        image: 'https://images.pokemontcg.io/sv8/logo.png',
+        selectedType: 'ETB',
+        variants: {
+          ETB: {
+            name: 'Surging Sparks ETB',
+            packCount: 9,
+            msrp: 49.99,
+            history: {
+              '1D': [64, 64, 65, 65, 64, 65, 65],
+              '7D': [58, 59, 60, 61, 62, 64, 65],
+              '1M': [52, 54, 56, 60, 65],
+              '6M': [45, 48, 50, 54, 58, 65],
+              '1Y': [40, 42, 45, 48, 52, 58, 62, 65],
+              '5Y': [50, 50, 50, 50, 55, 65]
+            }
+          }
+        }
+      },
+      {
+        id: 'sv7-stellar-crown',
+        name: 'Stellar Crown',
+        era: 'Scarlet & Violet',
+        category: 'SV',
+        released: 'Sep 2024',
+        image: 'https://images.pokemontcg.io/sv7/logo.png',
+        selectedType: 'ETB',
+        variants: {
+          ETB: {
+            name: 'Stellar Crown ETB',
+            packCount: 9,
+            msrp: 49.99,
+            history: {
+              '1D': [48, 48, 48, 49, 49, 49, 49],
+              '7D': [46, 46, 47, 47, 48, 48, 49],
+              '1M': [44, 45, 46, 47, 49],
+              '6M': [40, 42, 44, 45, 47, 49],
+              '1Y': [38, 40, 41, 42, 44, 46, 48, 49],
+              '5Y': [50, 50, 50, 45, 47, 49]
+            }
+          }
+        }
+      },
+      {
+        id: 'sv6-twilight-masquerade',
+        name: 'Twilight Masquerade',
+        era: 'Scarlet & Violet',
+        category: 'SV',
+        released: 'May 2024',
+        image: 'https://images.pokemontcg.io/sv6/logo.png',
+        selectedType: 'ETB',
+        variants: {
+          ETB: {
+            name: 'Twilight Masquerade ETB',
+            packCount: 9,
+            msrp: 49.99,
+            history: {
+              '1D': [52, 52, 53, 53, 53, 54, 54],
+              '7D': [49, 50, 50, 51, 52, 53, 54],
+              '1M': [46, 48, 49, 51, 54],
+              '6M': [42, 44, 46, 48, 50, 54],
+              '1Y': [40, 41, 43, 45, 47, 49, 51, 54],
+              '5Y': [50, 50, 50, 45, 49, 54]
+            }
+          }
+        }
+      },
+      {
+        id: 'sv5-temporal-forces',
+        name: 'Temporal Forces',
+        era: 'Scarlet & Violet',
+        category: 'SV',
+        released: 'Mar 2024',
+        image: 'https://images.pokemontcg.io/sv5/logo.png',
+        selectedType: 'ETB',
+        variants: {
+          ETB: {
+            name: 'Temporal Forces ETB',
+            packCount: 9,
+            msrp: 49.99,
+            history: {
+              '1D': [47, 47, 48, 48, 48, 48, 48],
+              '7D': [45, 45, 46, 46, 47, 47, 48],
+              '1M': [42, 44, 45, 46, 48],
+              '6M': [38, 40, 42, 44, 46, 48],
+              '1Y': [35, 36, 38, 40, 42, 44, 46, 48],
+              '5Y': [50, 50, 48, 44, 46, 48]
+            }
+          }
+        }
+      },
+      {
+        id: 'sv4pt5-paldean-fates',
+        name: 'Paldean Fates',
+        era: 'Scarlet & Violet',
+        category: 'SV',
+        released: 'Jan 2024',
+        image: 'https://images.pokemontcg.io/sv4pt5/logo.png',
+        selectedType: 'ETB',
+        variants: {
+          ETB: {
+            name: 'Paldean Fates ETB',
+            packCount: 9,
+            msrp: 49.99,
+            history: {
+              '1D': [58, 58, 59, 58, 59, 60, 60],
+              '7D': [54, 55, 56, 57, 58, 59, 60],
+              '1M': [50, 52, 54, 56, 60],
+              '6M': [45, 47, 50, 52, 56, 60],
+              '1Y': [42, 44, 46, 48, 50, 53, 56, 60],
+              '5Y': [50, 50, 48, 48, 54, 60]
+            }
+          }
+        }
+      },
+      {
+        id: 'sv4-paradox-rift',
+        name: 'Paradox Rift',
+        era: 'Scarlet & Violet',
+        category: 'SV',
+        released: 'Nov 2023',
+        image: 'https://images.pokemontcg.io/sv4/logo.png',
+        selectedType: 'ETB',
+        variants: {
+          ETB: {
+            name: 'Paradox Rift ETB',
+            packCount: 9,
+            msrp: 49.99,
+            history: {
+              '1D': [46, 46, 47, 47, 47, 47, 47],
+              '7D': [44, 44, 45, 45, 46, 46, 47],
+              '1M': [41, 42, 43, 45, 47],
+              '6M': [38, 39, 41, 42, 44, 47],
+              '1Y': [35, 36, 38, 40, 41, 43, 45, 47],
+              '5Y': [50, 50, 46, 42, 44, 47]
+            }
+          }
+        }
+      },
+      {
+        id: 'sv3pt5-151',
+        name: 'Scarlet & Violet 151',
+        era: 'Scarlet & Violet',
+        category: 'SV',
         released: 'Sep 2023',
-        packCount: 9,
-        msrp: 49.99,
         image: 'https://images.pokemontcg.io/sv3pt5/logo.png',
-        history: {
-          '1D': [73, 72, 73, 73, 73, 73, 73],
-          '7D': [68, 68, 69, 70, 71, 71, 73],
-          '1M': [62, 65, 68, 70, 73],
-          '6M': [55, 58, 60, 64, 68, 73],
-          '1Y': [48, 50, 52, 56, 60, 65, 68, 73],
-          '5Y': [50, 50, 50, 48, 58, 73]
+        selectedType: 'UPC',
+        variants: {
+          UPC: {
+            name: 'Scarlet & Violet 151 UPC',
+            packCount: 16,
+            msrp: 119.99,
+            history: {
+              '1D': [133, 133, 134, 133, 134, 134, 134],
+              '7D': [120, 120, 122, 123, 125, 128, 134],
+              '1M': [115, 118, 122, 128, 134],
+              '6M': [98, 104, 110, 118, 125, 134],
+              '1Y': [85, 90, 95, 102, 112, 120, 126, 134],
+              '5Y': [120, 120, 120, 95, 115, 134]
+            }
+          },
+          ETB: {
+            name: 'Scarlet & Violet 151 ETB',
+            packCount: 9,
+            msrp: 49.99,
+            history: {
+              '1D': [73, 72, 73, 73, 73, 73, 73],
+              '7D': [68, 68, 69, 70, 71, 71, 73],
+              '1M': [62, 65, 68, 70, 73],
+              '6M': [55, 58, 60, 64, 68, 73],
+              '1Y': [48, 50, 52, 56, 60, 65, 68, 73],
+              '5Y': [50, 50, 50, 48, 58, 73]
+            }
+          }
         }
       },
       {
-        id: 'hidden-fates-etb',
-        name: 'Hidden Fates Elite Trainer Box',
-        type: 'ETB',
-        era: 'Sun & Moon',
-        released: 'Sep 2019',
-        packCount: 10,
-        msrp: 49.99,
-        image: 'https://images.pokemontcg.io/sm115/logo.png',
-        history: {
-          '1D': [170, 170, 170, 170, 170, 170, 170],
-          '7D': [165, 165, 166, 166, 167, 168, 170],
-          '1M': [155, 160, 164, 167, 170],
-          '6M': [140, 145, 150, 158, 164, 170],
-          '1Y': [120, 128, 135, 142, 150, 156, 162, 170],
-          '5Y': [65, 95, 125, 138, 152, 170]
+        id: 'sv3-obsidian-flames',
+        name: 'Obsidian Flames',
+        era: 'Scarlet & Violet',
+        category: 'SV',
+        released: 'Aug 2023',
+        image: 'https://images.pokemontcg.io/sv3/logo.png',
+        selectedType: 'ETB',
+        variants: {
+          ETB: {
+            name: 'Obsidian Flames ETB',
+            packCount: 9,
+            msrp: 49.99,
+            history: {
+              '1D': [46, 46, 46, 47, 47, 47, 47],
+              '7D': [44, 44, 45, 45, 46, 46, 47],
+              '1M': [42, 43, 44, 45, 47],
+              '6M': [38, 40, 41, 43, 45, 47],
+              '1Y': [35, 37, 39, 41, 42, 44, 45, 47],
+              '5Y': [50, 50, 45, 42, 44, 47]
+            }
+          }
         }
       },
       {
-        id: 'crown-zenith-etb',
-        name: 'Crown Zenith Elite Trainer Box',
-        type: 'ETB',
+        id: 'swsh12pt5-crown-zenith',
+        name: 'Crown Zenith',
         era: 'Sword & Shield',
+        category: 'SWSH',
         released: 'Jan 2023',
-        packCount: 10,
-        msrp: 49.99,
         image: 'https://images.pokemontcg.io/swsh12pt5/logo.png',
-        history: {
-          '1D': [61, 60, 61, 61, 61, 61, 61],
-          '7D': [58, 58, 59, 58, 59, 60, 61],
-          '1M': [54, 56, 58, 59, 61],
-          '6M': [48, 50, 52, 55, 58, 61],
-          '1Y': [42, 44, 46, 48, 52, 55, 58, 61],
-          '5Y': [50, 50, 45, 48, 54, 61]
+        selectedType: 'ETB',
+        variants: {
+          ETB: {
+            name: 'Crown Zenith ETB',
+            packCount: 10,
+            msrp: 49.99,
+            history: {
+              '1D': [61, 60, 61, 61, 61, 61, 61],
+              '7D': [58, 58, 59, 58, 59, 60, 61],
+              '1M': [54, 56, 58, 59, 61],
+              '6M': [48, 50, 52, 55, 58, 61],
+              '1Y': [42, 44, 46, 48, 52, 55, 58, 61],
+              '5Y': [50, 50, 45, 48, 54, 61]
+            }
+          }
+        }
+      },
+      {
+        id: 'swsh12-silver-tempest',
+        name: 'Silver Tempest',
+        era: 'Sword & Shield',
+        category: 'SWSH',
+        released: 'Nov 2022',
+        image: 'https://images.pokemontcg.io/swsh12/logo.png',
+        selectedType: 'ETB',
+        variants: {
+          ETB: {
+            name: 'Silver Tempest ETB',
+            packCount: 8,
+            msrp: 39.99,
+            history: {
+              '1D': [45, 45, 45, 46, 46, 46, 46],
+              '7D': [42, 43, 43, 44, 45, 45, 46],
+              '1M': [39, 40, 42, 44, 46],
+              '6M': [35, 36, 38, 40, 42, 46],
+              '1Y': [32, 33, 35, 37, 39, 41, 43, 46],
+              '5Y': [40, 40, 35, 38, 42, 46]
+            }
+          }
+        }
+      },
+      {
+        id: 'swsh-charizard-upc',
+        name: 'Sword & Shield Ultra-Premium',
+        era: 'Sword & Shield',
+        category: 'SWSH',
+        released: 'Oct 2022',
+        image: 'https://images.pokemontcg.io/swsh12pt5/logo.png',
+        selectedType: 'UPC',
+        variants: {
+          UPC: {
+            name: 'Sword & Shield Charizard UPC',
+            packCount: 16,
+            msrp: 119.99,
+            history: {
+              '1D': [135, 134, 135, 135, 135, 135, 135],
+              '7D': [130, 129, 131, 130, 132, 133, 135],
+              '1M': [125, 128, 130, 132, 135],
+              '6M': [115, 118, 120, 125, 130, 135],
+              '1Y': [100, 105, 110, 115, 120, 125, 130, 135],
+              '5Y': [120, 120, 100, 105, 120, 135]
+            }
+          }
+        }
+      },
+      {
+        id: 'swsh11-lost-origin',
+        name: 'Lost Origin',
+        era: 'Sword & Shield',
+        category: 'SWSH',
+        released: 'Sep 2022',
+        image: 'https://images.pokemontcg.io/swsh11/logo.png',
+        selectedType: 'ETB',
+        variants: {
+          ETB: {
+            name: 'Lost Origin ETB',
+            packCount: 8,
+            msrp: 39.99,
+            history: {
+              '1D': [55, 55, 56, 56, 56, 56, 56],
+              '7D': [52, 53, 53, 54, 54, 55, 56],
+              '1M': [48, 50, 51, 53, 56],
+              '6M': [42, 44, 46, 49, 52, 56],
+              '1Y': [38, 40, 42, 44, 47, 50, 53, 56],
+              '5Y': [40, 40, 36, 40, 48, 56]
+            }
+          }
+        }
+      },
+      {
+        id: 'swsh9-brilliant-stars',
+        name: 'Brilliant Stars',
+        era: 'Sword & Shield',
+        category: 'SWSH',
+        released: 'Feb 2022',
+        image: 'https://images.pokemontcg.io/swsh9/logo.png',
+        selectedType: 'ETB',
+        variants: {
+          ETB: {
+            name: 'Brilliant Stars ETB',
+            packCount: 8,
+            msrp: 39.99,
+            history: {
+              '1D': [62, 62, 63, 62, 63, 63, 63],
+              '7D': [59, 60, 60, 61, 61, 62, 63],
+              '1M': [54, 56, 58, 60, 63],
+              '6M': [48, 50, 52, 55, 59, 63],
+              '1Y': [42, 44, 46, 49, 52, 56, 60, 63],
+              '5Y': [40, 45, 42, 46, 55, 63]
+            }
+          }
+        }
+      },
+      {
+        id: 'cel25-celebrations',
+        name: 'Celebrations 25th',
+        era: 'Sword & Shield',
+        category: 'SWSH',
+        released: 'Oct 2021',
+        image: 'https://images.pokemontcg.io/cel25/logo.png',
+        selectedType: 'UPC',
+        variants: {
+          UPC: {
+            name: 'Celebrations UPC',
+            packCount: 17,
+            msrp: 119.99,
+            history: {
+              '1D': [382, 383, 380, 384, 383, 385, 385],
+              '7D': [342, 345, 350, 360, 368, 375, 385],
+              '1M': [310, 325, 345, 368, 385],
+              '6M': [275, 290, 305, 330, 355, 385],
+              '1Y': [220, 235, 250, 280, 300, 330, 360, 385],
+              '5Y': [120, 280, 320, 290, 340, 385]
+            }
+          },
+          ETB: {
+            name: 'Celebrations ETB',
+            packCount: 10,
+            msrp: 49.99,
+            history: {
+              '1D': [98, 98, 99, 99, 100, 100, 100],
+              '7D': [92, 93, 94, 95, 96, 98, 100],
+              '1M': [85, 88, 90, 94, 100],
+              '6M': [74, 78, 82, 88, 94, 100],
+              '1Y': [65, 68, 72, 76, 82, 88, 94, 100],
+              '5Y': [50, 75, 80, 72, 85, 100]
+            }
+          }
+        }
+      },
+      {
+        id: 'swsh7-evolving-skies',
+        name: 'Evolving Skies',
+        era: 'Sword & Shield',
+        category: 'SWSH',
+        released: 'Aug 2021',
+        image: 'https://images.pokemontcg.io/swsh7/logo.png',
+        selectedType: 'ETB',
+        variants: {
+          ETB: {
+            name: 'Evolving Skies ETB',
+            packCount: 8,
+            msrp: 39.99,
+            history: {
+              '1D': [204, 203, 205, 204, 206, 205, 205],
+              '7D': [180, 182, 185, 188, 192, 198, 205],
+              '1M': [160, 172, 185, 195, 205],
+              '6M': [120, 135, 150, 170, 185, 205],
+              '1Y': [95, 110, 125, 140, 160, 175, 190, 205],
+              '5Y': [40, 55, 85, 120, 165, 205]
+            }
+          }
+        }
+      },
+      {
+        id: 'sm115-hidden-fates',
+        name: 'Hidden Fates',
+        era: 'Sun & Moon',
+        category: 'SM',
+        released: 'Sep 2019',
+        image: 'https://images.pokemontcg.io/sm115/logo.png',
+        selectedType: 'ETB',
+        variants: {
+          ETB: {
+            name: 'Hidden Fates ETB',
+            packCount: 10,
+            msrp: 49.99,
+            history: {
+              '1D': [170, 170, 170, 170, 170, 170, 170],
+              '7D': [165, 165, 166, 166, 167, 168, 170],
+              '1M': [155, 160, 164, 167, 170],
+              '6M': [140, 145, 150, 158, 164, 170],
+              '1Y': [120, 128, 135, 142, 150, 156, 162, 170],
+              '5Y': [65, 95, 125, 138, 152, 170]
+            }
+          }
+        }
+      },
+      {
+        id: 'sm12-cosmic-eclipse',
+        name: 'Cosmic Eclipse',
+        era: 'Sun & Moon',
+        category: 'SM',
+        released: 'Nov 2019',
+        image: 'https://images.pokemontcg.io/sm12/logo.png',
+        selectedType: 'ETB',
+        variants: {
+          ETB: {
+            name: 'Cosmic Eclipse ETB',
+            packCount: 8,
+            msrp: 39.99,
+            history: {
+              '1D': [325, 325, 326, 326, 328, 330, 330],
+              '7D': [310, 312, 315, 318, 322, 325, 330],
+              '1M': [290, 295, 305, 315, 330],
+              '6M': [240, 255, 270, 290, 310, 330],
+              '1Y': [200, 215, 230, 250, 270, 290, 310, 330],
+              '5Y': [50, 90, 140, 195, 260, 330]
+            }
+          }
+        }
+      },
+      {
+        id: 'sm9-team-up',
+        name: 'Team Up',
+        era: 'Sun & Moon',
+        category: 'SM',
+        released: 'Feb 2019',
+        image: 'https://images.pokemontcg.io/sm9/logo.png',
+        selectedType: 'ETB',
+        variants: {
+          ETB: {
+            name: 'Team Up ETB',
+            packCount: 8,
+            msrp: 39.99,
+            history: {
+              '1D': [740, 740, 745, 745, 750, 750, 750],
+              '7D': [710, 715, 720, 725, 735, 740, 750],
+              '1M': [670, 685, 700, 725, 750],
+              '6M': [550, 580, 620, 660, 705, 750],
+              '1Y': [420, 460, 500, 550, 600, 650, 700, 750],
+              '5Y': [80, 160, 280, 420, 580, 750]
+            }
+          }
+        }
+      },
+      {
+        id: 'xy12-evolutions',
+        name: 'XY Evolutions',
+        era: 'XY',
+        category: 'VINTAGE',
+        released: 'Nov 2016',
+        image: 'https://images.pokemontcg.io/xy12/logo.png',
+        selectedType: 'ETB',
+        variants: {
+          ETB: {
+            name: 'XY Evolutions ETB',
+            packCount: 8,
+            msrp: 39.99,
+            history: {
+              '1D': [225, 225, 226, 226, 228, 228, 228],
+              '7D': [215, 218, 220, 222, 224, 226, 228],
+              '1M': [198, 205, 210, 218, 228],
+              '6M': [170, 180, 192, 202, 215, 228],
+              '1Y': [145, 155, 165, 178, 190, 205, 215, 228],
+              '5Y': [50, 120, 150, 165, 195, 228]
+            }
+          }
+        }
+      },
+      {
+        id: 'base-set',
+        name: 'Base Set (Vintage)',
+        era: 'Classic Vintage',
+        category: 'VINTAGE',
+        released: 'Jan 1999',
+        image: 'https://images.pokemontcg.io/base1/logo.png',
+        selectedType: 'UPC',
+        variants: {
+          UPC: {
+            name: 'Base Set Sealed Box / Classic',
+            packCount: 36,
+            msrp: 110.00,
+            history: {
+              '1D': [14500, 14500, 14500, 14550, 14550, 14600, 14600],
+              '7D': [14200, 14250, 14300, 14350, 14450, 14500, 14600],
+              '1M': [13800, 14000, 14150, 14400, 14600],
+              '6M': [12500, 12900, 13400, 13800, 14200, 14600],
+              '1Y': [11000, 11500, 12000, 12600, 13200, 13800, 14200, 14600],
+              '5Y': [8500, 12000, 15000, 13500, 14000, 14600]
+            }
+          }
         }
       }
     ];
 
-    let activeProduct = PRODUCTS[0];
+    let activeProduct = SETS_DATA[0];
     let activeFilter = 'ALL';
-    let activeMainTimeScale = '7D';
+    let activeMainTimeScale = '6M';
     let activeMoversTimeScale = '7D';
     let mainChart = null;
+    let cardCharts = {};
 
-    function getMetrics(product, timeScale) {
-      const arr = product.history[timeScale];
+    function getVariant(setObj) {
+      return setObj.variants[setObj.selectedType] || Object.values(setObj.variants)[0];
+    }
+
+    function getMetrics(setObj, timeScale) {
+      const v = getVariant(setObj);
+      const arr = v.history[timeScale];
       const start = arr[0];
       const end = arr[arr.length - 1];
       const delta = end - start;
       const pct = ((delta / start) * 100).toFixed(1);
-      return { start, end, delta, pct: parseFloat(pct) };
+      return { start, end, delta, pct: parseFloat(pct), variantName: v.name, packCount: v.packCount, msrp: v.msrp };
     }
 
     function renderMarketMovers() {
@@ -355,12 +750,12 @@
 
       document.getElementById('mover-range-indicator').innerText = `(${activeMoversTimeScale} delta)`;
 
-      const ranked = [...PRODUCTS].sort((a, b) => {
+      const ranked = [...SETS_DATA].sort((a, b) => {
         return getMetrics(b, activeMoversTimeScale).pct - getMetrics(a, activeMoversTimeScale).pct;
       }).slice(0, 4);
 
       ranked.forEach((item, index) => {
-        const { end, delta, pct } = getMetrics(item, activeMoversTimeScale);
+        const { end, delta, pct, variantName } = getMetrics(item, activeMoversTimeScale);
         const card = document.createElement('div');
         card.className = `bg-[#111827] border ${activeProduct.id === item.id ? 'border-emerald-500/80 bg-[#141e33]' : 'border-gray-800 hover:border-gray-700'} rounded-xl p-3.5 flex flex-col justify-between cursor-pointer transition duration-150 relative overflow-hidden group shadow-lg`;
         card.onclick = () => selectProduct(item.id);
@@ -380,7 +775,7 @@
               <img src="${item.image}" alt="" class="max-h-full max-w-full object-contain set-logo" />
             </div>
             <div class="min-w-0 flex-1">
-              <h4 class="text-xs font-bold text-gray-100 truncate group-hover:text-emerald-300 transition">${item.name}</h4>
+              <h4 class="text-xs font-bold text-gray-100 truncate group-hover:text-emerald-300 transition">${variantName}</h4>
               <div class="flex items-baseline space-x-2">
                 <span class="text-base font-black font-mono text-white">$${end}</span>
                 <span class="text-[11px] font-mono text-gray-400">+${delta >= 0 ? '$' + delta : '-$' + Math.abs(delta)} ${activeMoversTimeScale}</span>
@@ -396,7 +791,7 @@
         moversGrid.appendChild(card);
 
         setTimeout(() => {
-          renderSparkline(`sparkline-${item.id}`, item.history[activeMoversTimeScale], TIME_INTERVALS[activeMoversTimeScale].labels);
+          renderSparkline(`sparkline-${item.id}`, getVariant(item).history[activeMoversTimeScale], TIME_INTERVALS[activeMoversTimeScale].labels);
         }, 10);
       });
     }
@@ -413,7 +808,6 @@
             borderColor: '#34d399',
             borderWidth: 2,
             pointRadius: 0,
-            pointHoverRadius: 3,
             tension: 0.35,
             fill: true,
             backgroundColor: 'rgba(52, 211, 153, 0.08)'
@@ -422,11 +816,8 @@
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: { legend: { display: false }, tooltip: { enabled: true } },
-          scales: {
-            x: { display: false },
-            y: { display: false }
-          }
+          plugins: { legend: { display: false }, tooltip: { enabled: false } },
+          scales: { x: { display: false }, y: { display: false } }
         }
       });
     }
@@ -434,19 +825,19 @@
     function updateMainChart() {
       const ctx = document.getElementById('mainChart').getContext('2d');
       const metrics = getMetrics(activeProduct, activeMainTimeScale);
-      const dataset = activeProduct.history[activeMainTimeScale];
+      const dataset = getVariant(activeProduct).history[activeMainTimeScale];
       const labels = TIME_INTERVALS[activeMainTimeScale].labels;
 
       document.getElementById('active-img').src = activeProduct.image;
       document.getElementById('active-img').alt = activeProduct.name;
-      document.getElementById('active-title').innerText = activeProduct.name;
+      document.getElementById('active-title').innerText = metrics.variantName;
       document.getElementById('active-era').innerText = `${activeProduct.era} Era • Released ${activeProduct.released}`;
-      document.getElementById('active-type-badge').innerText = activeProduct.type;
-      document.getElementById('active-type-badge').className = `px-2 py-0.5 rounded text-[11px] font-bold border ${activeProduct.type === 'UPC' ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' : 'bg-blue-500/20 text-blue-300 border-blue-500/30'}`;
+      document.getElementById('active-type-badge').innerText = activeProduct.selectedType;
+      document.getElementById('active-type-badge').className = `px-2 py-0.5 rounded text-[11px] font-bold border ${activeProduct.selectedType === 'UPC' ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' : 'bg-blue-500/20 text-blue-300 border-blue-500/30'}`;
       document.getElementById('active-price').innerText = `$${metrics.end}.00`;
       document.getElementById('active-delta-label').innerText = `Change (${activeMainTimeScale})`;
       document.getElementById('active-delta').innerText = `${metrics.delta >= 0 ? '+' : ''}${metrics.pct}% (${activeMainTimeScale})`;
-      document.getElementById('active-pack-val').innerText = `$${(metrics.end / activeProduct.packCount).toFixed(2)}`;
+      document.getElementById('active-pack-val').innerText = `$${(metrics.end / metrics.packCount).toFixed(2)}`;
 
       if (mainChart) mainChart.destroy();
 
@@ -455,7 +846,7 @@
         data: {
           labels: labels,
           datasets: [{
-            label: `${activeProduct.name} ($)`,
+            label: `${metrics.variantName} ($)`,
             data: dataset,
             borderColor: '#10b981',
             borderWidth: 3,
@@ -503,6 +894,158 @@
       });
     }
 
+    function renderCatalog() {
+      const grid = document.getElementById('catalog-grid');
+      grid.innerHTML = '';
+
+      const filtered = SETS_DATA.filter(p => activeFilter === 'ALL' || p.category === activeFilter);
+      document.getElementById('product-count').innerText = filtered.length;
+
+      // Clean up previous sub-charts
+      Object.values(cardCharts).forEach(c => c.destroy());
+      cardCharts = {};
+
+      filtered.forEach(item => {
+        const metrics = getMetrics(item, '6M');
+        const card = document.createElement('div');
+        card.className = `bg-[#111827] border ${activeProduct.id === item.id ? 'border-emerald-500 ring-1 ring-emerald-500/50' : 'border-gray-800'} hover:border-gray-700 p-4 rounded-xl cursor-pointer transition flex flex-col justify-between shadow-lg`;
+        card.onclick = (e) => {
+          if (!e.target.closest('button')) {
+            selectProduct(item.id);
+          }
+        };
+
+        const hasETB = !!item.variants.ETB;
+        const hasUPC = !!item.variants.UPC;
+
+        card.innerHTML = `
+          <div>
+            <!-- Top Controls Row: Set Badges + Variant Buttons -->
+            <div class="flex items-center justify-between gap-2 border-b border-gray-800/80 pb-2.5">
+              <span class="text-[11px] font-bold text-gray-400 truncate uppercase tracking-wider">${item.era}</span>
+              
+              <!-- ETB & UPC Selection Buttons -->
+              <div class="flex items-center space-x-1.5 bg-gray-900 border border-gray-800 rounded-lg p-0.5">
+                ${hasETB ? `
+                  <button onclick="changeVariant(event, '${item.id}', 'ETB')" 
+                    class="px-2 py-0.5 text-[10px] font-bold rounded transition ${item.selectedType === 'ETB' ? 'bg-blue-500/20 text-blue-300 border border-blue-500/40 shadow-sm' : 'text-gray-400 hover:text-white'}">
+                    ETB
+                  </button>` : ''}
+                ${hasUPC ? `
+                  <button onclick="changeVariant(event, '${item.id}', 'UPC')" 
+                    class="px-2 py-0.5 text-[10px] font-bold rounded transition ${item.selectedType === 'UPC' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm' : 'text-gray-400 hover:text-white'}">
+                    UPC
+                  </button>` : ''}
+              </div>
+            </div>
+            
+            <!-- Logo & Product Information -->
+            <div class="flex items-center space-x-3 mt-3">
+              <div class="w-16 h-10 rounded bg-gray-900/90 border border-gray-800 p-1 flex-shrink-0 flex items-center justify-center">
+                <img src="${item.image}" alt="" class="max-h-full max-w-full object-contain set-logo" />
+              </div>
+              <div class="min-w-0 flex-1">
+                <h4 class="text-sm font-bold text-white leading-snug truncate">${metrics.variantName}</h4>
+                <p class="text-[11px] text-gray-400 mt-0.5">${metrics.packCount} Packs • MSRP $${metrics.msrp}</p>
+              </div>
+            </div>
+
+            <!-- Mini 6-Month Graph In Every Box -->
+            <div class="mt-3.5 bg-gray-900/50 rounded-lg p-2 border border-gray-800/60">
+              <div class="flex items-center justify-between text-[11px] mb-1">
+                <span class="text-gray-400 font-mono">6M Trend</span>
+                <span class="font-bold font-mono ${metrics.pct >= 0 ? 'text-emerald-400' : 'text-red-400'}">
+                  ${metrics.pct >= 0 ? '+' : ''}${metrics.pct}%
+                </span>
+              </div>
+              <div class="h-20 w-full">
+                <canvas id="card-chart-${item.id}"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Price Footer -->
+          <div class="mt-4 pt-3 border-t border-gray-800 flex items-baseline justify-between">
+            <span class="text-xs text-gray-400">Current Market</span>
+            <span class="text-base font-black font-mono text-white">$${metrics.end}.00</span>
+          </div>
+        `;
+        grid.appendChild(card);
+
+        setTimeout(() => {
+          renderCardChart(item);
+        }, 10);
+      });
+    }
+
+    function renderCardChart(item) {
+      const canvas = document.getElementById(`card-chart-${item.id}`);
+      if (!canvas) return;
+      const dataPoints = getVariant(item).history['6M'];
+
+      cardCharts[item.id] = new Chart(canvas, {
+        type: 'line',
+        data: {
+          labels: TIME_INTERVALS['6M'].labels,
+          datasets: [{
+            data: dataPoints,
+            borderColor: '#10b981',
+            borderWidth: 2,
+            pointRadius: 0,
+            pointHoverRadius: 4,
+            tension: 0.3,
+            fill: true,
+            backgroundColor: 'rgba(16, 185, 129, 0.08)'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              enabled: true,
+              callbacks: {
+                label: (c) => ` $${c.parsed.y}.00`
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { color: '#6b7280', font: { size: 9 } }
+            },
+            y: {
+              display: false
+            }
+          }
+        }
+      });
+    }
+
+    function changeVariant(e, id, type) {
+      e.stopPropagation();
+      const found = SETS_DATA.find(p => p.id === id);
+      if (found && found.variants[type]) {
+        found.selectedType = type;
+        if (activeProduct.id === id) {
+          updateMainChart();
+        }
+        renderCatalog();
+        renderMarketMovers();
+      }
+    }
+
+    function selectProduct(id) {
+      const found = SETS_DATA.find(p => p.id === id);
+      if (found) {
+        activeProduct = found;
+        updateMainChart();
+        renderMarketMovers();
+        renderCatalog();
+      }
+    }
+
     function setMoversTimeScale(scale) {
       activeMoversTimeScale = scale;
       document.querySelectorAll('.mover-time-btn').forEach(btn => {
@@ -527,62 +1070,16 @@
       updateMainChart();
     }
 
-    function renderCatalog() {
-      const grid = document.getElementById('catalog-grid');
-      grid.innerHTML = '';
-
-      const filtered = PRODUCTS.filter(p => activeFilter === 'ALL' || p.type === activeFilter);
-      document.getElementById('product-count').innerText = filtered.length;
-
-      filtered.forEach(item => {
-        const { end, pct } = getMetrics(item, '7D');
-        const card = document.createElement('div');
-        card.className = `bg-[#111827] border ${activeProduct.id === item.id ? 'border-emerald-500' : 'border-gray-800'} hover:border-gray-700 p-4 rounded-xl cursor-pointer transition flex flex-col justify-between`;
-        card.onclick = () => selectProduct(item.id);
-
-        card.innerHTML = `
-          <div>
-            <div class="flex items-center justify-between">
-              <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${item.type === 'UPC' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-blue-500/10 text-blue-400 border border-blue-500/20'}">
-                ${item.type}
-              </span>
-              <span class="text-xs font-mono font-bold text-emerald-400">+${pct}% (7D)</span>
-            </div>
-            
-            <div class="flex items-center space-x-3 mt-3">
-              <div class="w-16 h-9 rounded bg-gray-900/90 border border-gray-800 p-1 flex-shrink-0 flex items-center justify-center">
-                <img src="${item.image}" alt="" class="max-h-full max-w-full object-contain set-logo" />
-              </div>
-              <div class="min-w-0 flex-1">
-                <h4 class="text-sm font-bold text-white leading-snug truncate">${item.name}</h4>
-                <p class="text-xs text-gray-400 mt-0.5">${item.packCount} Packs • MSRP $${item.msrp}</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="mt-4 pt-3 border-t border-gray-800 flex items-baseline justify-between">
-            <span class="text-xs text-gray-400">Current Market</span>
-            <span class="text-base font-black font-mono text-white">$${end}.00</span>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    function selectProduct(id) {
-      const found = PRODUCTS.find(p => p.id === id);
-      if (found) {
-        activeProduct = found;
-        updateMainChart();
-        renderMarketMovers();
-        renderCatalog();
-      }
-    }
-
-    function setFilter(type) {
-      activeFilter = type;
+    function setFilter(category) {
+      activeFilter = category;
       document.querySelectorAll('.filter-btn').forEach(btn => {
-        if (btn.innerText.toUpperCase().includes(type)) {
+        if (
+          (category === 'ALL' && btn.innerText.includes('All')) ||
+          (category === 'SV' && btn.innerText.includes('Scarlet')) ||
+          (category === 'SWSH' && btn.innerText.includes('Sword')) ||
+          (category === 'SM' && btn.innerText.includes('Sun')) ||
+          (category === 'VINTAGE' && btn.innerText.includes('Vintage'))
+        ) {
           btn.className = 'filter-btn active px-3 py-1 text-xs font-semibold rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40';
         } else {
           btn.className = 'filter-btn px-3 py-1 text-xs font-semibold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white';
@@ -593,7 +1090,7 @@
 
     function resetFilters() {
       setFilter('ALL');
-      selectProduct(PRODUCTS[0].id);
+      selectProduct(SETS_DATA[0].id);
     }
 
     window.addEventListener('DOMContentLoaded', () => {
