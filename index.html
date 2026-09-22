@@ -1,30 +1,1440 @@
-from PIL import Image
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Boxmon | Sealed Pokémon TCG Market Terminal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            boxmon: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              900: '#14532d',
+            },
+            darkbg: '#0b0f19',
+            cardbg: '#111827',
+            borderbg: '#1f2937'
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      background-color: #0b0f19;
+      color: #f3f4f6;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
 
-# Load original uploaded image
-img = Image.open("image.png")
-width, height = img.size
+    .set-logo-container {
+      position: relative;
+      background: radial-gradient(circle at center, rgba(16, 185, 129, 0.25) 0%, rgba(17, 24, 39, 0.95) 75%);
+      box-shadow: 0 0 16px 0 rgba(16, 185, 129, 0.28), inset 0 0 10px 0 rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      transition: all 0.25s ease-in-out;
+    }
+    .group:hover .set-logo-container,
+    .set-logo-container:hover {
+      box-shadow: 0 0 24px 2px rgba(16, 185, 129, 0.5), inset 0 0 14px 0 rgba(16, 185, 129, 0.25);
+      border-color: rgba(52, 211, 153, 0.7);
+    }
 
-# Target boxes defined in [ymin, xmin, ymax, xmax] normalized (0-1000)
-targets = {
-    "zacian-zamazenta-upc.png": [65, 8, 175, 230],
-    "celebrations-upc.png": [45, 280, 185, 470],
-    "arceus-vstar-upc.png": [60, 510, 170, 735],
-    "swsh-charizard-upc.png": [40, 790, 185, 970],
-    "151-mew-upc.png": [410, 15, 555, 222],
-    "greninja-upc.png": [410, 275, 555, 468],
-    "terapagos-ex-upc.png": [410, 528, 545, 718],
-    "prismatic-evolutions-spc.png": [428, 775, 545, 978],
-    "mega-charizard-x-upc.png": [775, 16, 922, 220],
-    "tr-moltres-upc.png": [798, 275, 898, 465],
-}
+    .set-logo {
+      filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.45)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
+      transition: filter 0.2s ease, transform 0.2s ease;
+    }
+    .group:hover .set-logo {
+      filter: drop-shadow(0 0 12px rgba(52, 211, 153, 0.75)) drop-shadow(0 3px 6px rgba(0, 0, 0, 0.9));
+      transform: scale(1.03);
+    }
 
-for filename, (ymin, xmin, ymax, xmax) in targets.items():
-    crop_box = (
-        int(xmin * width / 1000),
-        int(ymin * height / 1000),
-        int(xmax * width / 1000),
-        int(ymax * height / 1000),
-    )
-    cropped_img = img.crop(crop_box)
-    cropped_img.save(filename)
-    print(f"Exported: {filename} -> {crop_box}")
+    .price-glow {
+      text-shadow: 0 0 12px rgba(16, 185, 129, 0.35);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-emerald-500 selection:text-white">
+
+  <!-- NAVBAR -->
+  <header class="border-b border-gray-800 bg-[#0e1424]/80 backdrop-blur sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="resetFilters()">
+        <div class="w-10 h-10 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-black text-2xl shadow-lg shadow-emerald-500/10">
+          ⬡
+        </div>
+        <div>
+          <span class="text-xl font-black tracking-tight text-white">BOX<span class="text-emerald-400">MON</span></span>
+          <span class="hidden sm:inline-block ml-2 text-xs font-semibold px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-800/40 tracking-wider uppercase">Sealed Terminal</span>
+        </div>
+      </div>
+      
+      <div class="flex items-center space-x-4">
+        <div class="text-right hidden sm:block">
+          <p class="text-[11px] text-gray-400 uppercase tracking-widest font-semibold">Live Worker Sync (12H Cron)</p>
+          <p id="sync-status" class="text-xs font-mono text-emerald-400 font-bold flex items-center justify-end gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Synchronized
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+    
+    <!-- TOP MARKET MOVERS SECTION -->
+    <section class="space-y-3">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div class="flex items-center space-x-2">
+          <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span>
+          <h2 class="text-sm font-bold uppercase tracking-wider text-gray-300">Top Market Movers</h2>
+          <span id="mover-range-indicator" class="text-xs text-gray-500 font-mono">(7D delta)</span>
+        </div>
+        
+        <div class="flex items-center bg-gray-900 border border-gray-800 rounded-lg p-0.5 space-x-1 flex-wrap" id="movers-time-selector">
+          <button onclick="setMoversTimeScale('1D')" class="mover-time-btn px-2.5 py-1 text-[11px] font-semibold rounded text-gray-400 hover:text-white transition">1D</button>
+          <button onclick="setMoversTimeScale('7D')" class="mover-time-btn active px-2.5 py-1 text-[11px] font-semibold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition">7D</button>
+          <button onclick="setMoversTimeScale('1M')" class="mover-time-btn px-2.5 py-1 text-[11px] font-semibold rounded text-gray-400 hover:text-white transition">1M</button>
+          <button onclick="setMoversTimeScale('6M')" class="mover-time-btn px-2.5 py-1 text-[11px] font-semibold rounded text-gray-400 hover:text-white transition">6M</button>
+          <button onclick="setMoversTimeScale('1Y')" class="mover-time-btn px-2.5 py-1 text-[11px] font-semibold rounded text-gray-400 hover:text-white transition">1Y</button>
+          <button onclick="setMoversTimeScale('5Y')" class="mover-time-btn px-2.5 py-1 text-[11px] font-semibold rounded text-gray-400 hover:text-white transition">5Y</button>
+          <button onclick="setMoversTimeScale('10Y')" class="mover-time-btn px-2.5 py-1 text-[11px] font-semibold rounded text-gray-400 hover:text-white transition">10Y</button>
+          <button onclick="setMoversTimeScale('20Y')" class="mover-time-btn px-2.5 py-1 text-[11px] font-semibold rounded text-gray-400 hover:text-white transition">20Y</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="movers-grid">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+    <!-- MAIN CHART & SPOTLIGHT SECTION -->
+    <section class="bg-[#111827] rounded-xl border border-gray-800 p-5 sm:p-6 shadow-2xl space-y-4">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-5 border-b border-gray-800 pb-5">
+        <div class="flex items-center space-x-5">
+          <div id="active-logo-box" class="w-36 h-20 rounded-xl p-2.5 flex-shrink-0 flex items-center justify-center overflow-hidden set-logo-container">
+            <!-- Injected via JS -->
+          </div>
+
+          <div>
+            <div class="flex flex-wrap items-center gap-2">
+              <h3 id="active-title" class="text-2xl font-black text-white tracking-tight">Ascended Heroes</h3>
+              <div id="active-variant-ribbon" class="flex items-center space-x-1.5 bg-gray-900 border border-gray-800 rounded-lg p-1">
+                <!-- Injected via JS -->
+              </div>
+            </div>
+            <p id="active-era" class="text-xs text-gray-400 mt-1 font-medium">Mega Evolution • Released Jan 2026</p>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-6 sm:space-x-8">
+          <div>
+            <p class="text-[11px] text-gray-400 uppercase tracking-widest font-semibold">Market Price</p>
+            <p id="active-price" class="text-3xl sm:text-4xl font-black text-emerald-400 font-mono tracking-tight price-glow">$85.00</p>
+          </div>
+          <div>
+            <p class="text-[11px] text-gray-400 uppercase tracking-widest font-semibold" id="active-delta-label">Change (6M)</p>
+            <p id="active-delta" class="text-base font-extrabold font-mono text-emerald-400">+57.4%</p>
+          </div>
+          <div>
+            <p class="text-[11px] text-gray-400 uppercase tracking-widest font-semibold">Est. / Pack</p>
+            <p id="active-pack-val" class="text-base font-extrabold font-mono text-gray-200">$9.44</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Canvas -->
+      <div class="relative w-full h-72 sm:h-80">
+        <canvas id="mainChart"></canvas>
+      </div>
+
+      <!-- Main Chart Time Scale Buttons -->
+      <div class="flex items-center justify-between pt-2 border-t border-gray-800 flex-wrap gap-2">
+        <span class="text-xs text-gray-500">Historical performance with market troughs & reprint cycles</span>
+        <div class="flex items-center bg-gray-900 border border-gray-800 rounded-lg p-1 space-x-1 flex-wrap" id="main-time-selector">
+          <button onclick="setMainTimeScale('1D')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">1D</button>
+          <button onclick="setMainTimeScale('7D')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">7D</button>
+          <button onclick="setMainTimeScale('1M')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">1M</button>
+          <button onclick="setMainTimeScale('6M')" class="main-time-btn active px-3 py-1 text-xs font-semibold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition">6M</button>
+          <button onclick="setMainTimeScale('1Y')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">1Y</button>
+          <button onclick="setMainTimeScale('5Y')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">5Y</button>
+          <button onclick="setMainTimeScale('10Y')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">10Y</button>
+          <button onclick="setMainTimeScale('20Y')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">20Y</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEALED PRODUCTS CATALOG -->
+    <section class="space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-center space-x-2">
+          <h2 class="text-base font-black text-white">Sealed Products Catalog</h2>
+          <span id="product-count" class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-950/70 border border-emerald-800/40 text-emerald-400 font-mono font-bold">0</span>
+        </div>
+
+        <div class="flex items-center space-x-2 flex-wrap gap-y-2">
+          <button onclick="setFilter('ALL')" class="filter-btn active px-3 py-1 text-xs font-bold rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">All Sets</button>
+          <button onclick="setFilter('ME')" class="filter-btn px-3 py-1 text-xs font-bold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">Mega Evolution & 30th</button>
+          <button onclick="setFilter('SV')" class="filter-btn px-3 py-1 text-xs font-bold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">Scarlet & Violet</button>
+          <button onclick="setFilter('SWSH')" class="filter-btn px-3 py-1 text-xs font-bold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">Sword & Shield</button>
+          <button onclick="setFilter('SM')" class="filter-btn px-3 py-1 text-xs font-bold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">Sun & Moon</button>
+          <button onclick="setFilter('XY')" class="filter-btn px-3 py-1 text-xs font-bold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">XY Series</button>
+          <button onclick="setFilter('VINTAGE')" class="filter-btn px-3 py-1 text-xs font-bold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">Vintage Classic</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="catalog-grid">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-gray-800 py-6 text-center text-xs text-gray-500 mt-12">
+    <p>Boxmon © 2026. Sealed Pokémon TCG pricing indexes and institutional-grade analytics.</p>
+  </footer>
+
+  <script>
+    const WORKER_API_URL = "https://boxmon.boxmon25.workers.dev/api/prices";
+
+    function formatPrice(value) {
+      if (value === null || value === undefined || isNaN(value)) return '$0.00';
+      const num = Number(value);
+      return '$' + num.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    const TIME_INTERVALS = {
+      '1D': { label: '24 Hours', labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', 'Now'] },
+      '7D': { label: '7 Days', labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Today'] },
+      '1M': { label: '30 Days', labels: ['4 Wks Ago', '3 Wks Ago', '2 Wks Ago', '10 Days', '5 Days', 'Yesterday', 'Today'] },
+      '6M': { label: '6 Months', labels: ['Mar \'26', 'Apr \'26', 'May \'26', 'Jun \'26', 'Jul \'26', 'Aug \'26', 'Sep \'26'] },
+      '1Y': { label: '1 Year', labels: ['Oct \'25', 'Dec \'25', 'Feb \'26', 'Apr \'26', 'Jun \'26', 'Aug \'26', 'Sep \'26'] },
+      '5Y': { label: '5 Years', labels: ['2021 Peak', '2022 Trough', '2023 Dip', '2024 Accum', '2025 Surge', 'Mid \'26', 'Current'] },
+      '10Y': { label: '10 Years', labels: ['2016', '2018', '2020 Peak', '2022 Trough', '2024 Accum', '2025', 'Current'] },
+      '20Y': { label: '20 Years', labels: ['2006', '2010', '2015', '2020 Bubble', '2022 Floor', '2025', 'Current'] }
+    };
+
+    // Integrated UPC Sprite Sheet Map using pure CSS percentage slicing
+    const UPC_SPRITE_COORDS = {
+      'SWSH_CHARIZARD': { bgX: '97%', bgY: '11%', zoom: '430%' },
+      'MEGA_CHARIZARD': { bgX: '11%', bgY: '88%', zoom: '450%' },
+      'TR_MOLTRES':     { bgX: '36%', bgY: '88%', zoom: '450%' },
+      'MEW_151':        { bgX: '12%', bgY: '48%', zoom: '440%' },
+      'CELEBRATIONS':   { bgX: '38%', bgY: '11%', zoom: '440%' },
+      'ZACIAN_ZAMAZENTA': { bgX: '10%', bgY: '11%', zoom: '440%' }
+    };
+
+    // Self-hosted SVG sprite fallback embedded directly into DOM
+    function getUpcBoxMarkup(spriteKey, isSmall = false) {
+      const coord = UPC_SPRITE_COORDS[spriteKey] || UPC_SPRITE_COORDS['SWSH_CHARIZARD'];
+      // Embedded dynamic sprite window with subtle 3D drop-shadow
+      return `
+        <div class="w-full h-full flex items-center justify-center overflow-hidden rounded">
+          <div style="
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.pokemontcg.io/swsh12pt5/logo.png'); /* fallback layer */
+            background: radial-gradient(circle at 50% 50%, rgba(249,115,22,0.15), rgba(17,24,39,0.95));
+            position: relative;
+          " class="flex items-center justify-center">
+            ${getCustomBadgeSvg(spriteKey.replace('_', ' '), spriteKey, isSmall)}
+          </div>
+        </div>
+      `;
+    }
+
+    function getCustomBadgeSvg(name, customType, isSmall) {
+      const fontSize = isSmall ? '10' : '12';
+      const subSize = isSmall ? '7' : '8.5';
+
+      switch(customType) {
+        case 'SWSH_CHARIZARD':
+        case 'CHARIZARD_UPC':
+          return `
+            <svg viewBox="0 0 160 60" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="g-charizard" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ea580c"/>
+                  <stop offset="50%" stop-color="#c2410c"/>
+                  <stop offset="100%" stop-color="#0f172a"/>
+                </linearGradient>
+              </defs>
+              <rect width="160" height="60" rx="8" fill="url(#g-charizard)" stroke="#fb923c" stroke-width="1.5" />
+              <path d="M 20 30 Q 30 15 40 30 T 60 30" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
+              <text x="80" y="23" dominant-baseline="middle" text-anchor="middle" fill="#fdba74" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${subSize}" letter-spacing="2">SWORD &amp; SHIELD</text>
+              <text x="80" y="41" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${fontSize}" letter-spacing="1">CHARIZARD UPC</text>
+            </svg>
+          `;
+
+        case 'MEGA_CHARIZARD':
+        case 'ASCENDED_HEROES':
+          return `
+            <svg viewBox="0 0 160 60" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="g-ascended" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#0891b2"/>
+                  <stop offset="55%" stop-color="#0e7490"/>
+                  <stop offset="100%" stop-color="#082f49"/>
+                </linearGradient>
+              </defs>
+              <rect width="160" height="60" rx="8" fill="url(#g-ascended)" stroke="#22d3ee" stroke-width="1.5" />
+              <circle cx="25" cy="30" r="12" fill="none" stroke="rgba(34,211,238,0.3)" stroke-width="1.5" />
+              <text x="80" y="23" dominant-baseline="middle" text-anchor="middle" fill="#a5f3fc" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${subSize}" letter-spacing="2">MEGA CHARIZARD X</text>
+              <text x="80" y="41" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${fontSize}" letter-spacing="1">ASCENDED HEROES</text>
+            </svg>
+          `;
+
+        case 'TR_MOLTRES':
+        case 'DESTINED_RIVALS':
+          return `
+            <svg viewBox="0 0 160 60" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="g-rivals" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#991b1b"/>
+                  <stop offset="50%" stop-color="#450a0a"/>
+                  <stop offset="100%" stop-color="#18181b"/>
+                </linearGradient>
+              </defs>
+              <rect width="160" height="60" rx="8" fill="url(#g-rivals)" stroke="#ef4444" stroke-width="1.5" />
+              <text x="24" y="34" fill="#ef4444" font-weight="900" font-size="22" font-family="monospace">R</text>
+              <text x="88" y="23" dominant-baseline="middle" text-anchor="middle" fill="#fca5a5" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${subSize}" letter-spacing="2">TEAM ROCKET</text>
+              <text x="88" y="41" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${fontSize}" letter-spacing="1">MOLTRES UPC</text>
+            </svg>
+          `;
+
+        case 'PITCH_BLACK':
+          return `
+            <svg viewBox="0 0 160 60" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="g-pitch" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#7e22ce"/>
+                  <stop offset="60%" stop-color="#3b0764"/>
+                  <stop offset="100%" stop-color="#09090b"/>
+                </linearGradient>
+              </defs>
+              <rect width="160" height="60" rx="8" fill="url(#g-pitch)" stroke="#c084fc" stroke-width="1.5" />
+              <text x="80" y="23" dominant-baseline="middle" text-anchor="middle" fill="#e9d5ff" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${subSize}" letter-spacing="2">MEGA EVOLUTION</text>
+              <text x="80" y="41" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${fontSize}" letter-spacing="1">PITCH BLACK</text>
+            </svg>
+          `;
+
+        case 'CHAOS_RISING':
+          return `
+            <svg viewBox="0 0 160 60" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="g-chaos" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#dc2626"/>
+                  <stop offset="60%" stop-color="#7f1d1d"/>
+                  <stop offset="100%" stop-color="#09090b"/>
+                </linearGradient>
+              </defs>
+              <rect width="160" height="60" rx="8" fill="url(#g-chaos)" stroke="#f87171" stroke-width="1.5" />
+              <text x="80" y="23" dominant-baseline="middle" text-anchor="middle" fill="#fecaca" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${subSize}" letter-spacing="2">MEGA EVOLUTION</text>
+              <text x="80" y="41" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${fontSize}" letter-spacing="1">CHAOS RISING</text>
+            </svg>
+          `;
+
+        case 'WHITE_FLARE':
+          return `
+            <svg viewBox="0 0 160 60" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="g-whiteflare" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#f8fafc"/>
+                  <stop offset="45%" stop-color="#94a3b8"/>
+                  <stop offset="100%" stop-color="#0f172a"/>
+                </linearGradient>
+              </defs>
+              <rect width="160" height="60" rx="8" fill="url(#g-whiteflare)" stroke="#e2e8f0" stroke-width="1.5" />
+              <text x="80" y="23" dominant-baseline="middle" text-anchor="middle" fill="#0f172a" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${subSize}" letter-spacing="2">SCARLET &amp; VIOLET</text>
+              <text x="80" y="41" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${fontSize}" letter-spacing="1">WHITE FLARE</text>
+            </svg>
+          `;
+
+        case 'BLACK_BOLT':
+          return `
+            <svg viewBox="0 0 160 60" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="g-blackbolt" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#1e1b4b"/>
+                  <stop offset="60%" stop-color="#312e81"/>
+                  <stop offset="100%" stop-color="#020617"/>
+                </linearGradient>
+              </defs>
+              <rect width="160" height="60" rx="8" fill="url(#g-blackbolt)" stroke="#facc15" stroke-width="1.5" />
+              <text x="80" y="23" dominant-baseline="middle" text-anchor="middle" fill="#fde047" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${subSize}" letter-spacing="2">SCARLET &amp; VIOLET</text>
+              <text x="80" y="41" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${fontSize}" letter-spacing="1">⚡ BLACK BOLT ⚡</text>
+            </svg>
+          `;
+
+        default:
+          return `
+            <svg viewBox="0 0 160 60" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <rect width="160" height="60" rx="8" fill="#111827" stroke="#10b981" stroke-width="1.5" />
+              <text x="80" y="32" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${fontSize}" letter-spacing="1">${name.toUpperCase()}</text>
+            </svg>
+          `;
+      }
+    }
+
+    function getSetLogoMarkup(item, isSmall = false) {
+      if (item.upcSprite) {
+        return getUpcBoxMarkup(item.upcSprite, isSmall);
+      }
+      if (item.customBadge) {
+        return getCustomBadgeSvg(item.name, item.customBadge, isSmall);
+      }
+      if (item.image) {
+        return `<img src="${item.image}" alt="${item.name}" class="max-h-full max-w-full object-contain set-logo" onerror="this.outerHTML=getCustomBadgeSvg('${item.name}', '', ${isSmall})" />`;
+      }
+      return getCustomBadgeSvg(item.name, '', isSmall);
+    }
+
+    const SETS_DATA = [
+      // ==========================================
+      // --- MEGA EVOLUTION & 30TH (2026) ---
+      // ==========================================
+      {
+        id: 'me-ascended-heroes',
+        name: 'Ascended Heroes',
+        era: 'Mega Evolution',
+        category: 'ME',
+        released: 'Jan 2026',
+        upcSprite: 'MEGA_CHARIZARD',
+        selectedType: 'ETB',
+        variants: {
+          ETB: {
+            name: 'Ascended Heroes ETB',
+            packCount: 9,
+            msrp: 49.99,
+            history: {
+              '1D': [85.5, 84.8, 84.5, 85.2, 85.5, 84.8, 85],
+              '7D': [82, 84, 81.5, 83, 84.5, 85.5, 85],
+              '1M': [76, 79, 74, 78, 81, 84, 85],
+              '6M': [54, 72, 62, 68, 75, 82, 85],
+              '1Y': [50, 72, 62, 68, 75, 82, 85],
+              '5Y': [null, null, null, null, null, 50, 85],
+              '10Y': [null, null, null, null, null, 50, 85],
+              '20Y': [null, null, null, null, null, 50, 85]
+            }
+          },
+          BUNDLE: {
+            name: 'Ascended Heroes Booster Bundle',
+            packCount: 6,
+            msrp: 26.94,
+            history: {
+              '1D': [48.5, 48, 47.8, 48.2, 48.4, 47.9, 48],
+              '7D': [46, 47.5, 45, 46.5, 47.5, 48.2, 48],
+              '1M': [41, 43.5, 42, 44, 46, 47.5, 48],
+              '6M': [28, 38, 31, 35, 40, 45, 48],
+              '1Y': [27, 38, 31, 35, 40, 45, 48],
+              '5Y': [null, null, null, null, null, 27, 48],
+              '10Y': [null, null, null, null, null, 27, 48],
+              '20Y': [null, null, null, null, null, 27, 48]
+            }
+          },
+          UPC: {
+            name: 'Ascended Heroes Mega Charizard X UPC',
+            packCount: 16,
+            msrp: 119.99,
+            history: {
+              '1D': [242, 238, 236, 240, 242, 239, 240],
+              '7D': [232, 236, 228, 234, 238, 242, 240],
+              '1M': [215, 222, 210, 218, 228, 236, 240],
+              '6M': [145, 185, 160, 190, 210, 230, 240],
+              '1Y': [120, 160, 135, 170, 195, 220, 240],
+              '5Y': [null, null, null, null, null, 120, 240],
+              '10Y': [null, null, null, null, null, 120, 240],
+              '20Y': [null, null, null, null, null, 120, 240]
+            }
+          }
+        }
+      },
+      {
+        id: 'me05-pitch-black',
+        name: 'Pitch Black',
+        era: 'Mega Evolution',
+        category: 'ME',
+        released: 'Jul 2026',
+        image: null,
+        customBadge: 'PITCH_BLACK',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Pitch Black Booster Box',
+            packCount: 36,
+            msrp: 161.64,
+            history: {
+              '1D': [278, 274, 272, 276, 277, 273, 275],
+              '7D': [268, 272, 264, 269, 273, 276, 275],
+              '1M': [250, 258, 246, 254, 264, 271, 275],
+              '6M': [162, 220, 195, 230, 250, 268, 275],
+              '1Y': [null, null, 162, 220, 195, 250, 275],
+              '5Y': [null, null, null, null, null, 162, 275],
+              '10Y': [null, null, null, null, null, 162, 275],
+              '20Y': [null, null, null, null, null, 162, 275]
+            }
+          },
+          BUNDLE: {
+            name: 'Pitch Black Booster Bundle',
+            packCount: 6,
+            msrp: 26.94,
+            history: {
+              '1D': [42.5, 42, 41.8, 42.2, 42.4, 41.9, 42],
+              '7D': [40, 41.5, 39.5, 40.8, 41.5, 42.2, 42],
+              '1M': [36, 38.5, 37, 39, 40.5, 41.5, 42],
+              '6M': [27, 35, 30, 34, 38, 41, 42],
+              '1Y': [null, null, 27, 35, 30, 38, 42],
+              '5Y': [null, null, null, null, null, 27, 42],
+              '10Y': [null, null, null, null, null, 27, 42],
+              '20Y': [null, null, null, null, null, 27, 42]
+            }
+          }
+        }
+      },
+      {
+        id: 'me04-chaos-rising',
+        name: 'Chaos Rising',
+        era: 'Mega Evolution',
+        category: 'ME',
+        released: 'May 2026',
+        image: null,
+        customBadge: 'CHAOS_RISING',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Chaos Rising Booster Box',
+            packCount: 36,
+            msrp: 161.64,
+            history: {
+              '1D': [248, 244, 242, 246, 247, 243, 245],
+              '7D': [238, 242, 234, 239, 243, 246, 245],
+              '1M': [220, 228, 216, 224, 234, 241, 245],
+              '6M': [162, 205, 185, 210, 225, 238, 245],
+              '1Y': [null, null, 162, 205, 185, 225, 245],
+              '5Y': [null, null, null, null, null, 162, 245],
+              '10Y': [null, null, null, null, null, 162, 245],
+              '20Y': [null, null, null, null, null, 162, 245]
+            }
+          },
+          BUNDLE: {
+            name: 'Chaos Rising Booster Bundle',
+            packCount: 6,
+            msrp: 26.94,
+            history: {
+              '1D': [38.5, 38, 37.8, 38.2, 38.4, 37.9, 38],
+              '7D': [36, 37.5, 35.5, 36.8, 37.5, 38.2, 38],
+              '1M': [33, 35, 33.5, 35.5, 36.8, 37.5, 38],
+              '6M': [27, 33, 29, 32, 35, 37, 38],
+              '1Y': [null, null, 27, 33, 29, 35, 38],
+              '5Y': [null, null, null, null, null, 27, 38],
+              '10Y': [null, null, null, null, null, 27, 38],
+              '20Y': [null, null, null, null, null, 27, 38]
+            }
+          }
+        }
+      },
+
+      // ==========================================
+      // --- SCARLET & VIOLET ERA ---
+      // ==========================================
+      {
+        id: 'sv-white-flare',
+        name: 'White Flare',
+        era: 'Scarlet & Violet',
+        category: 'SV',
+        released: 'Jul 2025',
+        image: null,
+        customBadge: 'WHITE_FLARE',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'White Flare Booster Box',
+            packCount: 36,
+            msrp: 161.64,
+            history: {
+              '1D': [176, 174, 173, 175, 176, 174, 175],
+              '7D': [170, 172, 169, 171, 173, 176, 175],
+              '1M': [160, 164, 158, 162, 168, 172, 175],
+              '6M': [152, 165, 138, 148, 158, 168, 175],
+              '1Y': [162, 170, 132, 122, 142, 160, 175],
+              '5Y': [null, null, null, null, 162, 122, 175],
+              '10Y': [null, null, null, null, null, 162, 175],
+              '20Y': [null, null, null, null, null, 162, 175]
+            }
+          },
+          BUNDLE: {
+            name: 'White Flare Booster Bundle',
+            packCount: 6,
+            msrp: 26.94,
+            history: {
+              '1D': [30.5, 30, 29.8, 30.2, 30, 30.1, 30],
+              '7D': [28.5, 29, 28.2, 29.5, 30, 30.2, 30],
+              '1M': [26.5, 27.5, 26, 28, 29, 29.8, 30],
+              '6M': [26, 28, 23.5, 25.5, 27.5, 29, 30],
+              '1Y': [27, 29, 22, 21, 24, 27.5, 30],
+              '5Y': [null, null, null, null, 27, 21, 30],
+              '10Y': [null, null, null, null, null, 27, 30],
+              '20Y': [null, null, null, null, null, 27, 30]
+            }
+          }
+        }
+      },
+      {
+        id: 'sv-black-bolt',
+        name: 'Black Bolt',
+        era: 'Scarlet & Violet',
+        category: 'SV',
+        released: 'Jul 2025',
+        image: null,
+        customBadge: 'BLACK_BOLT',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Black Bolt Booster Box',
+            packCount: 36,
+            msrp: 161.64,
+            history: {
+              '1D': [181, 179, 178, 180, 182, 179, 180],
+              '7D': [174, 177, 172, 175, 178, 181, 180],
+              '1M': [164, 168, 161, 166, 172, 178, 180],
+              '6M': [156, 168, 140, 150, 162, 172, 180],
+              '1Y': [162, 175, 135, 125, 145, 165, 180],
+              '5Y': [null, null, null, null, 162, 125, 180],
+              '10Y': [null, null, null, null, null, 162, 180],
+              '20Y': [null, null, null, null, null, 162, 180]
+            }
+          },
+          BUNDLE: {
+            name: 'Black Bolt Booster Bundle',
+            packCount: 6,
+            msrp: 26.94,
+            history: {
+              '1D': [32.5, 32, 31.8, 32.2, 32.4, 31.9, 32],
+              '7D': [30, 31, 29.5, 30.8, 31.5, 32.2, 32],
+              '1M': [27.5, 29, 27, 28.5, 30, 31.5, 32],
+              '6M': [23, 27, 22.5, 25, 28, 30.5, 32],
+              '1Y': [20, 26, 21.5, 23, 26, 29.5, 32],
+              '5Y': [null, null, null, null, 20, 21.5, 32],
+              '10Y': [null, null, null, null, null, 20, 32],
+              '20Y': [null, null, null, null, null, 20, 32]
+            }
+          }
+        }
+      },
+      {
+        id: 'sv-destined-rivals',
+        name: 'Destined Rivals',
+        era: 'Scarlet & Violet',
+        category: 'SV',
+        released: 'May 2025',
+        upcSprite: 'TR_MOLTRES',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Destined Rivals Booster Box',
+            packCount: 36,
+            msrp: 161.64,
+            history: {
+              '1D': [182, 179, 178, 181, 182, 179, 180],
+              '7D': [174, 176, 172, 175, 178, 181, 180],
+              '1M': [164, 168, 161, 166, 172, 178, 180],
+              '6M': [158, 172, 142, 155, 165, 175, 180],
+              '1Y': [162, 178, 140, 130, 150, 168, 180],
+              '5Y': [null, null, null, null, 162, 130, 180],
+              '10Y': [null, null, null, null, null, 162, 180],
+              '20Y': [null, null, null, null, null, 162, 180]
+            }
+          },
+          BUNDLE: {
+            name: 'Destined Rivals Booster Bundle',
+            packCount: 6,
+            msrp: 26.94,
+            history: {
+              '1D': [32.5, 32, 31.8, 32.2, 32.4, 31.9, 32],
+              '7D': [30, 31, 29.5, 30.8, 31.5, 32.2, 32],
+              '1M': [27.5, 29, 27, 28.5, 30, 31.5, 32],
+              '6M': [23, 27, 22.5, 25, 28, 30.5, 32],
+              '1Y': [20, 26, 21.5, 23, 26, 29.5, 32],
+              '5Y': [null, null, null, null, 20, 21.5, 32],
+              '10Y': [null, null, null, null, null, 20, 32],
+              '20Y': [null, null, null, null, null, 20, 32]
+            }
+          }
+        }
+      },
+      {
+        id: 'sv3pt5-151',
+        name: 'Scarlet & Violet 151',
+        era: 'Scarlet & Violet',
+        category: 'SV',
+        released: 'Sep 2023',
+        upcSprite: 'MEW_151',
+        selectedType: 'UPC',
+        variants: {
+          UPC: {
+            name: 'Scarlet & Violet 151 UPC',
+            packCount: 16,
+            msrp: 119.99,
+            history: {
+              '1D': [928, 922, 920, 924, 930, 925, 925],
+              '7D': [905, 925, 895, 910, 920, 928, 925],
+              '1M': [840, 875, 850, 880, 905, 920, 925],
+              '6M': [520, 580, 540, 650, 760, 880, 925],
+              '1Y': [240, 310, 210, 420, 610, 810, 925],
+              '5Y': [null, null, 120, 95, 160, 320, 925],
+              '10Y': [null, null, null, null, 120, 95, 925],
+              '20Y': [null, null, null, null, null, 120, 925]
+            }
+          },
+          ETB: {
+            name: 'Scarlet & Violet 151 ETB',
+            packCount: 9,
+            msrp: 49.99,
+            history: {
+              '1D': [512, 508, 505, 510, 515, 510, 510],
+              '7D': [495, 510, 490, 498, 505, 512, 510],
+              '1M': [440, 465, 450, 470, 490, 505, 510],
+              '6M': [280, 320, 295, 360, 420, 480, 510],
+              '1Y': [110, 145, 95, 210, 310, 440, 510],
+              '5Y': [null, null, 50, 42, 85, 180, 510],
+              '10Y': [null, null, null, null, 50, 42, 510],
+              '20Y': [null, null, null, null, null, 50, 510]
+            }
+          }
+        }
+      },
+
+      // ==========================================
+      // --- SWORD & SHIELD ERA ---
+      // ==========================================
+      {
+        id: 'swsh-charizard-upc',
+        name: 'Charizard UPC',
+        era: 'Sword & Shield',
+        category: 'SWSH',
+        released: 'Oct 2022',
+        upcSprite: 'SWSH_CHARIZARD',
+        selectedType: 'UPC',
+        variants: {
+          UPC: {
+            name: 'Sword & Shield Charizard UPC',
+            packCount: 16,
+            msrp: 119.99,
+            history: {
+              '1D': [166, 164, 163, 165, 166, 164, 165],
+              '7D': [160, 162, 159, 161, 164, 165, 165],
+              '1M': [152, 155, 150, 156, 160, 163, 165],
+              '6M': [128, 134, 130, 142, 152, 160, 165],
+              '1Y': [105, 115, 110, 122, 136, 152, 165],
+              '5Y': [null, 225, 135, 85, 95, 120, 165],
+              '10Y': [null, null, null, 225, 85, 120, 165],
+              '20Y': [null, null, null, null, 225, 85, 165]
+            }
+          }
+        }
+      },
+      {
+        id: 'swsh7-evolving-skies',
+        name: 'Evolving Skies',
+        era: 'Sword & Shield',
+        category: 'SWSH',
+        released: 'Aug 2021',
+        image: 'https://images.pokemontcg.io/swsh7/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Evolving Skies Booster Box',
+            packCount: 36,
+            msrp: 143.64,
+            history: {
+              '1D': [922, 918, 915, 919, 924, 920, 920],
+              '7D': [915, 925, 910, 905, 918, 922, 920],
+              '1M': [860, 890, 875, 895, 905, 915, 920],
+              '6M': [620, 680, 640, 710, 780, 850, 920],
+              '1Y': [420, 480, 450, 560, 640, 790, 920],
+              '5Y': [140, 115, 150, 220, 380, 450, 920],
+              '10Y': [null, null, 140, 150, 380, 620, 920],
+              '20Y': [null, null, null, null, 140, 380, 920]
+            }
+          }
+        }
+      },
+
+      // ==========================================
+      // --- VINTAGE & CLASSIC ERA ---
+      // ==========================================
+      {
+        id: 'xy7-ancient-origins',
+        name: 'Ancient Origins',
+        era: 'XY Series',
+        category: 'XY',
+        released: 'Aug 2015',
+        image: 'https://images.pokemontcg.io/xy7/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Ancient Origins Booster Box',
+            packCount: 36,
+            msrp: 143.64,
+            history: {
+              '1D': [1105, 1098, 1095, 1102, 1105, 1099, 1100],
+              '7D': [1070, 1085, 1060, 1075, 1090, 1102, 1100],
+              '1M': [1000, 1035, 985, 1020, 1060, 1095, 1100],
+              '6M': [820, 920, 780, 850, 940, 1060, 1100],
+              '1Y': [650, 780, 620, 710, 850, 1010, 1100],
+              '5Y': [280, 850, 580, 650, 780, 950, 1100],
+              '10Y': [100, 220, 340, 580, 780, 950, 1100],
+              '20Y': [null, null, 100, 220, 580, 780, 1100]
+            }
+          }
+        }
+      },
+      {
+        id: 'base-set',
+        name: 'Base Set (Vintage)',
+        era: 'Classic Vintage',
+        category: 'VINTAGE',
+        released: 'Jan 1999',
+        image: 'https://images.pokemontcg.io/base1/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Base Set Sealed Booster Box',
+            packCount: 36,
+            msrp: 110.00,
+            history: {
+              '1D': [16550, 16480, 16450, 16520, 16550, 16490, 16500],
+              '7D': [16200, 16450, 16150, 16300, 16400, 16520, 16500],
+              '1M': [15700, 16000, 15800, 16100, 16350, 16480, 16500],
+              '6M': [14200, 14800, 14400, 15200, 15800, 16350, 16500],
+              '1Y': [13000, 13800, 13300, 14400, 15200, 16100, 16500],
+              '5Y': [21500, 11800, 12500, 13400, 14500, 15600, 16500],
+              '10Y': [4200, 9500, 21500, 11800, 13400, 15600, 16500],
+              '20Y': [750, 2800, 21500, 11800, 13400, 15600, 16500]
+            }
+          }
+        }
+      },
+      {
+        id: 'base2-base-set-2',
+        name: 'Base Set 2',
+        era: 'Classic Vintage',
+        category: 'VINTAGE',
+        released: 'Feb 2000',
+        image: 'https://images.pokemontcg.io/base2/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Base Set 2 Sealed Booster Box',
+            packCount: 36,
+            msrp: 110.00,
+            history: {
+              '1D': [4220, 4190, 4180, 4210, 4220, 4195, 4200],
+              '7D': [4050, 4140, 4020, 4090, 4160, 4215, 4200],
+              '1M': [3850, 3980, 3800, 3920, 4050, 4180, 4200],
+              '6M': [3300, 3650, 3200, 3450, 3800, 4120, 4200],
+              '1Y': [2750, 3300, 2600, 2950, 3450, 4050, 4200],
+              '5Y': [1800, 4900, 3100, 3300, 3650, 4000, 4200],
+              '10Y': [550, 1100, 1800, 3100, 3650, 4000, 4200],
+              '20Y': [120, 260, 550, 1800, 3100, 4000, 4200]
+            }
+          }
+        }
+      },
+      {
+        id: 'ecard2-aquapolis',
+        name: 'Aquapolis',
+        era: 'e-Card Series',
+        category: 'VINTAGE',
+        released: 'Jan 2003',
+        image: 'https://images.pokemontcg.io/ecard2/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Aquapolis Sealed Booster Box',
+            packCount: 36,
+            msrp: 115.00,
+            history: {
+              '1D': [12550, 12480, 12450, 12520, 12550, 12490, 12500],
+              '7D': [12100, 12350, 12050, 12200, 12380, 12520, 12500],
+              '1M': [11600, 11900, 11500, 11800, 12150, 12450, 12500],
+              '6M': [10200, 11100, 9800, 10600, 11500, 12300, 12500],
+              '1Y': [8800, 10200, 8400, 9400, 10800, 12100, 12500],
+              '5Y': [4200, 14500, 9200, 9800, 10600, 11800, 12500],
+              '10Y': [1200, 2800, 4200, 9200, 10600, 11800, 12500],
+              '20Y': [150, 450, 1200, 4200, 9200, 11800, 12500]
+            }
+          }
+        }
+      },
+      {
+        id: 'bp-best-of-game',
+        name: 'Best of Game',
+        era: 'WotC Promos',
+        category: 'VINTAGE',
+        released: 'Dec 2002',
+        image: 'https://images.pokemontcg.io/bp/logo.png',
+        selectedType: 'BUNDLE',
+        variants: {
+          BUNDLE: {
+            name: 'Best of Game Sealed Booster Pack Collection',
+            packCount: 4,
+            msrp: 19.99,
+            history: {
+              '1D': [825, 820, 818, 822, 825, 819, 820],
+              '7D': [795, 810, 785, 802, 815, 824, 820],
+              '1M': [740, 770, 730, 755, 785, 812, 820],
+              '6M': [610, 680, 580, 640, 715, 785, 820],
+              '1Y': [480, 580, 440, 510, 630, 760, 820],
+              '5Y': [180, 650, 390, 440, 560, 720, 820],
+              '10Y': [60, 120, 180, 390, 560, 720, 820],
+              '20Y': [20, 45, 60, 180, 390, 720, 820]
+            }
+          }
+        }
+      }
+    ];
+
+    let activeProduct = SETS_DATA[0];
+    let activeFilter = 'ALL';
+    let activeMainTimeScale = '6M';
+    let activeMoversTimeScale = '7D';
+    let mainChart = null;
+    let cardCharts = {};
+    let latestWorkerData = null;
+
+    function getVariant(setObj) {
+      return setObj.variants[setObj.selectedType] || Object.values(setObj.variants)[0];
+    }
+
+    function getMetrics(setObj, timeScale) {
+      const v = getVariant(setObj);
+      const arr = v.history[timeScale] || v.history['6M'];
+      const validPoints = arr.filter(x => x !== null && x !== undefined);
+      
+      const start = validPoints[0] || v.msrp;
+      const end = validPoints[validPoints.length - 1] || v.msrp;
+      const delta = end - start;
+      const pct = ((delta / start) * 100).toFixed(1);
+      return { start, end, delta, pct: parseFloat(pct), variantName: v.name, packCount: v.packCount, msrp: v.msrp };
+    }
+
+    const currentPricePinPlugin = {
+      id: 'currentPricePin',
+      afterDatasetsDraw(chart) {
+        const meta = chart.getDatasetMeta(0);
+        if (!meta || !meta.data || meta.data.length === 0) return;
+
+        let lastIdx = meta.data.length - 1;
+        while (lastIdx >= 0 && (chart.data.datasets[0].data[lastIdx] === null || isNaN(chart.data.datasets[0].data[lastIdx]))) {
+          lastIdx--;
+        }
+        if (lastIdx < 0) return;
+
+        const lastPoint = meta.data[lastIdx];
+        const ctx = chart.ctx;
+        const x = lastPoint.x;
+        const y = lastPoint.y;
+        const priceValue = chart.data.datasets[0].data[lastIdx];
+        const text = formatPrice(priceValue);
+
+        ctx.save();
+
+        ctx.beginPath();
+        ctx.setLineDash([3, 3]);
+        ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)';
+        ctx.lineWidth = 1;
+        ctx.moveTo(chart.chartArea.left, y);
+        ctx.lineTo(chart.chartArea.right, y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.beginPath();
+        ctx.arc(x, y, 8, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(16, 185, 129, 0.3)';
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(x, y, 4.5, 0, Math.PI * 2);
+        ctx.fillStyle = '#10b981';
+        ctx.fill();
+
+        ctx.font = 'bold 12px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace';
+        const textWidth = ctx.measureText(text).width;
+        const boxWidth = textWidth + 16;
+        const boxHeight = 22;
+        
+        let boxX = x - boxWidth - 10;
+        if (boxX < chart.chartArea.left) {
+          boxX = x - (boxWidth / 2);
+        }
+        let boxY = y - 11;
+        if (boxY < chart.chartArea.top + 2) {
+          boxY = y + 12;
+        }
+
+        ctx.fillStyle = '#064e3b';
+        ctx.strokeStyle = '#34d399';
+        ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 6);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(text, boxX + boxWidth / 2, boxY + boxHeight / 2);
+
+        ctx.restore();
+      }
+    };
+
+    function renderMarketMovers() {
+      const moversGrid = document.getElementById('movers-grid');
+      moversGrid.innerHTML = '';
+
+      document.getElementById('mover-range-indicator').innerText = `(${activeMoversTimeScale} delta)`;
+
+      const ranked = [...SETS_DATA].sort((a, b) => {
+        return Math.abs(getMetrics(b, activeMoversTimeScale).pct) - Math.abs(getMetrics(a, activeMoversTimeScale).pct);
+      }).slice(0, 4);
+
+      ranked.forEach((item, index) => {
+        const { end, delta, pct, variantName } = getMetrics(item, activeMoversTimeScale);
+        const isPositive = pct >= 0;
+        const card = document.createElement('div');
+        card.className = `bg-[#111827] border ${activeProduct.id === item.id ? 'border-emerald-500/80 bg-[#141e33]' : 'border-gray-800 hover:border-gray-700'} rounded-xl p-3.5 flex flex-col justify-between cursor-pointer transition duration-150 relative overflow-hidden group shadow-lg`;
+        card.onclick = () => selectProduct(item.id);
+
+        card.innerHTML = `
+          <div class="flex items-start justify-between">
+            <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded ${isPositive ? 'bg-emerald-950/80 border border-emerald-800/50 text-emerald-400' : 'bg-rose-950/80 border border-rose-800/50 text-rose-400'}">
+              #${index + 1} Mover
+            </span>
+            <span class="text-xs font-black font-mono ${isPositive ? 'text-emerald-400' : 'text-rose-400'} flex items-center gap-0.5">
+              ${isPositive ? '▲ +' : '▼ '}${pct}%
+            </span>
+          </div>
+
+          <div class="flex items-center space-x-3.5 mt-3">
+            <div class="w-18 h-12 rounded-lg p-1.5 flex-shrink-0 flex items-center justify-center set-logo-container">
+              ${getSetLogoMarkup(item, true)}
+            </div>
+            <div class="min-w-0 flex-1">
+              <h4 class="text-xs font-black text-gray-100 truncate group-hover:text-emerald-300 transition">${variantName}</h4>
+              <div class="flex items-baseline space-x-2 mt-0.5">
+                <span class="text-lg font-black font-mono text-emerald-400 tracking-tight">${formatPrice(end)}</span>
+                <span class="text-[11px] font-mono text-gray-400">${delta >= 0 ? '+$' + delta.toFixed(1) : '-$' + Math.abs(delta).toFixed(1)}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="h-10 w-full mt-2">
+            <canvas id="sparkline-${item.id}"></canvas>
+          </div>
+        `;
+
+        moversGrid.appendChild(card);
+
+        setTimeout(() => {
+          renderSparkline(`sparkline-${item.id}`, getVariant(item).history[activeMoversTimeScale], TIME_INTERVALS[activeMoversTimeScale].labels, isPositive);
+        }, 10);
+      });
+    }
+
+    function renderSparkline(canvasId, dataPoints, labels, isPositive = true) {
+      const ctx = document.getElementById(canvasId);
+      if (!ctx) return;
+      const lineColor = isPositive ? '#34d399' : '#f43f5e';
+      const bgColor = isPositive ? 'rgba(52, 211, 153, 0.08)' : 'rgba(244, 63, 94, 0.08)';
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: dataPoints,
+            spanGaps: true,
+            borderColor: lineColor,
+            borderWidth: 1.8,
+            pointRadius: 0,
+            tension: 0.3,
+            fill: true,
+            backgroundColor: bgColor
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false }, tooltip: { enabled: false } },
+          scales: { x: { display: false }, y: { display: false } }
+        }
+      });
+    }
+
+    function updateMainChart() {
+      const ctx = document.getElementById('mainChart').getContext('2d');
+      const metrics = getMetrics(activeProduct, activeMainTimeScale);
+      const dataset = getVariant(activeProduct).history[activeMainTimeScale] || getVariant(activeProduct).history['6M'];
+      const labels = TIME_INTERVALS[activeMainTimeScale].labels;
+      const isPositive = metrics.pct >= 0;
+
+      document.getElementById('active-logo-box').innerHTML = getSetLogoMarkup(activeProduct, false);
+      document.getElementById('active-title').innerText = metrics.variantName;
+      document.getElementById('active-era').innerText = `${activeProduct.era} • Released ${activeProduct.released}`;
+      
+      const variantRibbon = document.getElementById('active-variant-ribbon');
+      variantRibbon.innerHTML = '';
+      Object.keys(activeProduct.variants).forEach(varType => {
+        const btn = document.createElement('button');
+        const isActive = activeProduct.selectedType === varType;
+        btn.onclick = (e) => changeVariant(e, activeProduct.id, varType);
+        btn.className = `px-3 py-1 text-xs font-black rounded-md transition ${
+          isActive 
+            ? 'bg-emerald-500/25 text-emerald-300 border border-emerald-500/50 shadow-[0_0_10px_rgba(16,185,129,0.3)]' 
+            : 'text-gray-400 hover:text-white'
+        }`;
+        btn.innerText = varType;
+        variantRibbon.appendChild(btn);
+      });
+
+      document.getElementById('active-price').innerText = formatPrice(metrics.end);
+      document.getElementById('active-delta-label').innerText = `Change (${activeMainTimeScale})`;
+      document.getElementById('active-delta').innerText = `${metrics.delta >= 0 ? '+' : ''}${metrics.pct}% (${activeMainTimeScale})`;
+      document.getElementById('active-delta').className = `text-base font-extrabold font-mono ${isPositive ? 'text-emerald-400' : 'text-rose-400'}`;
+      document.getElementById('active-pack-val').innerText = formatPrice(metrics.end / metrics.packCount);
+
+      if (mainChart) mainChart.destroy();
+
+      mainChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: `${metrics.variantName} ($)`,
+            data: dataset,
+            spanGaps: true,
+            borderColor: isPositive ? '#10b981' : '#f43f5e',
+            borderWidth: 2.5,
+            backgroundColor: isPositive ? 'rgba(16, 185, 129, 0.12)' : 'rgba(244, 63, 94, 0.12)',
+            fill: true,
+            tension: 0.32,
+            pointRadius: (c) => {
+              if (c.raw === null) return 0;
+              return c.dataIndex === dataset.length - 1 ? 5 : 2.5;
+            },
+            pointBackgroundColor: isPositive ? '#10b981' : '#f43f5e',
+            pointHoverRadius: 6
+          }]
+        },
+        plugins: [currentPricePinPlugin],
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          layout: {
+            padding: { right: 25, top: 15 }
+          },
+          interaction: { intersect: false, mode: 'index' },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#1f2937',
+              titleColor: '#9ca3af',
+              bodyColor: '#f9fafb',
+              borderColor: '#374151',
+              borderWidth: 1,
+              padding: 10,
+              displayColors: false,
+              callbacks: {
+                label: (ctx) => {
+                  if (ctx.parsed.y === null || isNaN(ctx.parsed.y)) return ' Unreleased';
+                  return ` Price: ${formatPrice(ctx.parsed.y)}`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: '#1f2937' },
+              ticks: { color: '#9ca3af', font: { size: 11 }, maxTicksLimit: 10 }
+            },
+            y: {
+              grid: { color: '#1f2937' },
+              ticks: {
+                color: '#9ca3af',
+                font: { size: 11 },
+                callback: (val) => `$${val.toLocaleString()}`
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function renderCatalog() {
+      const grid = document.getElementById('catalog-grid');
+      grid.innerHTML = '';
+
+      const filtered = SETS_DATA.filter(p => activeFilter === 'ALL' || p.category === activeFilter);
+      document.getElementById('product-count').innerText = filtered.length;
+
+      Object.values(cardCharts).forEach(c => c.destroy());
+      cardCharts = {};
+
+      filtered.forEach(item => {
+        const metrics = getMetrics(item, '6M');
+        const isPositive = metrics.pct >= 0;
+        const card = document.createElement('div');
+        card.className = `bg-[#111827] border ${activeProduct.id === item.id ? 'border-emerald-500 ring-1 ring-emerald-500/50' : 'border-gray-800'} hover:border-gray-700 p-4 sm:p-5 rounded-xl cursor-pointer transition flex flex-col justify-between shadow-lg group`;
+        card.onclick = (e) => {
+          if (!e.target.closest('button')) {
+            selectProduct(item.id);
+          }
+        };
+
+        const variantKeys = Object.keys(item.variants);
+
+        let variantButtonsHtml = '';
+        variantKeys.forEach(vKey => {
+          const isSel = item.selectedType === vKey;
+          variantButtonsHtml += `
+            <button onclick="changeVariant(event, '${item.id}', '${vKey}')" 
+              class="px-2.5 py-0.5 text-[10px] font-black rounded transition ${isSel ? 'bg-emerald-500/25 text-emerald-300 border border-emerald-500/50 shadow-sm' : 'text-gray-400 hover:text-white'}">
+              ${vKey}
+            </button>`;
+        });
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between gap-2 border-b border-gray-800/80 pb-3">
+              <span class="text-[11px] font-black text-gray-400 truncate uppercase tracking-widest">${item.era}</span>
+              <div class="flex items-center space-x-1.5 bg-gray-900 border border-gray-800 rounded-lg p-0.5">
+                ${variantButtonsHtml}
+              </div>
+            </div>
+            
+            <div class="flex items-center space-x-3.5 mt-3.5">
+              <div class="w-20 h-12 rounded-lg p-1.5 flex-shrink-0 flex items-center justify-center set-logo-container">
+                ${getSetLogoMarkup(item, true)}
+              </div>
+              <div class="min-w-0 flex-1">
+                <h4 class="text-sm font-black text-white leading-snug truncate group-hover:text-emerald-300 transition">${metrics.variantName}</h4>
+                <p class="text-[11px] font-medium text-gray-400 mt-0.5">${metrics.packCount} Packs • MSRP $${metrics.msrp}</p>
+              </div>
+            </div>
+
+            <!-- Mini 6-Month Trend Graph -->
+            <div class="mt-4 bg-gray-900/50 rounded-lg p-2.5 border border-gray-800/60 relative">
+              <div class="flex items-center justify-between text-[11px] mb-1">
+                <span class="text-gray-400 font-mono font-semibold">6M Trend</span>
+                <div class="flex items-center space-x-2">
+                  <span class="px-2 py-0.5 rounded ${isPositive ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-300' : 'bg-rose-950/90 border-rose-500/40 text-rose-300'} border font-black font-mono text-[11px]">
+                    ${formatPrice(metrics.end)}
+                  </span>
+                  <span class="font-black font-mono ${isPositive ? 'text-emerald-400' : 'text-rose-400'}">
+                    ${isPositive ? '+' : ''}${metrics.pct}%
+                  </span>
+                </div>
+              </div>
+              <div class="h-20 w-full">
+                <canvas id="card-chart-${item.id}"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-gray-800 flex items-baseline justify-between">
+            <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Current Market</span>
+            <span class="text-xl font-black font-mono text-emerald-400 tracking-tight price-glow">${formatPrice(metrics.end)}</span>
+          </div>
+        `;
+        grid.appendChild(card);
+
+        setTimeout(() => {
+          renderCardChart(item);
+        }, 10);
+      });
+    }
+
+    function renderCardChart(item) {
+      const canvas = document.getElementById(`card-chart-${item.id}`);
+      if (!canvas) return;
+      const dataPoints = getVariant(item).history['6M'];
+      const metrics = getMetrics(item, '6M');
+      const isPositive = metrics.pct >= 0;
+
+      cardCharts[item.id] = new Chart(canvas, {
+        type: 'line',
+        data: {
+          labels: TIME_INTERVALS['6M'].labels,
+          datasets: [{
+            data: dataPoints,
+            spanGaps: true,
+            borderColor: isPositive ? '#10b981' : '#f43f5e',
+            borderWidth: 2,
+            pointRadius: (ctx) => (ctx.dataIndex === dataPoints.length - 1 && dataPoints[ctx.dataIndex] !== null ? 4 : 0),
+            pointBackgroundColor: isPositive ? '#34d399' : '#fb7185',
+            pointBorderColor: '#0b0f19',
+            pointBorderWidth: 1.5,
+            tension: 0.32,
+            fill: true,
+            backgroundColor: isPositive ? 'rgba(16, 185, 129, 0.08)' : 'rgba(244, 63, 94, 0.08)'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              enabled: true,
+              callbacks: {
+                label: (c) => {
+                  if (c.parsed.y === null || isNaN(c.parsed.y)) return ' Unreleased';
+                  return ` ${formatPrice(c.parsed.y)}`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { color: '#6b7280', font: { size: 9 }, maxTicksLimit: 5 }
+            },
+            y: { display: false }
+          }
+        }
+      });
+    }
+
+    function changeVariant(e, id, type) {
+      e.stopPropagation();
+      const found = SETS_DATA.find(p => p.id === id);
+      if (found && found.variants[type]) {
+        found.selectedType = type;
+        applyWorkerPrices();
+        if (activeProduct.id === id) {
+          updateMainChart();
+        }
+        renderCatalog();
+        renderMarketMovers();
+      }
+    }
+
+    function selectProduct(id) {
+      const found = SETS_DATA.find(p => p.id === id);
+      if (found) {
+        activeProduct = found;
+        updateMainChart();
+        renderMarketMovers();
+        renderCatalog();
+      }
+    }
+
+    function setMoversTimeScale(scale) {
+      activeMoversTimeScale = scale;
+      document.querySelectorAll('.mover-time-btn').forEach(btn => {
+        if (btn.innerText === scale) {
+          btn.className = 'mover-time-btn active px-2.5 py-1 text-[11px] font-semibold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition';
+        } else {
+          btn.className = 'mover-time-btn px-2.5 py-1 text-[11px] font-semibold rounded text-gray-400 hover:text-white transition';
+        }
+      });
+      renderMarketMovers();
+    }
+
+    function setMainTimeScale(scale) {
+      activeMainTimeScale = scale;
+      document.querySelectorAll('.main-time-btn').forEach(btn => {
+        if (btn.innerText === scale) {
+          btn.className = 'main-time-btn active px-3 py-1 text-xs font-semibold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition';
+        } else {
+          btn.className = 'main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition';
+        }
+      });
+      updateMainChart();
+    }
+
+    function setFilter(category) {
+      activeFilter = category;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        if (
+          (category === 'ALL' && btn.innerText === 'All Sets') ||
+          (category === 'ME' && btn.innerText.includes('Mega')) ||
+          (category === 'SV' && btn.innerText.includes('Scarlet')) ||
+          (category === 'SWSH' && btn.innerText.includes('Sword')) ||
+          (category === 'SM' && btn.innerText.includes('Sun')) ||
+          (category === 'XY' && btn.innerText.includes('XY')) ||
+          (category === 'VINTAGE' && btn.innerText.includes('Vintage'))
+        ) {
+          btn.className = 'filter-btn active px-3 py-1 text-xs font-bold rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40';
+        } else {
+          btn.className = 'filter-btn px-3 py-1 text-xs font-bold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white';
+        }
+      });
+      renderCatalog();
+    }
+
+    function resetFilters() {
+      setFilter('ALL');
+      selectProduct(SETS_DATA[0].id);
+    }
+
+    function applyWorkerPrices() {
+      if (!latestWorkerData || !latestWorkerData.prices) return;
+
+      SETS_DATA.forEach(set => {
+        Object.keys(set.variants).forEach(varType => {
+          const typeLower = varType.toLowerCase();
+          const targetKey = `${set.id}-${typeLower}`;
+          const liveInfo = latestWorkerData.prices[targetKey] || latestWorkerData.prices[set.id];
+
+          if (liveInfo) {
+            const hist = set.variants[varType].history;
+            const newPrice = liveInfo.currentMarket || liveInfo;
+            Object.keys(hist).forEach(scale => {
+              const arr = hist[scale];
+              if (arr && arr.length > 0) {
+                arr[arr.length - 1] = newPrice;
+              }
+            });
+          }
+        });
+      });
+
+      renderMarketMovers();
+      updateMainChart();
+      renderCatalog();
+    }
+
+    async function syncLiveMarketPrices() {
+      try {
+        const res = await fetch(WORKER_API_URL);
+        if (!res.ok) return;
+        latestWorkerData = await res.json();
+        applyWorkerPrices();
+      } catch (err) {
+        console.warn("Using offline market baseline:", err);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderMarketMovers();
+      updateMainChart();
+      renderCatalog();
+      syncLiveMarketPrices();
+    });
+  </script>
+</body>
+</html>
