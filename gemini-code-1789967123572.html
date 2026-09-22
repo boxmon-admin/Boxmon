@@ -68,18 +68,18 @@
   <!-- MAIN CONTAINER -->
   <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
     
-    <!-- 4 BIGGEST MARKET MOVERS OF THE WEEK -->
+    <!-- BIGGEST MARKET MOVERS SECTION -->
     <section>
       <div class="flex items-center justify-between mb-3">
         <div class="flex items-center space-x-2">
           <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
-          <h2 class="text-sm font-bold uppercase tracking-wider text-gray-300">Top Market Movers This Week (7D)</h2>
+          <h2 class="text-sm font-bold uppercase tracking-wider text-gray-300">Top Market Movers This Week</h2>
         </div>
-        <span class="text-xs text-gray-500">Calculated via 7-day moving price delta</span>
+        <span class="text-xs text-gray-500">Ranked by weekly delta percentage</span>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="movers-grid">
-        <!-- Dynamically Rendered by JS -->
+        <!-- Dynamically Rendered -->
       </div>
     </section>
 
@@ -88,25 +88,25 @@
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-800 pb-4">
         <div>
           <div class="flex items-center space-x-3">
-            <h3 id="active-title" class="text-xl font-bold text-white tracking-tight">Celebrations Ultra-Premium Collection</h3>
-            <span id="active-type-badge" class="px-2 py-0.5 rounded text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">UPC</span>
+            <h3 id="active-title" class="text-xl font-bold text-white tracking-tight leading-snug">--</h3>
+            <span id="active-type-badge" class="px-2 py-0.5 rounded text-[11px] font-bold">--</span>
           </div>
-          <p id="active-era" class="text-xs text-gray-400 mt-0.5">Sword & Shield Era • Released Oct 2021</p>
+          <p id="active-set" class="text-xs text-gray-400 mt-0.5">--</p>
         </div>
 
         <!-- Metric Ribbon -->
         <div class="flex items-center space-x-6">
           <div>
             <p class="text-[11px] text-gray-400 uppercase tracking-wider">Market Price</p>
-            <p id="active-price" class="text-2xl font-black text-white font-mono">$385.00</p>
+            <p id="active-price" class="text-2xl font-black text-white font-mono">$0.00</p>
           </div>
           <div>
-            <p class="text-[11px] text-gray-400 uppercase tracking-wider">7D Change</p>
-            <p id="active-delta" class="text-sm font-bold font-mono text-emerald-400">+12.4%</p>
+            <p class="text-[11px] text-gray-400 uppercase tracking-wider">Net Change</p>
+            <p id="active-delta" class="text-sm font-bold font-mono">--</p>
           </div>
           <div>
-            <p class="text-[11px] text-gray-400 uppercase tracking-wider">Est. / Pack</p>
-            <p id="active-pack-val" class="text-sm font-bold font-mono text-gray-200">$22.64</p>
+            <p class="text-[11px] text-gray-400 uppercase tracking-wider">Inventory</p>
+            <p id="active-inventory" class="text-sm font-bold font-mono text-gray-200">0 Units</p>
           </div>
         </div>
       </div>
@@ -121,19 +121,22 @@
     <section class="space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div class="flex items-center space-x-2">
-          <h2 class="text-base font-bold text-white">Tracked Sealed Products</h2>
-          <span id="product-count" class="text-xs px-2 py-0.5 rounded-full bg-gray-800 text-gray-400 font-mono">8</span>
+          <h2 class="text-base font-bold text-white">Tracked Inventory</h2>
+          <span id="product-count" class="text-xs px-2 py-0.5 rounded-full bg-gray-800 text-gray-400 font-mono">0</span>
         </div>
 
         <!-- Filter Controls -->
-        <div class="flex items-center space-x-2">
-          <button onclick="setFilter('ALL')" class="filter-btn active px-3 py-1 text-xs font-semibold rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">All</button>
+        <div class="flex flex-wrap items-center gap-2">
+          <button onclick="setFilter('ALL')" class="filter-btn px-3 py-1 text-xs font-semibold rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">All</button>
           <button onclick="setFilter('ETB')" class="filter-btn px-3 py-1 text-xs font-semibold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">ETBs</button>
           <button onclick="setFilter('UPC')" class="filter-btn px-3 py-1 text-xs font-semibold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">UPCs</button>
+          <button onclick="setFilter('PREMIUM_BOX')" class="filter-btn px-3 py-1 text-xs font-semibold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">Premium / Special</button>
+          <button onclick="setFilter('BOOSTER_BUNDLE')" class="filter-btn px-3 py-1 text-xs font-semibold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">Bundles</button>
+          <button onclick="setFilter('BOOSTER_BOX')" class="filter-btn px-3 py-1 text-xs font-semibold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">Booster Boxes</button>
         </div>
       </div>
 
-      <!-- Product Cards Table / Grid -->
+      <!-- Product Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="catalog-grid">
         <!-- Rendered by JS -->
       </div>
@@ -145,149 +148,171 @@
     <p>Boxmon © 2026. Sealed Pokémon TCG pricing indexes and market analytics.</p>
   </footer>
 
-  <!-- APPLICATION LOGIC & DATA -->
+  <!-- DATA & LOGIC -->
   <script>
-    // Sealed Product Dataset with 7-day granular price ticks
+    // Exact relevant products parsed directly from your inventory sheet
     const PRODUCTS = [
-      {
-        id: 'celebrations-upc',
-        name: 'Celebrations Ultra-Premium Collection',
-        type: 'UPC',
-        era: 'Sword & Shield',
-        released: 'Oct 2021',
-        packCount: 17,
-        msrp: 119.99,
-        // 7-day trajectory (Day -6 to Today)
-        history7D: [342, 345, 350, 360, 368, 375, 385],
-        history30D: [310, 315, 320, 335, 342, 350, 368, 385]
-      },
-      {
-        id: 'evolving-skies-etb',
-        name: 'Evolving Skies Elite Trainer Box',
-        type: 'ETB',
-        era: 'Sword & Shield',
-        released: 'Aug 2021',
-        packCount: 8,
-        msrp: 39.99,
-        history7D: [180, 182, 185, 188, 192, 198, 205],
-        history30D: [160, 165, 172, 178, 182, 190, 205]
-      },
-      {
-        id: '151-upc',
-        name: 'Scarlet & Violet 151 UPC',
-        type: 'UPC',
-        era: 'Scarlet & Violet',
-        released: 'Oct 2023',
-        packCount: 16,
-        msrp: 119.99,
-        history7D: [120, 120, 122, 123, 125, 128, 134],
-        history30D: [115, 116, 118, 120, 122, 125, 134]
-      },
-      {
-        id: 'prismatic-evolutions-etb',
-        name: 'Prismatic Evolutions ETB',
-        type: 'ETB',
-        era: 'Scarlet & Violet',
-        released: 'Jan 2025',
-        packCount: 9,
-        msrp: 49.99,
-        history7D: [72, 74, 76, 78, 80, 84, 88],
-        history30D: [60, 65, 68, 72, 75, 80, 88]
-      },
-      {
-        id: 'charizard-upc',
-        name: 'Sword & Shield Charizard UPC',
-        type: 'UPC',
-        era: 'Sword & Shield',
-        released: 'Oct 2022',
-        packCount: 16,
-        msrp: 119.99,
-        history7D: [130, 129, 131, 130, 132, 133, 135],
-        history30D: [125, 126, 128, 130, 130, 132, 135]
-      },
-      {
-        id: '151-etb',
-        name: 'Scarlet & Violet 151 ETB',
-        type: 'ETB',
-        era: 'Scarlet & Violet',
-        released: 'Sep 2023',
-        packCount: 9,
-        msrp: 49.99,
-        history7D: [68, 68, 69, 70, 71, 71, 73],
-        history30D: [62, 64, 65, 68, 69, 70, 73]
-      },
-      {
-        id: 'hidden-fates-etb',
-        name: 'Hidden Fates Elite Trainer Box',
-        type: 'ETB',
-        era: 'Sun & Moon',
-        released: 'Sep 2019',
-        packCount: 10,
-        msrp: 49.99,
-        history7D: [165, 165, 166, 166, 167, 168, 170],
-        history30D: [155, 158, 160, 162, 165, 168, 170]
-      },
-      {
-        id: 'crown-zenith-etb',
-        name: 'Crown Zenith Elite Trainer Box',
-        type: 'ETB',
-        era: 'Sword & Shield',
-        released: 'Jan 2023',
-        packCount: 10,
-        msrp: 49.99,
-        history7D: [58, 58, 59, 58, 59, 60, 61],
-        history30D: [54, 55, 56, 57, 58, 60, 61]
-      }
+      // ETBs
+      { id: '30th-pc-etb', name: '30th Celebration Pokemon Center ETB', type: 'ETB', set: '30th Celebration', price: 322.70, delta: -141.98, pct: -30.55, qty: 0 },
+      { id: 'perfect-order-pc-etb', name: 'Perfect Order Pokemon Center ETB', type: 'ETB', set: 'Perfect Order', price: 125.00, delta: 0.60, pct: 0.48, qty: 0 },
+      { id: 'ascended-heroes-etb', name: 'Ascended Heroes Elite Trainer Box', type: 'ETB', set: 'Ascended Heroes', price: 147.61, delta: -12.66, pct: -7.90, qty: 0 },
+      { id: 'ascended-heroes-pc-etb', name: 'Ascended Heroes PC ETB (Exclusive)', type: 'ETB', set: 'Ascended Heroes', price: 365.43, delta: -15.70, pct: -4.12, qty: 0 },
+      { id: 'phantasmal-flames-pc-etb', name: 'Phantasmal Flames PC ETB (Exclusive)', type: 'ETB', set: 'Phantasmal Flames', price: 287.05, delta: -1.21, pct: -0.42, qty: 0 },
+      { id: 'black-bolt-pc-etb', name: 'Black Bolt PC ETB (Exclusive)', type: 'ETB', set: 'Black Bolt', price: 275.48, delta: -0.28, pct: -0.10, qty: 0 },
+      { id: 'white-flare-pc-etb', name: 'White Flare PC ETB (Exclusive)', type: 'ETB', set: 'White Flare', price: 237.60, delta: 0.76, pct: 0.32, qty: 0 },
+      { id: 'destined-rivals-pc-etb', name: 'Destined Rivals PC ETB (Exclusive)', type: 'ETB', set: 'Destined Rivals', price: 433.20, delta: -17.58, pct: -3.90, qty: 0 },
+      { id: 'destined-rivals-etb', name: 'Destined Rivals Elite Trainer Box', type: 'ETB', set: 'Destined Rivals', price: 117.73, delta: 1.31, pct: 1.13, qty: 0 },
+      { id: 'chaos-rising-etb', name: 'Chaos Rising Elite Trainer Box', type: 'ETB', set: 'Chaos Rising', price: 68.48, delta: 3.17, pct: 4.85, qty: 0 },
+      { id: 'prismatic-evolutions-etb', name: 'Prismatic Evolutions ETB', type: 'ETB', set: 'Prismatic Evolutions', price: 139.38, delta: -1.49, pct: -1.06, qty: 0 },
+      { id: 'black-bolt-etb', name: 'Black Bolt Elite Trainer Box', type: 'ETB', set: 'Black Bolt', price: 166.28, delta: -5.10, pct: -2.98, qty: 0 },
+      { id: 'mega-lucario-pc-etb', name: 'Mega Evolution PC ETB [Mega Lucario]', type: 'ETB', set: 'Mega Evolution', price: 208.82, delta: -11.02, pct: -5.01, qty: 0 },
+      { id: 'perfect-order-etb', name: 'Perfect Order Elite Trainer Box', type: 'ETB', set: 'Perfect Order', price: 69.47, delta: 4.63, pct: 7.14, qty: 0 },
+      { id: 'prismatic-pc-etb', name: 'Prismatic Evolutions PC ETB (Exclusive)', type: 'ETB', set: 'Prismatic Evolutions', price: 412.31, delta: -3.05, pct: -0.73, qty: 0 },
+      { id: 'twilight-masquerade-etb', name: 'Twilight Masquerade ETB', type: 'ETB', set: 'Twilight Masquerade', price: 101.43, delta: -1.49, pct: -1.45, qty: 0 },
+      { id: '30th-etb', name: '30th Celebration Elite Trainer Box', type: 'ETB', set: '30th Celebration', price: 177.86, delta: 4.37, pct: 2.52, qty: 0 },
+      { id: 'phantasmal-flames-etb', name: 'Phantasmal Flames Elite Trainer Box', type: 'ETB', set: 'Phantasmal Flames', price: 150.60, delta: -1.59, pct: -1.04, qty: 0 },
+      { id: 'white-flare-etb', name: 'White Flare Elite Trainer Box', type: 'ETB', set: 'White Flare', price: 149.88, delta: -4.20, pct: -2.73, qty: 0 },
+      { id: 'journey-together-etb', name: 'Journey Together Elite Trainer Box', type: 'ETB', set: 'Journey Together', price: 138.27, delta: -1.40, pct: -1.00, qty: 0 },
+      { id: 'mega-gardevoir-etb', name: 'Mega Evolution ETB [Mega Gardevoir]', type: 'ETB', set: 'Mega Evolution', price: 121.66, delta: -0.74, pct: -0.60, qty: 0 },
+      { id: 'surging-sparks-etb', name: 'Surging Sparks Elite Trainer Box', type: 'ETB', set: 'Surging Sparks', price: 126.17, delta: 1.77, pct: 1.42, qty: 0 },
+      { id: 'mega-lucario-etb', name: 'Mega Evolution ETB [Mega Lucario]', type: 'ETB', set: 'Mega Evolution', price: 126.69, delta: 0.33, pct: 0.26, qty: 0 },
+      { id: 'mega-gardevoir-pc-etb', name: 'Mega Evolution PC ETB [Mega Gardevoir]', type: 'ETB', set: 'Mega Evolution', price: 185.01, delta: 0.36, pct: 0.19, qty: 0 },
+      { id: 'pitch-black-etb', name: 'Pitch Black Elite Trainer Box', type: 'ETB', set: 'Pitch Black', price: 71.79, delta: -0.83, pct: -1.14, qty: 1 },
+      { id: 'chaos-rising-pc-etb', name: 'Chaos Rising PC Elite Trainer Box', type: 'ETB', set: 'Chaos Rising', price: 116.29, delta: -9.97, pct: -7.90, qty: 0 },
+      { id: 'journey-together-pc-etb', name: 'Journey Together PC ETB (Exclusive)', type: 'ETB', set: 'Journey Together', price: 195.25, delta: 0.20, pct: 0.10, qty: 0 },
+      { id: 'sv-151-etb', name: 'Scarlet & Violet 151 ETB', type: 'ETB', set: 'SV: 151', price: 504.37, delta: -44.63, pct: -8.13, qty: 0 },
+      { id: 'pitch-black-pc-etb', name: 'Pitch Black PC ETB (Exclusive)', type: 'ETB', set: 'Pitch Black', price: 118.73, delta: -6.09, pct: -4.88, qty: 0 },
+      { id: 'celebrations-etb', name: 'Celebrations Elite Trainer Box', type: 'ETB', set: 'Celebrations', price: 365.61, delta: 3.56, pct: 0.98, qty: 0 },
+      { id: 'sv-151-pc-etb', name: '151 Pokemon Center ETB (Exclusive)', type: 'ETB', set: 'SV: 151', price: 1284.45, delta: -8.72, pct: -0.67, qty: 0 },
+      { id: 'crown-zenith-etb', name: 'Crown Zenith Elite Trainer Box', type: 'ETB', set: 'Crown Zenith', price: 312.16, delta: -5.47, pct: -1.72, qty: 0 },
+      { id: 'paldean-fates-etb', name: 'Paldean Fates Elite Trainer Box', type: 'ETB', set: 'Paldean Fates', price: 441.83, delta: -0.59, pct: -0.13, qty: 0 },
+      { id: 'evolving-skies-etb-1', name: 'Evolving Skies ETB [Umbreon/Leafeon]', type: 'ETB', set: 'Evolving Skies', price: 570.57, delta: 4.78, pct: 0.84, qty: 0 },
+      { id: 'evolving-skies-etb-2', name: 'Evolving Skies ETB [Sylveon/Espeon]', type: 'ETB', set: 'Evolving Skies', price: 506.78, delta: 0.00, pct: 0.00, qty: 0 },
+      { id: 'hidden-fates-etb', name: 'Hidden Fates Elite Trainer Box', type: 'ETB', set: 'Hidden Fates', price: 559.60, delta: -2.34, pct: -0.42, qty: 0 },
+
+      // UPCs
+      { id: '151-upc', name: '151 Ultra-Premium Collection', type: 'UPC', set: 'SV: 151', price: 856.53, delta: -64.64, pct: -7.02, qty: 1 },
+      { id: 'celebrations-upc', name: 'Celebrations Ultra Premium Collection', type: 'UPC', set: 'Celebrations', price: 1236.93, delta: -3.08, pct: -0.25, qty: 0 },
+      { id: 'charizard-x-upc', name: 'Mega Charizard X ex Ultra Premium Collection', type: 'UPC', set: 'Miscellaneous Cards & Products', price: 229.67, delta: -2.45, pct: -1.06, qty: 2 },
+      { id: 'moltres-upc', name: 'Team Rocket’s Moltres ex UPC', type: 'UPC', set: 'Miscellaneous Cards & Products', price: 345.84, delta: 0.00, pct: 0.00, qty: 0 },
+      { id: 'swsh-charizard-upc', name: 'Sword & Shield Charizard UPC', type: 'UPC', set: 'Lost Origin', price: 569.16, delta: -19.05, pct: -3.24, qty: 0 },
+      { id: 'terapagos-upc', name: 'Terapagos ex Ultra-Premium Collection', type: 'UPC', set: 'Miscellaneous Cards & Products', price: 251.88, delta: -0.31, pct: -0.12, qty: 0 },
+      { id: 'arceus-upc', name: 'Arceus VSTAR Ultra Premium Collection', type: 'UPC', set: 'Lost Origin', price: 380.28, delta: 0.51, pct: 0.13, qty: 0 },
+      { id: '30th-upc-night', name: '30th Celebration UPC [Night]', type: 'UPC', set: '30th Celebration', price: 701.99, delta: 42.09, pct: 6.38, qty: 0 },
+      { id: 'greninja-upc', name: 'Greninja ex Ultra-Premium Collection', type: 'UPC', set: 'Miscellaneous Cards & Products', price: 493.48, delta: 0.00, pct: 0.00, qty: 0 },
+
+      // Special & Premium Boxes
+      { id: 'blooming-waters-box', name: 'Blooming Waters Premium Collection', type: 'PREMIUM_BOX', set: 'Miscellaneous Cards & Products', price: 335.62, delta: 9.02, pct: 2.76, qty: 0 },
+      { id: 'prismatic-super-premium', name: 'Prismatic Evolutions Super Premium Collection', type: 'PREMIUM_BOX', set: 'Prismatic Evolutions', price: 246.86, delta: -5.99, pct: -2.37, qty: 0 },
+      { id: 'lucario-tyranitar-premium', name: 'Lucario ex & Tyranitar ex Premium Collection', type: 'PREMIUM_BOX', set: 'Miscellaneous Cards & Products', price: 199.87, delta: 2.23, pct: 1.13, qty: 0 },
+      { id: 'unova-heavy-hitters', name: 'Unova Heavy Hitters Premium Collection', type: 'PREMIUM_BOX', set: 'Black Bolt', price: 188.19, delta: -0.19, pct: -0.10, qty: 0 },
+      { id: 'sea-sky-premium', name: 'Sea & Sky Premium Collection', type: 'PREMIUM_BOX', set: 'Crown Zenith', price: 386.96, delta: -0.89, pct: -0.23, qty: 0 },
+      { id: 'charizard-super-premium', name: 'Charizard ex Super-Premium Collection', type: 'PREMIUM_BOX', set: 'Miscellaneous Cards & Products', price: 128.01, delta: 0.27, pct: 0.21, qty: 0 },
+      { id: 'vaporeon-vmax-premium', name: 'Vaporeon VMAX Premium Collection', type: 'PREMIUM_BOX', set: 'Miscellaneous Cards & Products', price: 359.41, delta: 0.00, pct: 0.00, qty: 0 },
+      { id: 'tag-team-powers-darkrai', name: 'TAG TEAM Powers Collection [Umbreon/Darkrai]', type: 'PREMIUM_BOX', set: 'Miscellaneous Cards & Products', price: 1849.99, delta: -25.00, pct: -1.33, qty: 0 },
+      { id: 'eevee-heroes-gym-box', name: 'Eevee Heroes Set Gym Box (JP)', type: 'PREMIUM_BOX', set: 'Eevee Heroes', price: 2809.95, delta: 0.00, pct: 0.00, qty: 0 },
+      { id: 'japan-post-stamp-box', name: 'Japan Post Stamp Box (JP)', type: 'PREMIUM_BOX', set: 'Sword & Shield Promo', price: 3419.95, delta: 0.00, pct: 0.00, qty: 0 },
+
+      // Booster Bundles
+      { id: 'ascended-heroes-bundle', name: 'Ascended Heroes Booster Bundle', type: 'BOOSTER_BUNDLE', set: 'Ascended Heroes', price: 81.81, delta: -5.40, pct: -6.19, qty: 0 },
+      { id: 'prismatic-evolutions-bundle', name: 'Prismatic Evolutions Booster Bundle', type: 'BOOSTER_BUNDLE', set: 'Prismatic Evolutions', price: 88.48, delta: -2.55, pct: -2.80, qty: 0 },
+      { id: 'black-bolt-bundle', name: 'Black Bolt Booster Bundle', type: 'BOOSTER_BUNDLE', set: 'Black Bolt', price: 101.84, delta: 3.22, pct: 3.27, qty: 0 },
+      { id: 'white-flare-bundle', name: 'White Flare Booster Bundle', type: 'BOOSTER_BUNDLE', set: 'White Flare', price: 92.70, delta: 3.90, pct: 4.39, qty: 0 },
+      { id: 'chaos-rising-bundle', name: 'Chaos Rising Booster Bundle', type: 'BOOSTER_BUNDLE', set: 'Chaos Rising', price: 37.26, delta: 0.75, pct: 2.05, qty: 0 },
+      { id: 'perfect-order-bundle', name: 'Perfect Order Booster Bundle', type: 'BOOSTER_BUNDLE', set: 'Perfect Order', price: 36.78, delta: -1.58, pct: -4.12, qty: 0 },
+      { id: '151-bundle', name: '151 Booster Bundle', type: 'BOOSTER_BUNDLE', set: 'SV: 151', price: 163.55, delta: -13.46, pct: -7.60, qty: 0 },
+      { id: 'phantasmal-flames-bundle', name: 'Phantasmal Flames Booster Bundle', type: 'BOOSTER_BUNDLE', set: 'Phantasmal Flames', price: 88.03, delta: 3.87, pct: 4.60, qty: 0 },
+      { id: 'destined-rivals-bundle', name: 'Destined Rivals Booster Bundle', type: 'BOOSTER_BUNDLE', set: 'Destined Rivals', price: 66.54, delta: -1.34, pct: -1.97, qty: 0 },
+      { id: 'pitch-black-bundle', name: 'Pitch Black Booster Bundle', type: 'BOOSTER_BUNDLE', set: 'Pitch Black', price: 40.31, delta: 0.34, pct: 0.85, qty: 0 },
+      { id: '30th-celebration-bundle', name: '30th Celebration Booster Bundle', type: 'BOOSTER_BUNDLE', set: '30th Celebration', price: 123.23, delta: 8.94, pct: 7.82, qty: 0 },
+      { id: 'surging-sparks-bundle', name: 'Surging Sparks Booster Bundle', type: 'BOOSTER_BUNDLE', set: 'Surging Sparks', price: 61.69, delta: -1.08, pct: -1.72, qty: 0 },
+      { id: 'paldean-fates-bundle', name: 'Paldean Fates Booster Bundle', type: 'BOOSTER_BUNDLE', set: 'Paldean Fates', price: 170.96, delta: 4.51, pct: 2.71, qty: 0 },
+      { id: 'mega-evolution-bundle', name: 'Mega Evolution Booster Bundle', type: 'BOOSTER_BUNDLE', set: 'Mega Evolution', price: 63.88, delta: -0.04, pct: -0.06, qty: 0 },
+      { id: 'journey-together-bundle', name: 'Journey Together Booster Bundle', type: 'BOOSTER_BUNDLE', set: 'Journey Together', price: 45.95, delta: -0.61, pct: -1.31, qty: 0 },
+
+      // Booster Boxes
+      { id: 'perfect-order-bb', name: 'Perfect Order Booster Box', type: 'BOOSTER_BOX', set: 'Perfect Order', price: 175.33, delta: -1.85, pct: -1.04, qty: 0 },
+      { id: 'phantasmal-flames-bb', name: 'Phantasmal Flames Booster Box', type: 'BOOSTER_BOX', set: 'Phantasmal Flames', price: 394.05, delta: -3.74, pct: -0.94, qty: 0 },
+      { id: 'mega-evolution-bb', name: 'Mega Evolution Enhanced Booster Box', type: 'BOOSTER_BOX', set: 'Mega Evolution', price: 289.17, delta: 0.32, pct: 0.11, qty: 0 },
+      { id: 'journey-together-enhanced-bb', name: 'Journey Together Enhanced Booster Box', type: 'BOOSTER_BOX', set: 'Journey Together', price: 253.61, delta: 3.24, pct: 1.29, qty: 0 },
+      { id: 'chaos-rising-bb', name: 'Chaos Rising Booster Box', type: 'BOOSTER_BOX', set: 'Chaos Rising', price: 190.09, delta: -9.49, pct: -4.75, qty: 0 },
+      { id: 'destined-rivals-bb', name: 'Destined Rivals Booster Box', type: 'BOOSTER_BOX', set: 'Destined Rivals', price: 419.62, delta: -10.63, pct: -2.47, qty: 0 },
+      { id: 'pitch-black-bb', name: 'Pitch Black Booster Box', type: 'BOOSTER_BOX', set: 'Pitch Black', price: 191.79, delta: -6.03, pct: -3.05, qty: 0 },
+      { id: 'evolving-skies-bb', name: 'Evolving Skies Booster Box', type: 'BOOSTER_BOX', set: 'Evolving Skies', price: 2408.12, delta: -41.72, pct: -1.70, qty: 0 },
+      { id: 'surging-sparks-bb', name: 'Surging Sparks Booster Box', type: 'BOOSTER_BOX', set: 'Surging Sparks', price: 302.66, delta: 0.19, pct: 0.06, qty: 0 },
+      { id: 'fusion-strike-bb', name: 'Fusion Strike Booster Box', type: 'BOOSTER_BOX', set: 'Fusion Strike', price: 968.97, delta: -0.54, pct: -0.06, qty: 0 },
+      { id: 'paldea-evolved-bb', name: 'Paldea Evolved Booster Box', type: 'BOOSTER_BOX', set: 'Paldea Evolved', price: 477.29, delta: -2.76, pct: -0.57, qty: 0 },
+      { id: 'lost-origin-bb', name: 'Lost Origin Booster Box', type: 'BOOSTER_BOX', set: 'Lost Origin', price: 733.72, delta: 0.99, pct: 0.14, qty: 0 },
+      { id: 'pokemon-151-jp-bb', name: 'Pokemon 151 Booster Box (JP)', type: 'BOOSTER_BOX', set: 'Pokemon 151', price: 294.81, delta: 4.23, pct: 1.46, qty: 0 },
+      { id: 'silver-tempest-bb', name: 'Silver Tempest Booster Box', type: 'BOOSTER_BOX', set: 'Silver Tempest', price: 522.04, delta: 2.92, pct: 0.56, qty: 0 },
+      { id: 'brilliant-stars-bb', name: 'Brilliant Stars Booster Box', type: 'BOOSTER_BOX', set: 'Brilliant Stars', price: 582.41, delta: -0.40, pct: -0.07, qty: 0 },
+      { id: 'twilight-masquerade-bb', name: 'Twilight Masquerade Booster Box', type: 'BOOSTER_BOX', set: 'Twilight Masquerade', price: 354.05, delta: -0.88, pct: -0.25, qty: 0 },
+      { id: 'team-up-bb', name: 'Team Up Booster Box', type: 'BOOSTER_BOX', set: 'Team Up', price: 12316.89, delta: -55.56, pct: -0.45, qty: 0 },
+      { id: 'base-set-1st-bb', name: 'Pokemon Base Set [1st Edition] Booster Box', type: 'BOOSTER_BOX', set: 'Base Set (1st Edition)', price: 305500.00, delta: 0.00, pct: 0.00, qty: 0 }
     ];
+
+    // Synthesize a realistic 7-day historical curve based on current price and weekly delta
+    PRODUCTS.forEach(p => {
+      const startPrice = p.price - p.delta;
+      const step = p.delta / 6;
+      p.history7D = [
+        Number((startPrice).toFixed(2)),
+        Number((startPrice + step * 1).toFixed(2)),
+        Number((startPrice + step * 2).toFixed(2)),
+        Number((startPrice + step * 3).toFixed(2)),
+        Number((startPrice + step * 4).toFixed(2)),
+        Number((startPrice + step * 5).toFixed(2)),
+        Number((p.price).toFixed(2))
+      ];
+    });
 
     let activeProduct = PRODUCTS[0];
     let activeFilter = 'ALL';
     let mainChart = null;
 
-    // Calculate percentage and absolute mover deltas
-    function calculateMoverMetrics(product) {
-      const start = product.history7D[0];
-      const end = product.history7D[product.history7D.length - 1];
-      const delta = end - start;
-      const pct = ((delta / start) * 100).toFixed(1);
-      return { start, end, delta, pct: parseFloat(pct) };
+    function getBadgeConfig(type) {
+      switch (type) {
+        case 'ETB': return { label: 'ETB', class: 'bg-blue-500/20 text-blue-300 border-blue-500/30' };
+        case 'UPC': return { label: 'UPC', class: 'bg-amber-500/20 text-amber-300 border-amber-500/30' };
+        case 'PREMIUM_BOX': return { label: 'Premium', class: 'bg-purple-500/20 text-purple-300 border-purple-500/30' };
+        case 'BOOSTER_BUNDLE': return { label: 'Bundle', class: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30' };
+        case 'BOOSTER_BOX': return { label: 'Booster Box', class: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' };
+        default: return { label: type, class: 'bg-gray-500/20 text-gray-300 border-gray-500/30' };
+      }
     }
 
-    // Render the 4 Biggest Movers of the Week Cards
     function renderMarketMovers() {
       const moversGrid = document.getElementById('movers-grid');
       moversGrid.innerHTML = '';
 
-      // Rank products by highest 7-day % increase
-      const ranked = [...PRODUCTS].sort((a, b) => {
-        return calculateMoverMetrics(b).pct - calculateMoverMetrics(a).pct;
-      }).slice(0, 4);
+      // Rank by highest absolute percentage swing
+      const ranked = [...PRODUCTS].sort((a, b) => Math.abs(b.pct) - Math.abs(a.pct)).slice(0, 4);
 
       ranked.forEach((item, index) => {
-        const { end, delta, pct } = calculateMoverMetrics(item);
+        const isPositive = item.pct >= 0;
+        const color = isPositive ? 'text-emerald-400' : 'text-rose-400';
         const card = document.createElement('div');
         card.className = `bg-[#111827] border ${activeProduct.id === item.id ? 'border-emerald-500/80 bg-[#141e33]' : 'border-gray-800 hover:border-gray-700'} rounded-xl p-3.5 flex flex-col justify-between cursor-pointer transition duration-150 relative overflow-hidden group shadow-lg`;
         card.onclick = () => selectProduct(item.id);
 
         card.innerHTML = `
           <div class="flex items-start justify-between">
-            <span class="text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-emerald-950/70 border border-emerald-800/40 text-emerald-400">
+            <span class="text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-gray-800 border border-gray-700 text-gray-300">
               #${index + 1} Mover
             </span>
-            <span class="text-xs font-bold font-mono text-emerald-400 flex items-center gap-0.5">
-              ▲ +${pct}%
+            <span class="text-xs font-bold font-mono ${color} flex items-center gap-0.5">
+              ${isPositive ? '▲ +' : '▼ '}${item.pct.toFixed(2)}%
             </span>
           </div>
 
           <div class="mt-2">
             <h4 class="text-xs font-bold text-gray-100 truncate group-hover:text-emerald-300 transition">${item.name}</h4>
             <div class="flex items-baseline space-x-2 mt-0.5">
-              <span class="text-lg font-black font-mono text-white">$${end}</span>
-              <span class="text-[11px] font-mono text-gray-400">+$${delta} 7D</span>
+              <span class="text-lg font-black font-mono text-white">$${item.price.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+              <span class="text-[11px] font-mono text-gray-400">${item.delta >= 0 ? '+$' : '-$'}${Math.abs(item.delta).toFixed(2)}</span>
             </div>
           </div>
 
-          <!-- Micro Sparkline Canvas -->
           <div class="h-10 w-full mt-2">
             <canvas id="sparkline-${item.id}"></canvas>
           </div>
@@ -295,15 +320,13 @@
 
         moversGrid.appendChild(card);
 
-        // Render sparkline micro-chart
         setTimeout(() => {
-          renderSparkline(`sparkline-${item.id}`, item.history7D);
+          renderSparkline(`sparkline-${item.id}`, item.history7D, isPositive ? '#34d399' : '#f43f5e');
         }, 10);
       });
     }
 
-    // Sparkline Chart Instance
-    function renderSparkline(canvasId, dataPoints) {
+    function renderSparkline(canvasId, dataPoints, strokeColor) {
       const ctx = document.getElementById(canvasId);
       if (!ctx) return;
       new Chart(ctx, {
@@ -312,13 +335,12 @@
           labels: ['-6D', '-5D', '-4D', '-3D', '-2D', '-1D', 'Now'],
           datasets: [{
             data: dataPoints,
-            borderColor: '#34d399',
+            borderColor: strokeColor,
             borderWidth: 2,
             pointRadius: 0,
             pointHoverRadius: 3,
             tension: 0.35,
-            fill: true,
-            backgroundColor: 'rgba(52, 211, 153, 0.08)'
+            fill: false
           }]
         },
         options: {
@@ -333,19 +355,26 @@
       });
     }
 
-    // Render Main Comparison Chart
     function updateMainChart() {
       const ctx = document.getElementById('mainChart').getContext('2d');
-      const metrics = calculateMoverMetrics(activeProduct);
+      const isPositive = activeProduct.pct >= 0;
+      const themeColor = isPositive ? '#10b981' : '#f43f5e';
+      const badge = getBadgeConfig(activeProduct.type);
 
-      // Update Header Elements
       document.getElementById('active-title').innerText = activeProduct.name;
-      document.getElementById('active-era').innerText = `${activeProduct.era} Era • Released ${activeProduct.released}`;
-      document.getElementById('active-type-badge').innerText = activeProduct.type;
-      document.getElementById('active-type-badge').className = `px-2 py-0.5 rounded text-[11px] font-bold border ${activeProduct.type === 'UPC' ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' : 'bg-blue-500/20 text-blue-300 border-blue-500/30'}`;
-      document.getElementById('active-price').innerText = `$${metrics.end}.00`;
-      document.getElementById('active-delta').innerText = `+${metrics.pct}% (7D)`;
-      document.getElementById('active-pack-val').innerText = `$${(metrics.end / activeProduct.packCount).toFixed(2)}`;
+      document.getElementById('active-set').innerText = `${activeProduct.set} • Sealed`;
+      
+      const badgeElem = document.getElementById('active-type-badge');
+      badgeElem.innerText = badge.label;
+      badgeElem.className = `px-2 py-0.5 rounded text-[11px] font-bold border ${badge.class}`;
+      
+      document.getElementById('active-price').innerText = `$${activeProduct.price.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+      
+      const deltaElem = document.getElementById('active-delta');
+      deltaElem.innerText = `${isPositive ? '+' : ''}${activeProduct.delta.toFixed(2)} (${isPositive ? '+' : ''}${activeProduct.pct.toFixed(2)}%)`;
+      deltaElem.className = `text-sm font-bold font-mono ${isPositive ? 'text-emerald-400' : 'text-rose-400'}`;
+
+      document.getElementById('active-inventory').innerText = `${activeProduct.qty} Unit${activeProduct.qty === 1 ? '' : 's'}`;
 
       if (mainChart) mainChart.destroy();
 
@@ -356,12 +385,12 @@
           datasets: [{
             label: `${activeProduct.name} ($)`,
             data: activeProduct.history7D,
-            borderColor: '#10b981',
+            borderColor: themeColor,
             borderWidth: 3,
-            backgroundColor: 'rgba(16, 185, 129, 0.12)',
+            backgroundColor: isPositive ? 'rgba(16, 185, 129, 0.12)' : 'rgba(244, 63, 94, 0.12)',
             fill: true,
             tension: 0.3,
-            pointBackgroundColor: '#10b981',
+            pointBackgroundColor: themeColor,
             pointHoverRadius: 6
           }]
         },
@@ -380,7 +409,7 @@
               padding: 10,
               displayColors: false,
               callbacks: {
-                label: (ctx) => ` Price: $${ctx.parsed.y}.00`
+                label: (ctx) => ` Price: $${ctx.parsed.y.toLocaleString('en-US', { minimumFractionDigits: 2 })}`
               }
             }
           },
@@ -394,7 +423,7 @@
               ticks: {
                 color: '#9ca3af',
                 font: { size: 11 },
-                callback: (val) => `$${val}`
+                callback: (val) => `$${val.toLocaleString()}`
               }
             }
           }
@@ -402,7 +431,6 @@
       });
     }
 
-    // Render Catalog
     function renderCatalog() {
       const grid = document.getElementById('catalog-grid');
       grid.innerHTML = '';
@@ -411,7 +439,8 @@
       document.getElementById('product-count').innerText = filtered.length;
 
       filtered.forEach(item => {
-        const { end, pct } = calculateMoverMetrics(item);
+        const isPositive = item.pct >= 0;
+        const badge = getBadgeConfig(item.type);
         const card = document.createElement('div');
         card.className = `bg-[#111827] border ${activeProduct.id === item.id ? 'border-emerald-500' : 'border-gray-800'} hover:border-gray-700 p-4 rounded-xl cursor-pointer transition flex flex-col justify-between`;
         card.onclick = () => selectProduct(item.id);
@@ -419,17 +448,19 @@
         card.innerHTML = `
           <div>
             <div class="flex items-center justify-between">
-              <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${item.type === 'UPC' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-blue-500/10 text-blue-400 border border-blue-500/20'}">
-                ${item.type}
+              <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${badge.class}">
+                ${badge.label}
               </span>
-              <span class="text-xs font-mono font-bold text-emerald-400">+${pct}%</span>
+              <span class="text-xs font-mono font-bold ${isPositive ? 'text-emerald-400' : 'text-rose-400'}">
+                ${isPositive ? '+' : ''}${item.pct.toFixed(2)}%
+              </span>
             </div>
-            <h4 class="text-sm font-bold text-white mt-2 leading-snug">${item.name}</h4>
-            <p class="text-xs text-gray-400 mt-1">${item.packCount} Packs • MSRP $${item.msrp}</p>
+            <h4 class="text-sm font-bold text-white mt-2 leading-snug line-clamp-2">${item.name}</h4>
+            <p class="text-xs text-gray-400 mt-1 truncate">${item.set}</p>
           </div>
           <div class="mt-4 pt-3 border-t border-gray-800 flex items-baseline justify-between">
-            <span class="text-xs text-gray-400">Current Market</span>
-            <span class="text-base font-black font-mono text-white">$${end}.00</span>
+            <span class="text-xs text-gray-400">Qty: ${item.qty}</span>
+            <span class="text-base font-black font-mono text-white">$${item.price.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
           </div>
         `;
         grid.appendChild(card);
@@ -449,8 +480,15 @@
     function setFilter(type) {
       activeFilter = type;
       document.querySelectorAll('.filter-btn').forEach(btn => {
-        if (btn.innerText.toUpperCase().includes(type)) {
-          btn.className = 'filter-btn active px-3 py-1 text-xs font-semibold rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40';
+        const matches = (type === 'ALL' && btn.innerText === 'All') ||
+                        (type === 'ETB' && btn.innerText === 'ETBs') ||
+                        (type === 'UPC' && btn.innerText === 'UPCs') ||
+                        (type === 'PREMIUM_BOX' && btn.innerText.includes('Premium')) ||
+                        (type === 'BOOSTER_BUNDLE' && btn.innerText.includes('Bundles')) ||
+                        (type === 'BOOSTER_BOX' && btn.innerText.includes('Booster Boxes'));
+
+        if (matches) {
+          btn.className = 'filter-btn px-3 py-1 text-xs font-semibold rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40';
         } else {
           btn.className = 'filter-btn px-3 py-1 text-xs font-semibold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white';
         }
@@ -463,7 +501,6 @@
       selectProduct(PRODUCTS[0].id);
     }
 
-    // Init
     window.addEventListener('DOMContentLoaded', () => {
       renderMarketMovers();
       updateMainChart();
