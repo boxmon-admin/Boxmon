@@ -36,23 +36,23 @@
 
     .set-logo-container {
       position: relative;
-      background: radial-gradient(circle at center, rgba(16, 185, 129, 0.28) 0%, rgba(17, 24, 39, 0.95) 75%);
-      box-shadow: 0 0 18px 0 rgba(16, 185, 129, 0.32), inset 0 0 12px 0 rgba(16, 185, 129, 0.16);
-      border: 1px solid rgba(16, 185, 129, 0.45);
+      background: radial-gradient(circle at center, rgba(16, 185, 129, 0.25) 0%, rgba(17, 24, 39, 0.95) 75%);
+      box-shadow: 0 0 16px 0 rgba(16, 185, 129, 0.28), inset 0 0 10px 0 rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
       transition: all 0.25s ease-in-out;
     }
     .group:hover .set-logo-container,
     .set-logo-container:hover {
-      box-shadow: 0 0 28px 2px rgba(16, 185, 129, 0.55), inset 0 0 16px 0 rgba(16, 185, 129, 0.3);
-      border-color: rgba(52, 211, 153, 0.75);
+      box-shadow: 0 0 24px 2px rgba(16, 185, 129, 0.5), inset 0 0 14px 0 rgba(16, 185, 129, 0.25);
+      border-color: rgba(52, 211, 153, 0.7);
     }
 
     .set-logo {
-      filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.5)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
+      filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.45)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
       transition: filter 0.2s ease, transform 0.2s ease;
     }
     .group:hover .set-logo {
-      filter: drop-shadow(0 0 12px rgba(52, 211, 153, 0.8)) drop-shadow(0 3px 6px rgba(0, 0, 0, 0.9));
+      filter: drop-shadow(0 0 12px rgba(52, 211, 153, 0.75)) drop-shadow(0 3px 6px rgba(0, 0, 0, 0.9));
       transform: scale(1.03);
     }
 
@@ -126,27 +126,27 @@
 
           <div>
             <div class="flex flex-wrap items-center gap-2">
-              <h3 id="active-title" class="text-2xl font-black text-white tracking-tight">Ancient Origins</h3>
+              <h3 id="active-title" class="text-2xl font-black text-white tracking-tight">Ascended Heroes</h3>
               <div id="active-variant-ribbon" class="flex items-center space-x-1.5 bg-gray-900 border border-gray-800 rounded-lg p-1">
                 <!-- Injected via JS -->
               </div>
             </div>
-            <p id="active-era" class="text-xs text-gray-400 mt-1 font-medium">XY Series • Released Aug 2015</p>
+            <p id="active-era" class="text-xs text-gray-400 mt-1 font-medium">Mega Evolution • Released Jan 2026</p>
           </div>
         </div>
 
         <div class="flex items-center space-x-6 sm:space-x-8">
           <div>
             <p class="text-[11px] text-gray-400 uppercase tracking-widest font-semibold">Market Price</p>
-            <p id="active-price" class="text-3xl sm:text-4xl font-black text-emerald-400 font-mono tracking-tight price-glow">$1,100.00</p>
+            <p id="active-price" class="text-3xl sm:text-4xl font-black text-emerald-400 font-mono tracking-tight price-glow">$85.00</p>
           </div>
           <div>
             <p class="text-[11px] text-gray-400 uppercase tracking-widest font-semibold" id="active-delta-label">Change (6M)</p>
-            <p id="active-delta" class="text-base font-extrabold font-mono text-emerald-400">+34.1%</p>
+            <p id="active-delta" class="text-base font-extrabold font-mono text-emerald-400">+57.4%</p>
           </div>
           <div>
             <p class="text-[11px] text-gray-400 uppercase tracking-widest font-semibold">Est. / Pack</p>
-            <p id="active-pack-val" class="text-base font-extrabold font-mono text-gray-200">$30.56</p>
+            <p id="active-pack-val" class="text-base font-extrabold font-mono text-gray-200">$9.44</p>
           </div>
         </div>
       </div>
@@ -225,252 +225,145 @@
       '20Y': { label: '20 Years', labels: ['2006', '2010', '2015', '2020 Bubble', '2022 Floor', '2025', 'Current'] }
     };
 
-    function getSetLogoMarkup(item, isSmall = false) {
-      if (item.image) {
-        return `<img src="${item.image}" alt="${item.name}" class="max-h-full max-w-full object-contain set-logo" onerror="this.outerHTML=getCustomBadgeSvg('${item.name}', '${item.badgeColor || '#10b981'}', ${isSmall})" />`;
+    // Dedicated custom SVG emblem generator for sets without CDN logos
+    function getCustomBadgeSvg(name, customType, isSmall) {
+      const fontSize = isSmall ? '10' : '12';
+      const subSize = isSmall ? '7' : '8.5';
+
+      switch(customType) {
+        case 'CHARIZARD_UPC':
+          return `
+            <svg viewBox="0 0 160 60" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="g-charizard" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ea580c"/>
+                  <stop offset="60%" stop-color="#b45309"/>
+                  <stop offset="100%" stop-color="#18181b"/>
+                </linearGradient>
+              </defs>
+              <rect width="160" height="60" rx="8" fill="url(#g-charizard)" stroke="#f97316" stroke-width="1.5" />
+              <text x="80" y="24" dominant-baseline="middle" text-anchor="middle" fill="#fdba74" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${subSize}" letter-spacing="2">SWORD &amp; SHIELD</text>
+              <text x="80" y="42" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${fontSize}" letter-spacing="1">CHARIZARD UPC</text>
+            </svg>
+          `;
+
+        case 'ASCENDED_HEROES':
+          return `
+            <svg viewBox="0 0 160 60" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="g-ascended" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#0891b2"/>
+                  <stop offset="60%" stop-color="#0e7490"/>
+                  <stop offset="100%" stop-color="#111827"/>
+                </linearGradient>
+              </defs>
+              <rect width="160" height="60" rx="8" fill="url(#g-ascended)" stroke="#22d3ee" stroke-width="1.5" />
+              <text x="80" y="23" dominant-baseline="middle" text-anchor="middle" fill="#a5f3fc" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${subSize}" letter-spacing="2">MEGA EVOLUTION</text>
+              <text x="80" y="41" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${fontSize}" letter-spacing="1">ASCENDED HEROES</text>
+            </svg>
+          `;
+
+        case 'PITCH_BLACK':
+          return `
+            <svg viewBox="0 0 160 60" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="g-pitch" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#7e22ce"/>
+                  <stop offset="60%" stop-color="#3b0764"/>
+                  <stop offset="100%" stop-color="#09090b"/>
+                </linearGradient>
+              </defs>
+              <rect width="160" height="60" rx="8" fill="url(#g-pitch)" stroke="#c084fc" stroke-width="1.5" />
+              <text x="80" y="23" dominant-baseline="middle" text-anchor="middle" fill="#e9d5ff" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${subSize}" letter-spacing="2">MEGA EVOLUTION</text>
+              <text x="80" y="41" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${fontSize}" letter-spacing="1">PITCH BLACK</text>
+            </svg>
+          `;
+
+        case 'CHAOS_RISING':
+          return `
+            <svg viewBox="0 0 160 60" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="g-chaos" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#dc2626"/>
+                  <stop offset="60%" stop-color="#7f1d1d"/>
+                  <stop offset="100%" stop-color="#09090b"/>
+                </linearGradient>
+              </defs>
+              <rect width="160" height="60" rx="8" fill="url(#g-chaos)" stroke="#f87171" stroke-width="1.5" />
+              <text x="80" y="23" dominant-baseline="middle" text-anchor="middle" fill="#fecaca" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${subSize}" letter-spacing="2">MEGA EVOLUTION</text>
+              <text x="80" y="41" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${fontSize}" letter-spacing="1">CHAOS RISING</text>
+            </svg>
+          `;
+
+        case 'WHITE_FLARE':
+          return `
+            <svg viewBox="0 0 160 60" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="g-whiteflare" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#f8fafc"/>
+                  <stop offset="45%" stop-color="#94a3b8"/>
+                  <stop offset="100%" stop-color="#0f172a"/>
+                </linearGradient>
+              </defs>
+              <rect width="160" height="60" rx="8" fill="url(#g-whiteflare)" stroke="#e2e8f0" stroke-width="1.5" />
+              <text x="80" y="23" dominant-baseline="middle" text-anchor="middle" fill="#0f172a" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${subSize}" letter-spacing="2">SCARLET &amp; VIOLET</text>
+              <text x="80" y="41" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${fontSize}" letter-spacing="1">WHITE FLARE</text>
+            </svg>
+          `;
+
+        case 'BLACK_BOLT':
+          return `
+            <svg viewBox="0 0 160 60" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="g-blackbolt" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#1e1b4b"/>
+                  <stop offset="60%" stop-color="#4338ca"/>
+                  <stop offset="100%" stop-color="#facc15"/>
+                </linearGradient>
+              </defs>
+              <rect width="160" height="60" rx="8" fill="url(#g-blackbolt)" stroke="#eab308" stroke-width="1.5" />
+              <text x="80" y="23" dominant-baseline="middle" text-anchor="middle" fill="#fde047" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${subSize}" letter-spacing="2">SCARLET &amp; VIOLET</text>
+              <text x="80" y="41" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${fontSize}" letter-spacing="1">⚡ BLACK BOLT ⚡</text>
+            </svg>
+          `;
+
+        case 'DESTINED_RIVALS':
+          return `
+            <svg viewBox="0 0 160 60" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="g-rivals" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#991b1b"/>
+                  <stop offset="50%" stop-color="#1e1b4b"/>
+                  <stop offset="100%" stop-color="#b45309"/>
+                </linearGradient>
+              </defs>
+              <rect width="160" height="60" rx="8" fill="url(#g-rivals)" stroke="#f59e0b" stroke-width="1.5" />
+              <text x="80" y="23" dominant-baseline="middle" text-anchor="middle" fill="#fcd34d" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${subSize}" letter-spacing="2">TEAM ROCKET SPECIAL</text>
+              <text x="80" y="41" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${fontSize}" letter-spacing="1">DESTINED RIVALS</text>
+            </svg>
+          `;
+
+        default:
+          return `
+            <svg viewBox="0 0 160 60" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <rect width="160" height="60" rx="8" fill="#111827" stroke="#10b981" stroke-width="1.5" />
+              <text x="80" y="32" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${fontSize}" letter-spacing="1">${name.toUpperCase()}</text>
+            </svg>
+          `;
       }
-      return getCustomBadgeSvg(item.name, item.badgeColor || '#10b981', isSmall);
     }
 
-    function getCustomBadgeSvg(name, color, isSmall) {
-      const fontSize = isSmall ? '10' : '12';
-      return `
-        <svg viewBox="0 0 160 60" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="grad-${name.replace(/[^a-zA-Z0-9]/g, '')}" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="${color}" stop-opacity="0.35"/>
-              <stop offset="100%" stop-color="#111827" stop-opacity="0.95"/>
-            </linearGradient>
-          </defs>
-          <rect width="160" height="60" rx="8" fill="url(#grad-${name.replace(/[^a-zA-Z0-9]/g, '')})" stroke="${color}" stroke-width="1.5" />
-          <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${fontSize}" letter-spacing="1">
-            ${name.toUpperCase()}
-          </text>
-        </svg>
-      `;
+    function getSetLogoMarkup(item, isSmall = false) {
+      if (item.customBadge) {
+        return getCustomBadgeSvg(item.name, item.customBadge, isSmall);
+      }
+      if (item.image) {
+        return `<img src="${item.image}" alt="${item.name}" class="max-h-full max-w-full object-contain set-logo" onerror="this.outerHTML=getCustomBadgeSvg('${item.name}', '', ${isSmall})" />`;
+      }
+      return getCustomBadgeSvg(item.name, '', isSmall);
     }
 
     const SETS_DATA = [
-      // ==========================================
-      // --- XY ERA & CLASSICS (NEW ICONS) ---
-      // ==========================================
-      {
-        id: 'xy7-ancient-origins',
-        name: 'Ancient Origins',
-        era: 'XY Series',
-        category: 'XY',
-        released: 'Aug 2015',
-        image: 'https://images.pokemontcg.io/xy7/logo.png', // Ancient Origins Logo
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Ancient Origins Booster Box',
-            packCount: 36,
-            msrp: 143.64,
-            history: {
-              '1D': [1105, 1098, 1095, 1102, 1105, 1099, 1100],
-              '7D': [1070, 1085, 1060, 1075, 1090, 1102, 1100],
-              '1M': [1000, 1035, 985, 1020, 1060, 1095, 1100],
-              '6M': [820, 920, 780, 850, 940, 1060, 1100],
-              '1Y': [650, 780, 620, 710, 850, 1010, 1100],
-              '5Y': [280, 850, 580, 650, 780, 950, 1100],
-              '10Y': [100, 220, 340, 580, 780, 950, 1100],
-              '20Y': [null, null, 100, 220, 580, 780, 1100]
-            }
-          },
-          ETB: {
-            name: 'Ancient Origins ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [322, 319, 318, 321, 322, 319, 320],
-              '7D': [310, 315, 305, 312, 318, 321, 320],
-              '1M': [290, 302, 285, 298, 310, 318, 320],
-              '6M': [240, 270, 230, 255, 280, 310, 320],
-              '1Y': [190, 235, 180, 210, 250, 295, 320],
-              '5Y': [90, 240, 150, 175, 210, 270, 320],
-              '10Y': [40, 70, 90, 150, 210, 270, 320],
-              '20Y': [null, null, 40, 70, 150, 210, 320]
-            }
-          }
-        }
-      },
-      {
-        id: 'xy12-evolutions',
-        name: 'XY Evolutions',
-        era: 'XY Series',
-        category: 'XY',
-        released: 'Nov 2016',
-        image: 'https://images.pokemontcg.io/xy12/logo.png',
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'XY Evolutions Booster Box',
-            packCount: 36,
-            msrp: 143.64,
-            history: {
-              '1D': [1155, 1148, 1145, 1152, 1155, 1149, 1150],
-              '7D': [1120, 1135, 1110, 1125, 1140, 1152, 1150],
-              '1M': [1050, 1085, 1030, 1065, 1105, 1140, 1150],
-              '6M': [850, 960, 810, 890, 990, 1110, 1150],
-              '1Y': [700, 840, 660, 760, 910, 1060, 1150],
-              '5Y': [380, 950, 650, 720, 840, 1020, 1150],
-              '10Y': [100, 240, 380, 650, 840, 1020, 1150],
-              '20Y': [null, null, 100, 240, 650, 840, 1150]
-            }
-          },
-          ETB: {
-            name: 'XY Evolutions ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [262, 259, 258, 261, 262, 259, 260],
-              '7D': [252, 258, 248, 254, 258, 261, 260],
-              '1M': [240, 246, 235, 242, 250, 258, 260],
-              '6M': [210, 230, 198, 215, 235, 252, 260],
-              '1Y': [180, 210, 172, 192, 222, 248, 260],
-              '5Y': [80, 240, 140, 165, 195, 235, 260],
-              '10Y': [40, 60, 80, 140, 195, 235, 260],
-              '20Y': [null, null, 40, 60, 140, 195, 260]
-            }
-          }
-        }
-      },
-      {
-        id: 'g1-generations',
-        name: 'Generations 20th',
-        era: 'XY Series',
-        category: 'XY',
-        released: 'Feb 2016',
-        image: 'https://images.pokemontcg.io/g1/logo.png',
-        selectedType: 'ETB',
-        variants: {
-          ETB: {
-            name: 'Generations 20th Anniversary ETB',
-            packCount: 10,
-            msrp: 49.99,
-            history: {
-              '1D': [855, 848, 846, 852, 855, 849, 850],
-              '7D': [820, 835, 810, 825, 840, 852, 850],
-              '1M': [760, 790, 745, 775, 810, 842, 850],
-              '6M': [620, 705, 595, 660, 745, 820, 850],
-              '1Y': [480, 585, 450, 520, 640, 780, 850],
-              '5Y': [220, 580, 360, 440, 620, 760, 850],
-              '10Y': [50, 140, 220, 360, 620, 760, 850],
-              '20Y': [null, null, 50, 140, 360, 620, 850]
-            }
-          }
-        }
-      },
-
-      // ==========================================
-      // --- VINTAGE ERA (NEW ICONS) ---
-      // ==========================================
-      {
-        id: 'base-set',
-        name: 'Base Set (Vintage)',
-        era: 'Classic Vintage',
-        category: 'VINTAGE',
-        released: 'Jan 1999',
-        image: 'https://images.pokemontcg.io/base1/logo.png', // Base Set Logo
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Base Set Sealed Booster Box',
-            packCount: 36,
-            msrp: 110.00,
-            history: {
-              '1D': [16550, 16480, 16450, 16520, 16550, 16490, 16500],
-              '7D': [16200, 16450, 16150, 16300, 16400, 16520, 16500],
-              '1M': [15700, 16000, 15800, 16100, 16350, 16480, 16500],
-              '6M': [14200, 14800, 14400, 15200, 15800, 16350, 16500],
-              '1Y': [13000, 13800, 13300, 14400, 15200, 16100, 16500],
-              '5Y': [21500, 11800, 12500, 13400, 14500, 15600, 16500],
-              '10Y': [4200, 9500, 21500, 11800, 13400, 15600, 16500],
-              '20Y': [750, 2800, 21500, 11800, 13400, 15600, 16500]
-            }
-          }
-        }
-      },
-      {
-        id: 'base2-base-set-2',
-        name: 'Base Set 2',
-        era: 'Classic Vintage',
-        category: 'VINTAGE',
-        released: 'Feb 2000',
-        image: 'https://images.pokemontcg.io/base2/logo.png', // Base Set 2 Logo
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Base Set 2 Sealed Booster Box',
-            packCount: 36,
-            msrp: 110.00,
-            history: {
-              '1D': [4220, 4190, 4180, 4210, 4220, 4195, 4200],
-              '7D': [4050, 4140, 4020, 4090, 4160, 4215, 4200],
-              '1M': [3850, 3980, 3800, 3920, 4050, 4180, 4200],
-              '6M': [3300, 3650, 3200, 3450, 3800, 4120, 4200],
-              '1Y': [2750, 3300, 2600, 2950, 3450, 4050, 4200],
-              '5Y': [1800, 4900, 3100, 3300, 3650, 4000, 4200],
-              '10Y': [550, 1100, 1800, 3100, 3650, 4000, 4200],
-              '20Y': [120, 260, 550, 1800, 3100, 4000, 4200]
-            }
-          }
-        }
-      },
-      {
-        id: 'ecard2-aquapolis',
-        name: 'Aquapolis',
-        era: 'e-Card Series',
-        category: 'VINTAGE',
-        released: 'Jan 2003',
-        image: 'https://images.pokemontcg.io/ecard2/logo.png', // Aquapolis Logo
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Aquapolis Sealed Booster Box',
-            packCount: 36,
-            msrp: 115.00,
-            history: {
-              '1D': [12550, 12480, 12450, 12520, 12550, 12490, 12500],
-              '7D': [12100, 12350, 12050, 12200, 12380, 12520, 12500],
-              '1M': [11600, 11900, 11500, 11800, 12150, 12450, 12500],
-              '6M': [10200, 11100, 9800, 10600, 11500, 12300, 12500],
-              '1Y': [8800, 10200, 8400, 9400, 10800, 12100, 12500],
-              '5Y': [4200, 14500, 9200, 9800, 10600, 11800, 12500],
-              '10Y': [1200, 2800, 4200, 9200, 10600, 11800, 12500],
-              '20Y': [150, 450, 1200, 4200, 9200, 11800, 12500]
-            }
-          }
-        }
-      },
-      {
-        id: 'bp-best-of-game',
-        name: 'Best of Game',
-        era: 'WotC Promos',
-        category: 'VINTAGE',
-        released: 'Dec 2002',
-        image: 'https://images.pokemontcg.io/bp/logo.png', // Best of Game Logo
-        selectedType: 'BUNDLE',
-        variants: {
-          BUNDLE: {
-            name: 'Best of Game Sealed Booster Pack Collection',
-            packCount: 4,
-            msrp: 19.99,
-            history: {
-              '1D': [825, 820, 818, 822, 825, 819, 820],
-              '7D': [795, 810, 785, 802, 815, 824, 820],
-              '1M': [740, 770, 730, 755, 785, 812, 820],
-              '6M': [610, 680, 580, 640, 715, 785, 820],
-              '1Y': [480, 580, 440, 510, 630, 760, 820],
-              '5Y': [180, 650, 390, 440, 560, 720, 820],
-              '10Y': [60, 120, 180, 390, 560, 720, 820],
-              '20Y': [20, 45, 60, 180, 390, 720, 820]
-            }
-          }
-        }
-      },
-
       // ==========================================
       // --- MEGA EVOLUTION & 30TH (2026) ---
       // ==========================================
@@ -481,7 +374,7 @@
         category: 'ME',
         released: 'Jan 2026',
         image: null,
-        badgeColor: '#06b6d4',
+        customBadge: 'ASCENDED_HEROES',
         selectedType: 'ETB',
         variants: {
           ETB: {
@@ -538,7 +431,7 @@
         category: 'ME',
         released: 'Jul 2026',
         image: null,
-        badgeColor: '#a855f7',
+        customBadge: 'PITCH_BLACK',
         selectedType: 'BBOX',
         variants: {
           BBOX: {
@@ -595,7 +488,7 @@
         category: 'ME',
         released: 'May 2026',
         image: null,
-        badgeColor: '#ef4444',
+        customBadge: 'CHAOS_RISING',
         selectedType: 'BBOX',
         variants: {
           BBOX: {
@@ -645,32 +538,6 @@
           }
         }
       },
-      {
-        id: '30th-celebration',
-        name: '30th Celebration',
-        era: 'Anniversary 2026',
-        category: 'ME',
-        released: 'Oct 2026',
-        image: 'https://images.pokemontcg.io/cel25/logo.png',
-        selectedType: 'UPC',
-        variants: {
-          UPC: {
-            name: '30th Celebration Ultra-Premium Collection',
-            packCount: 18,
-            msrp: 149.99,
-            history: {
-              '1D': [655, 650, 648, 652, 654, 649, 650],
-              '7D': [635, 645, 628, 638, 646, 652, 650],
-              '1M': [590, 615, 585, 605, 625, 642, 650],
-              '6M': [400, 480, 430, 510, 580, 635, 650],
-              '1Y': [250, 360, 300, 420, 520, 610, 650],
-              '5Y': [null, null, null, null, null, 250, 650],
-              '10Y': [null, null, null, null, null, 250, 650],
-              '20Y': [null, null, null, null, null, 250, 650]
-            }
-          }
-        }
-      },
 
       // ==========================================
       // --- SCARLET & VIOLET ERA ---
@@ -682,7 +549,7 @@
         category: 'SV',
         released: 'Jul 2025',
         image: null,
-        badgeColor: '#e2e8f0',
+        customBadge: 'WHITE_FLARE',
         selectedType: 'BBOX',
         variants: {
           BBOX: {
@@ -717,6 +584,49 @@
           }
         }
       },
+      // Newly added partner expansion: Black Bolt
+      {
+        id: 'sv-black-bolt',
+        name: 'Black Bolt',
+        era: 'Scarlet & Violet',
+        category: 'SV',
+        released: 'Jul 2025',
+        image: null,
+        customBadge: 'BLACK_BOLT',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Black Bolt Booster Box',
+            packCount: 36,
+            msrp: 161.64,
+            history: {
+              '1D': [181, 179, 178, 180, 182, 179, 180],
+              '7D': [174, 177, 172, 175, 178, 181, 180],
+              '1M': [164, 168, 161, 166, 172, 178, 180],
+              '6M': [156, 168, 140, 150, 162, 172, 180],
+              '1Y': [162, 175, 135, 125, 145, 165, 180],
+              '5Y': [null, null, null, null, 162, 125, 180],
+              '10Y': [null, null, null, null, null, 162, 180],
+              '20Y': [null, null, null, null, null, 162, 180]
+            }
+          },
+          BUNDLE: {
+            name: 'Black Bolt Booster Bundle',
+            packCount: 6,
+            msrp: 26.94,
+            history: {
+              '1D': [32.5, 32, 31.8, 32.2, 32.4, 31.9, 32],
+              '7D': [30, 31, 29.5, 30.8, 31.5, 32.2, 32],
+              '1M': [27.5, 29, 27, 28.5, 30, 31.5, 32],
+              '6M': [23, 27, 22.5, 25, 28, 30.5, 32],
+              '1Y': [20, 26, 21.5, 23, 26, 29.5, 32],
+              '5Y': [null, null, null, null, 20, 21.5, 32],
+              '10Y': [null, null, null, null, null, 20, 32],
+              '20Y': [null, null, null, null, null, 20, 32]
+            }
+          }
+        }
+      },
       {
         id: 'sv-destined-rivals',
         name: 'Destined Rivals',
@@ -724,7 +634,7 @@
         category: 'SV',
         released: 'May 2025',
         image: null,
-        badgeColor: '#f59e0b',
+        customBadge: 'DESTINED_RIVALS',
         selectedType: 'BBOX',
         variants: {
           BBOX: {
@@ -740,6 +650,36 @@
               '5Y': [null, null, null, null, 162, 130, 180],
               '10Y': [null, null, null, null, null, 162, 180],
               '20Y': [null, null, null, null, null, 162, 180]
+            }
+          },
+          BUNDLE: {
+            name: 'Destined Rivals Booster Bundle',
+            packCount: 6,
+            msrp: 26.94,
+            history: {
+              '1D': [32.5, 32, 31.8, 32.2, 32.4, 31.9, 32],
+              '7D': [30, 31, 29.5, 30.8, 31.5, 32.2, 32],
+              '1M': [27.5, 29, 27, 28.5, 30, 31.5, 32],
+              '6M': [23, 27, 22.5, 25, 28, 30.5, 32],
+              '1Y': [20, 26, 21.5, 23, 26, 29.5, 32],
+              '5Y': [null, null, null, null, 20, 21.5, 32],
+              '10Y': [null, null, null, null, null, 20, 32],
+              '20Y': [null, null, null, null, null, 20, 32]
+            }
+          },
+          ETB: {
+            name: 'Destined Rivals ETB',
+            packCount: 9,
+            msrp: 49.99,
+            history: {
+              '1D': [68.5, 68, 67.8, 68.2, 68.4, 67.9, 68],
+              '7D': [64, 66, 63, 65, 66.5, 68.2, 68],
+              '1M': [58, 61, 57, 60, 63, 66.5, 68],
+              '6M': [48, 56, 46, 52, 59, 65, 68],
+              '1Y': [42, 52, 44, 48, 55, 62, 68],
+              '5Y': [null, null, null, null, 42, 44, 68],
+              '10Y': [null, null, null, null, null, 42, 68],
+              '20Y': [null, null, null, null, null, 42, 68]
             }
           }
         }
@@ -766,32 +706,6 @@
               '5Y': [null, null, null, null, 160, 120, 165],
               '10Y': [null, null, null, null, null, 160, 165],
               '20Y': [null, null, null, null, null, 160, 165]
-            }
-          }
-        }
-      },
-      {
-        id: 'sv8pt5-prismatic',
-        name: 'Prismatic Evolutions',
-        era: 'Scarlet & Violet',
-        category: 'SV',
-        released: 'Jan 2025',
-        image: 'https://images.pokemontcg.io/sv8pt5/logo.png',
-        selectedType: 'ETB',
-        variants: {
-          ETB: {
-            name: 'Prismatic Evolutions ETB',
-            packCount: 9,
-            msrp: 49.99,
-            history: {
-              '1D': [146, 144, 143, 145, 146, 144, 145],
-              '7D': [140, 143, 138, 141, 143, 146, 145],
-              '1M': [132, 136, 128, 134, 139, 143, 145],
-              '6M': [95, 120, 102, 115, 128, 138, 145],
-              '1Y': [50, 85, 68, 88, 110, 132, 145],
-              '5Y': [null, null, null, null, 50, 68, 145],
-              '10Y': [null, null, null, null, null, 50, 145],
-              '20Y': [null, null, null, null, null, 50, 145]
             }
           }
         }
@@ -868,6 +782,33 @@
       // --- SWORD & SHIELD ERA ---
       // ==========================================
       {
+        id: 'swsh-charizard-upc',
+        name: 'Charizard UPC',
+        era: 'Sword & Shield',
+        category: 'SWSH',
+        released: 'Oct 2022',
+        image: null,
+        customBadge: 'CHARIZARD_UPC',
+        selectedType: 'UPC',
+        variants: {
+          UPC: {
+            name: 'Sword & Shield Charizard UPC',
+            packCount: 16,
+            msrp: 119.99,
+            history: {
+              '1D': [166, 164, 163, 165, 166, 164, 165],
+              '7D': [160, 162, 159, 161, 164, 165, 165],
+              '1M': [152, 155, 150, 156, 160, 163, 165],
+              '6M': [128, 134, 130, 142, 152, 160, 165],
+              '1Y': [105, 115, 110, 122, 136, 152, 165],
+              '5Y': [null, 225, 135, 85, 95, 120, 165],
+              '10Y': [null, null, null, 225, 85, 120, 165],
+              '20Y': [null, null, null, null, 225, 85, 165]
+            }
+          }
+        }
+      },
+      {
         id: 'swsh7-evolving-skies',
         name: 'Evolving Skies',
         era: 'Sword & Shield',
@@ -894,33 +835,6 @@
         }
       },
       {
-        id: 'swsh-charizard-upc',
-        name: 'Charizard UPC',
-        era: 'Sword & Shield',
-        category: 'SWSH',
-        released: 'Oct 2022',
-        image: null,
-        badgeColor: '#f97316',
-        selectedType: 'UPC',
-        variants: {
-          UPC: {
-            name: 'Sword & Shield Charizard UPC',
-            packCount: 16,
-            msrp: 119.99,
-            history: {
-              '1D': [166, 164, 163, 165, 166, 164, 165],
-              '7D': [160, 162, 159, 161, 164, 165, 165],
-              '1M': [152, 155, 150, 156, 160, 163, 165],
-              '6M': [128, 134, 130, 142, 152, 160, 165],
-              '1Y': [105, 115, 110, 122, 136, 152, 165],
-              '5Y': [null, 225, 135, 85, 95, 120, 165],
-              '10Y': [null, null, null, 225, 85, 120, 165],
-              '20Y': [null, null, null, null, 225, 85, 165]
-            }
-          }
-        }
-      },
-      {
         id: 'swsh12pt5-crown-zenith',
         name: 'Crown Zenith',
         era: 'Sword & Shield',
@@ -942,6 +856,140 @@
               '5Y': [null, null, 50, 44, 85, 180, 315],
               '10Y': [null, null, null, null, 50, 44, 315],
               '20Y': [null, null, null, null, null, 50, 315]
+            }
+          }
+        }
+      },
+
+      // ==========================================
+      // --- VINTAGE ERA ---
+      // ==========================================
+      {
+        id: 'xy7-ancient-origins',
+        name: 'Ancient Origins',
+        era: 'XY Series',
+        category: 'XY',
+        released: 'Aug 2015',
+        image: 'https://images.pokemontcg.io/xy7/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Ancient Origins Booster Box',
+            packCount: 36,
+            msrp: 143.64,
+            history: {
+              '1D': [1105, 1098, 1095, 1102, 1105, 1099, 1100],
+              '7D': [1070, 1085, 1060, 1075, 1090, 1102, 1100],
+              '1M': [1000, 1035, 985, 1020, 1060, 1095, 1100],
+              '6M': [820, 920, 780, 850, 940, 1060, 1100],
+              '1Y': [650, 780, 620, 710, 850, 1010, 1100],
+              '5Y': [280, 850, 580, 650, 780, 950, 1100],
+              '10Y': [100, 220, 340, 580, 780, 950, 1100],
+              '20Y': [null, null, 100, 220, 580, 780, 1100]
+            }
+          }
+        }
+      },
+      {
+        id: 'base-set',
+        name: 'Base Set (Vintage)',
+        era: 'Classic Vintage',
+        category: 'VINTAGE',
+        released: 'Jan 1999',
+        image: 'https://images.pokemontcg.io/base1/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Base Set Sealed Booster Box',
+            packCount: 36,
+            msrp: 110.00,
+            history: {
+              '1D': [16550, 16480, 16450, 16520, 16550, 16490, 16500],
+              '7D': [16200, 16450, 16150, 16300, 16400, 16520, 16500],
+              '1M': [15700, 16000, 15800, 16100, 16350, 16480, 16500],
+              '6M': [14200, 14800, 14400, 15200, 15800, 16350, 16500],
+              '1Y': [13000, 13800, 13300, 14400, 15200, 16100, 16500],
+              '5Y': [21500, 11800, 12500, 13400, 14500, 15600, 16500],
+              '10Y': [4200, 9500, 21500, 11800, 13400, 15600, 16500],
+              '20Y': [750, 2800, 21500, 11800, 13400, 15600, 16500]
+            }
+          }
+        }
+      },
+      {
+        id: 'base2-base-set-2',
+        name: 'Base Set 2',
+        era: 'Classic Vintage',
+        category: 'VINTAGE',
+        released: 'Feb 2000',
+        image: 'https://images.pokemontcg.io/base2/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Base Set 2 Sealed Booster Box',
+            packCount: 36,
+            msrp: 110.00,
+            history: {
+              '1D': [4220, 4190, 4180, 4210, 4220, 4195, 4200],
+              '7D': [4050, 4140, 4020, 4090, 4160, 4215, 4200],
+              '1M': [3850, 3980, 3800, 3920, 4050, 4180, 4200],
+              '6M': [3300, 3650, 3200, 3450, 3800, 4120, 4200],
+              '1Y': [2750, 3300, 2600, 2950, 3450, 4050, 4200],
+              '5Y': [1800, 4900, 3100, 3300, 3650, 4000, 4200],
+              '10Y': [550, 1100, 1800, 3100, 3650, 4000, 4200],
+              '20Y': [120, 260, 550, 1800, 3100, 4000, 4200]
+            }
+          }
+        }
+      },
+      {
+        id: 'ecard2-aquapolis',
+        name: 'Aquapolis',
+        era: 'e-Card Series',
+        category: 'VINTAGE',
+        released: 'Jan 2003',
+        image: 'https://images.pokemontcg.io/ecard2/logo.png',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Aquapolis Sealed Booster Box',
+            packCount: 36,
+            msrp: 115.00,
+            history: {
+              '1D': [12550, 12480, 12450, 12520, 12550, 12490, 12500],
+              '7D': [12100, 12350, 12050, 12200, 12380, 12520, 12500],
+              '1M': [11600, 11900, 11500, 11800, 12150, 12450, 12500],
+              '6M': [10200, 11100, 9800, 10600, 11500, 12300, 12500],
+              '1Y': [8800, 10200, 8400, 9400, 10800, 12100, 12500],
+              '5Y': [4200, 14500, 9200, 9800, 10600, 11800, 12500],
+              '10Y': [1200, 2800, 4200, 9200, 10600, 11800, 12500],
+              '20Y': [150, 450, 1200, 4200, 9200, 11800, 12500]
+            }
+          }
+        }
+      },
+      {
+        id: 'bp-best-of-game',
+        name: 'Best of Game',
+        era: 'WotC Promos',
+        category: 'VINTAGE',
+        released: 'Dec 2002',
+        image: 'https://images.pokemontcg.io/bp/logo.png',
+        selectedType: 'BUNDLE',
+        variants: {
+          BUNDLE: {
+            name: 'Best of Game Sealed Booster Pack Collection',
+            packCount: 4,
+            msrp: 19.99,
+            history: {
+              '1D': [825, 820, 818, 822, 825, 819, 820],
+              '7D': [795, 810, 785, 802, 815, 824, 820],
+              '1M': [740, 770, 730, 755, 785, 812, 820],
+              '6M': [610, 680, 580, 640, 715, 785, 820],
+              '1Y': [480, 580, 440, 510, 630, 760, 820],
+              '5Y': [180, 650, 390, 440, 560, 720, 820],
+              '10Y': [60, 120, 180, 390, 560, 720, 820],
+              '20Y': [20, 45, 60, 180, 390, 720, 820]
             }
           }
         }
