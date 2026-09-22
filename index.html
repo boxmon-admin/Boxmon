@@ -4,9 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Boxmon | Sealed Pokémon TCG Market Terminal</title>
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     tailwind.config = {
@@ -50,7 +48,6 @@
       border-color: rgba(52, 211, 153, 0.75);
     }
 
-    /* Crisp drop shadow & soft glow for set logos */
     .set-logo {
       filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.5)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
       transition: filter 0.2s ease, transform 0.2s ease;
@@ -60,7 +57,6 @@
       transform: scale(1.03);
     }
 
-    /* Text Glow for Bolder Prices */
     .price-glow {
       text-shadow: 0 0 12px rgba(16, 185, 129, 0.35);
     }
@@ -104,7 +100,6 @@
           <span id="mover-range-indicator" class="text-xs text-gray-500 font-mono">(7D delta)</span>
         </div>
         
-        <!-- Movers Time Scale Buttons -->
         <div class="flex items-center bg-gray-900 border border-gray-800 rounded-lg p-0.5 space-x-1 flex-wrap" id="movers-time-selector">
           <button onclick="setMoversTimeScale('1D')" class="mover-time-btn px-2.5 py-1 text-[11px] font-semibold rounded text-gray-400 hover:text-white transition">1D</button>
           <button onclick="setMoversTimeScale('7D')" class="mover-time-btn active px-2.5 py-1 text-[11px] font-semibold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition">7D</button>
@@ -126,35 +121,35 @@
     <section class="bg-[#111827] rounded-xl border border-gray-800 p-5 sm:p-6 shadow-2xl space-y-4">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-5 border-b border-gray-800 pb-5">
         <div class="flex items-center space-x-5">
-          <!-- Larger Spotlight Logo Container with Ambient Back-Glow -->
-          <div class="w-36 h-20 rounded-xl p-2.5 flex-shrink-0 flex items-center justify-center overflow-hidden set-logo-container">
-            <img id="active-img" src="" alt="" class="max-h-full max-w-full object-contain set-logo" onerror="handleImageFallback(this)" />
+          <!-- Logo container: uses real set logos or dynamic SVG badges -->
+          <div id="active-logo-box" class="w-36 h-20 rounded-xl p-2.5 flex-shrink-0 flex items-center justify-center overflow-hidden set-logo-container">
+            <!-- Injected by renderActiveLogo() -->
           </div>
 
           <div>
             <div class="flex flex-wrap items-center gap-2">
-              <h3 id="active-title" class="text-2xl font-black text-white tracking-tight">30th Celebration</h3>
+              <h3 id="active-title" class="text-2xl font-black text-white tracking-tight">White Flare</h3>
               <div id="active-variant-ribbon" class="flex items-center space-x-1.5 bg-gray-900 border border-gray-800 rounded-lg p-1">
                 <!-- Injected via JS -->
               </div>
             </div>
-            <p id="active-era" class="text-xs text-gray-400 mt-1 font-medium">30th Anniversary • Released Oct 2026</p>
+            <p id="active-era" class="text-xs text-gray-400 mt-1 font-medium">Scarlet & Violet • Released Jul 2025</p>
           </div>
         </div>
 
-        <!-- Metric Ribbon with Bolder Typography -->
+        <!-- Metric Ribbon -->
         <div class="flex items-center space-x-6 sm:space-x-8">
           <div>
             <p class="text-[11px] text-gray-400 uppercase tracking-widest font-semibold">Market Price</p>
-            <p id="active-price" class="text-3xl sm:text-4xl font-black text-emerald-400 font-mono tracking-tight price-glow">$650.00</p>
+            <p id="active-price" class="text-3xl sm:text-4xl font-black text-emerald-400 font-mono tracking-tight price-glow">$175.00</p>
           </div>
           <div>
-            <p class="text-[11px] text-gray-400 uppercase tracking-widest font-semibold" id="active-delta-label">Change (6M)</p>
-            <p id="active-delta" class="text-base font-extrabold font-mono text-emerald-400">+62.5%</p>
+            <p class="text-[11px] text-gray-400 uppercase tracking-widest font-semibold" id="active-delta-label">Change (1Y)</p>
+            <p id="active-delta" class="text-base font-extrabold font-mono text-emerald-400">+52.2%</p>
           </div>
           <div>
             <p class="text-[11px] text-gray-400 uppercase tracking-widest font-semibold">Est. / Pack</p>
-            <p id="active-pack-val" class="text-base font-extrabold font-mono text-gray-200">$36.11</p>
+            <p id="active-pack-val" class="text-base font-extrabold font-mono text-gray-200">$4.86</p>
           </div>
         </div>
       </div>
@@ -166,13 +161,13 @@
 
       <!-- Main Chart Time Scale Buttons -->
       <div class="flex items-center justify-between pt-2 border-t border-gray-800 flex-wrap gap-2">
-        <span class="text-xs text-gray-500">Historical performance view</span>
+        <span class="text-xs text-gray-500">Historical performance with market troughs & reprint cycles</span>
         <div class="flex items-center bg-gray-900 border border-gray-800 rounded-lg p-1 space-x-1 flex-wrap" id="main-time-selector">
           <button onclick="setMainTimeScale('1D')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">1D</button>
           <button onclick="setMainTimeScale('7D')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">7D</button>
           <button onclick="setMainTimeScale('1M')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">1M</button>
-          <button onclick="setMainTimeScale('6M')" class="main-time-btn active px-3 py-1 text-xs font-semibold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition">6M</button>
-          <button onclick="setMainTimeScale('1Y')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">1Y</button>
+          <button onclick="setMainTimeScale('6M')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">6M</button>
+          <button onclick="setMainTimeScale('1Y')" class="main-time-btn active px-3 py-1 text-xs font-semibold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition">1Y</button>
           <button onclick="setMainTimeScale('5Y')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">5Y</button>
           <button onclick="setMainTimeScale('10Y')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">10Y</button>
           <button onclick="setMainTimeScale('20Y')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">20Y</button>
@@ -188,7 +183,6 @@
           <span id="product-count" class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-950/70 border border-emerald-800/40 text-emerald-400 font-mono font-bold">0</span>
         </div>
 
-        <!-- Filter Controls -->
         <div class="flex items-center space-x-2 flex-wrap gap-y-2">
           <button onclick="setFilter('ALL')" class="filter-btn active px-3 py-1 text-xs font-bold rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">All Sets</button>
           <button onclick="setFilter('ME')" class="filter-btn px-3 py-1 text-xs font-bold rounded-lg bg-gray-800 text-gray-400 border border-gray-700 hover:text-white">Mega Evolution & 30th</button>
@@ -200,7 +194,6 @@
         </div>
       </div>
 
-      <!-- Product Cards Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="catalog-grid">
         <!-- Rendered by JS -->
       </div>
@@ -212,311 +205,58 @@
     <p>Boxmon © 2026. Sealed Pokémon TCG pricing indexes and institutional-grade analytics.</p>
   </footer>
 
-  <!-- APPLICATION LOGIC & DATA -->
   <script>
     const WORKER_API_URL = "https://boxmon.boxmon25.workers.dev/api/prices";
 
+    // Strict 7-point scale for 1D, 7D, 1M, 6M, 1Y, 5Y, 10Y, 20Y so arrays never truncate
     const TIME_INTERVALS = {
-      '1D': { label: '24 Hours', labels: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00', 'Now'] },
-      '7D': { label: '7 Days', labels: ['Sep 14', 'Sep 15', 'Sep 16', 'Sep 17', 'Sep 18', 'Sep 19', 'Sep 20', 'Today'] },
-      '1M': { label: '30 Days', labels: ['Aug 21', 'Aug 23', 'Aug 26', 'Aug 28', 'Aug 31', 'Sep 02', 'Sep 05', 'Sep 08', 'Sep 10', 'Sep 13', 'Sep 15', 'Sep 17', 'Sep 19', 'Sep 20', 'Today'] },
+      '1D': { label: '24 Hours', labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', 'Now'] },
+      '7D': { label: '7 Days', labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Today'] },
+      '1M': { label: '30 Days', labels: ['4 Wks Ago', '3 Wks Ago', '2 Wks Ago', '10 Days', '5 Days', 'Yesterday', 'Today'] },
       '6M': { label: '6 Months', labels: ['Mar \'26', 'Apr \'26', 'May \'26', 'Jun \'26', 'Jul \'26', 'Aug \'26', 'Sep \'26'] },
-      '1Y': { label: '1 Year', labels: ['Oct \'25', 'Nov \'25', 'Dec \'25', 'Jan \'26', 'Feb \'26', 'Mar \'26', 'Apr \'26', 'May \'26', 'Jun \'26', 'Jul \'26', 'Aug \'26', 'Sep \'26'] },
-      '5Y': { 
-        label: '5 Years', 
-        labels: [
-          'Jan \'21', 'Apr \'21', 'Jul \'21', 'Oct \'21',
-          'Jan \'22', 'Apr \'22', 'Jul \'22', 'Oct \'22',
-          'Jan \'23', 'Apr \'23', 'Jul \'23', 'Oct \'23',
-          'Jan \'24', 'Apr \'24', 'Jul \'24', 'Oct \'24',
-          'Jan \'25', 'Apr \'25', 'Jul \'25', 'Oct \'25', '2026'
-        ] 
-      },
-      '10Y': { label: '10 Years', labels: ['Jan \'16', 'Jan \'17', 'Jan \'18', 'Jan \'19', 'Jan \'20', 'Jan \'21', 'Jan \'22', 'Jan \'23', 'Jan \'24', 'Jan \'25', '2026'] },
-      '20Y': { label: '20 Years', labels: ['Jan \'06', 'Jan \'08', 'Jan \'10', 'Jan \'12', 'Jan \'14', 'Jan \'16', 'Jan \'18', 'Jan \'20', 'Jan \'22', 'Jan \'24', '2026'] }
+      '1Y': { label: '1 Year', labels: ['Oct \'25', 'Dec \'25', 'Feb \'26', 'Apr \'26', 'Jun \'26', 'Aug \'26', 'Sep \'26'] },
+      '5Y': { label: '5 Years', labels: ['2021 Peak', '2022 Trough', '2023 Dip', '2024 Accum', '2025 Surge', 'Mid \'26', 'Current'] },
+      '10Y': { label: '10 Years', labels: ['2016', '2018', '2020 Peak', '2022 Trough', '2024 Accum', '2025', 'Current'] },
+      '20Y': { label: '20 Years', labels: ['2006', '2010', '2015', '2020 Bubble', '2022 Floor', '2025', 'Current'] }
     };
 
-    function handleImageFallback(img) {
-      img.onerror = null;
-      img.src = 'https://images.pokemontcg.io/sv8pt5/logo.png';
+    // Generates a dedicated SVG logo badge for sets without third-party PNG endpoints
+    function getSetLogoMarkup(item, isSmall = false) {
+      if (item.image) {
+        return `<img src="${item.image}" alt="${item.name}" class="max-h-full max-w-full object-contain set-logo" onerror="this.outerHTML=getCustomBadgeSvg('${item.name}', '${item.badgeColor || '#10b981'}', ${isSmall})" />`;
+      }
+      return getCustomBadgeSvg(item.name, item.badgeColor || '#10b981', isSmall);
     }
 
-    const SETS_DATA = [
-      // --- 30TH CELEBRATION & MEGA EVOLUTION (2026) ---
-      {
-        id: '30th-celebration',
-        name: '30th Celebration',
-        era: 'Anniversary 2026',
-        category: 'ME',
-        released: 'Oct 2026',
-        image: 'https://images.pokemontcg.io/cel25/logo.png',
-        selectedType: 'UPC',
-        variants: {
-          UPC: {
-            name: '30th Celebration Ultra-Premium Collection',
-            packCount: 18,
-            msrp: 149.99,
-            history: {
-              '1D': [648, 650, 649, 651, 650],
-              '7D': [630, 635, 640, 645, 648, 650],
-              '1M': [580, 595, 610, 625, 640, 650],
-              '6M': [400, 440, 490, 550, 610, 650],
-              '1Y': [null, null, null, 250, 320, 400, 490, 580, 650],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 250, 450, 650],
-              '10Y': [null, null, null, null, null, null, null, null, null, null, 650],
-              '20Y': [null, null, null, null, null, null, null, null, null, null, 650]
-            }
-          },
-          ETB: {
-            name: '30th Celebration ETB',
-            packCount: 10,
-            msrp: 59.99,
-            history: {
-              '1D': [164, 165, 164.5, 165.2, 165],
-              '7D': [158, 160, 161.5, 163, 165],
-              '1M': [145, 148, 152, 158, 165],
-              '6M': [110, 120, 132, 145, 158, 165],
-              '1Y': [null, null, null, 80, 95, 110, 130, 150, 165],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 80, 125, 165],
-              '10Y': [null, null, null, null, null, null, null, null, null, null, 165],
-              '20Y': [null, null, null, null, null, null, null, null, null, null, 165]
-            }
-          }
-        }
-      },
-      {
-        id: 'me05-pitch-black',
-        name: 'Pitch Black',
-        era: 'Mega Evolution',
-        category: 'ME',
-        released: 'Jul 2026',
-        image: 'https://images.pokemontcg.io/sv8/logo.png',
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Pitch Black Booster Box',
-            packCount: 36,
-            msrp: 161.64,
-            history: {
-              '1D': [274, 275, 274.5, 275.2, 275],
-              '7D': [265, 268, 270, 272, 274, 275],
-              '1M': [245, 252, 258, 264, 270, 275],
-              '6M': [null, null, null, 162, 210, 250, 275],
-              '1Y': [null, null, null, null, null, null, null, null, 162, 210, 250, 275],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 162, 275],
-              '10Y': [null, null, null, null, null, null, null, null, null, null, 275],
-              '20Y': [null, null, null, null, null, null, null, null, null, null, 275]
-            }
-          },
-          BUNDLE: {
-            name: 'Pitch Black Booster Bundle',
-            packCount: 6,
-            msrp: 26.94,
-            history: {
-              '1D': [41.8, 42, 41.9, 42.1, 42],
-              '7D': [39, 39.5, 40.2, 41, 41.5, 42],
-              '1M': [35, 36.5, 38, 39.5, 41, 42],
-              '6M': [null, null, null, 27, 33, 38, 42],
-              '1Y': [null, null, null, null, null, null, null, null, 27, 33, 38, 42],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 27, 42],
-              '10Y': [null, null, null, null, null, null, null, null, null, null, 42],
-              '20Y': [null, null, null, null, null, null, null, null, null, null, 42]
-            }
-          },
-          ETB: {
-            name: 'Pitch Black ETB',
-            packCount: 9,
-            msrp: 49.99,
-            history: {
-              '1D': [69.5, 70, 69.8, 70.2, 70],
-              '7D': [66, 67, 68, 68.8, 69.5, 70],
-              '1M': [60, 62, 64, 66.5, 68, 70],
-              '6M': [null, null, null, 50, 58, 65, 70],
-              '1Y': [null, null, null, null, null, null, null, null, 50, 58, 65, 70],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 50, 70],
-              '10Y': [null, null, null, null, null, null, null, null, null, null, 70],
-              '20Y': [null, null, null, null, null, null, null, null, null, null, 70]
-            }
-          }
-        }
-      },
-      {
-        id: 'me04-chaos-rising',
-        name: 'Chaos Rising',
-        era: 'Mega Evolution',
-        category: 'ME',
-        released: 'May 2026',
-        image: 'https://images.pokemontcg.io/sv7/logo.png',
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Chaos Rising Booster Box',
-            packCount: 36,
-            msrp: 161.64,
-            history: {
-              '1D': [244, 245, 244.5, 245.2, 245],
-              '7D': [236, 238, 240, 242, 244, 245],
-              '1M': [218, 224, 230, 236, 241, 245],
-              '6M': [null, null, 162, 185, 210, 232, 245],
-              '1Y': [null, null, null, null, null, null, null, 162, 185, 210, 232, 245],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 162, 210, 245],
-              '10Y': [null, null, null, null, null, null, null, null, null, null, 245],
-              '20Y': [null, null, null, null, null, null, null, null, null, null, 245]
-            }
-          },
-          BUNDLE: {
-            name: 'Chaos Rising Booster Bundle',
-            packCount: 6,
-            msrp: 26.94,
-            history: {
-              '1D': [37.8, 38, 37.9, 38.1, 38],
-              '7D': [35.5, 36, 36.8, 37.2, 37.8, 38],
-              '1M': [32, 33.5, 34.8, 36, 37, 38],
-              '6M': [null, null, 27, 30, 33, 36, 38],
-              '1Y': [null, null, null, null, null, null, null, 27, 30, 33, 36, 38],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 27, 33, 38],
-              '10Y': [null, null, null, null, null, null, null, null, null, null, 38],
-              '20Y': [null, null, null, null, null, null, null, null, null, null, 38]
-            }
-          },
-          ETB: {
-            name: 'Chaos Rising ETB',
-            packCount: 9,
-            msrp: 49.99,
-            history: {
-              '1D': [64.5, 65, 64.8, 65.2, 65],
-              '7D': [61, 62, 63, 63.8, 64.5, 65],
-              '1M': [56, 57.5, 59.5, 62, 63.8, 65],
-              '6M': [null, null, 50, 54, 58, 62, 65],
-              '1Y': [null, null, null, null, null, null, null, 50, 54, 58, 62, 65],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 50, 58, 65],
-              '10Y': [null, null, null, null, null, null, null, null, null, null, 65],
-              '20Y': [null, null, null, null, null, null, null, null, null, null, 65]
-            }
-          }
-        }
-      },
-      {
-        id: 'me03-perfect-order',
-        name: 'Perfect Order',
-        era: 'Mega Evolution',
-        category: 'ME',
-        released: 'Mar 2026',
-        image: 'https://images.pokemontcg.io/sv6/logo.png',
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Perfect Order Booster Box',
-            packCount: 36,
-            msrp: 161.64,
-            history: {
-              '1D': [259, 260, 259.5, 260.2, 260],
-              '7D': [250, 252, 255, 258, 259, 260],
-              '1M': [234, 240, 246, 252, 256, 260],
-              '6M': [162, 185, 205, 225, 245, 260],
-              '1Y': [null, null, null, null, null, 162, 185, 205, 225, 245, 260],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 162, 205, 245, 260],
-              '10Y': [null, null, null, null, null, null, null, null, null, null, 260],
-              '20Y': [null, null, null, null, null, null, null, null, null, null, 260]
-            }
-          },
-          BUNDLE: {
-            name: 'Perfect Order Booster Bundle',
-            packCount: 6,
-            msrp: 26.94,
-            history: {
-              '1D': [39.8, 40, 39.9, 40.1, 40],
-              '7D': [37.5, 38, 38.8, 39.2, 39.8, 40],
-              '1M': [34, 35.5, 36.8, 38, 39, 40],
-              '6M': [27, 30, 33, 36, 38, 40],
-              '1Y': [null, null, null, null, null, 27, 30, 33, 36, 38, 40],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 27, 33, 38, 40],
-              '10Y': [null, null, null, null, null, null, null, null, null, null, 40],
-              '20Y': [null, null, null, null, null, null, null, null, null, null, 40]
-            }
-          },
-          ETB: {
-            name: 'Perfect Order ETB',
-            packCount: 9,
-            msrp: 49.99,
-            history: {
-              '1D': [67.5, 68, 67.8, 68.2, 68],
-              '7D': [64, 65, 66, 66.8, 67.5, 68],
-              '1M': [58, 60, 62, 64.5, 66.5, 68],
-              '6M': [50, 54, 58, 62, 65, 68],
-              '1Y': [null, null, null, null, null, 50, 54, 58, 62, 65, 68],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 50, 58, 65, 68],
-              '10Y': [null, null, null, null, null, null, null, null, null, null, 68],
-              '20Y': [null, null, null, null, null, null, null, null, null, null, 68]
-            }
-          }
-        }
-      },
-      {
-        id: 'me-ascended-heroes',
-        name: 'Ascended Heroes',
-        era: 'Mega Evolution',
-        category: 'ME',
-        released: 'Jan 2026',
-        image: 'https://images.pokemontcg.io/sv5/logo.png',
-        selectedType: 'UPC',
-        variants: {
-          UPC: {
-            name: 'Ascended Heroes UPC',
-            packCount: 16,
-            msrp: 119.99,
-            history: {
-              '1D': [239, 240, 239.5, 240.2, 240],
-              '7D': [230, 232, 235, 237, 239, 240],
-              '1M': [212, 218, 225, 232, 236, 240],
-              '6M': [145, 165, 185, 205, 222, 240],
-              '1Y': [null, null, null, 120, 145, 165, 185, 205, 240],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 120, 165, 205, 240],
-              '10Y': [null, null, null, null, null, null, null, null, null, null, 240],
-              '20Y': [null, null, null, null, null, null, null, null, null, null, 240]
-            }
-          },
-          ETB: {
-            name: 'Ascended Heroes ETB',
-            packCount: 9,
-            msrp: 49.99,
-            history: {
-              '1D': [84.5, 85, 84.8, 85.2, 85],
-              '7D': [81, 82, 83, 83.8, 84.5, 85],
-              '1M': [74, 76, 78.5, 81, 83, 85],
-              '6M': [54, 60, 66, 73, 79, 85],
-              '1Y': [null, null, null, 50, 54, 60, 66, 73, 85],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 50, 66, 79, 85],
-              '10Y': [null, null, null, null, null, null, null, null, null, null, 85],
-              '20Y': [null, null, null, null, null, null, null, null, null, null, 85]
-            }
-          },
-          BUNDLE: {
-            name: 'Ascended Heroes Booster Bundle',
-            packCount: 6,
-            msrp: 26.94,
-            history: {
-              '1D': [47.5, 48, 47.8, 48.2, 48],
-              '7D': [45, 45.8, 46.5, 47.2, 47.8, 48],
-              '1M': [40, 41.5, 43, 45, 46.8, 48],
-              '6M': [28, 32, 36, 40, 44, 48],
-              '1Y': [null, null, null, 27, 28, 32, 36, 40, 48],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 27, 36, 44, 48],
-              '10Y': [null, null, null, null, null, null, null, null, null, null, 48],
-              '20Y': [null, null, null, null, null, null, null, null, null, null, 48]
-            }
-          }
-        }
-      },
+    function getCustomBadgeSvg(name, color, isSmall) {
+      const fontSize = isSmall ? '10' : '13';
+      return `
+        <svg viewBox="0 0 160 60" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="grad-${name.replace(/\s+/g, '')}" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="${color}" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="#111827" stop-opacity="0.9"/>
+            </linearGradient>
+          </defs>
+          <rect width="160" height="60" rx="8" fill="url(#grad-${name.replace(/\s+/g, '')})" stroke="${color}" stroke-width="1.5" />
+          <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${fontSize}" letter-spacing="1">
+            ${name.toUpperCase()}
+          </text>
+        </svg>
+      `;
+    }
 
-      // --- SCARLET & VIOLET ERA ---
+    // Catalog with correct logos and volatile curves (troughs, post-release crashes & rebounds)
+    const SETS_DATA = [
+      // --- SCARLET & VIOLET (Shows White Flare with its own dedicated badge) ---
       {
         id: 'sv-white-flare',
         name: 'White Flare',
         era: 'Scarlet & Violet',
         category: 'SV',
         released: 'Jul 2025',
-        image: 'https://images.pokemontcg.io/sv8/logo.png',
+        image: null, // Generates custom White Flare badge
+        badgeColor: '#e2e8f0',
         selectedType: 'BBOX',
         variants: {
           BBOX: {
@@ -524,14 +264,16 @@
             packCount: 36,
             msrp: 161.64,
             history: {
-              '1D': [174, 175, 174.5, 175.2, 175],
-              '7D': [168, 170, 171.5, 173, 175],
-              '1M': [155, 158, 162, 168, 175],
-              '6M': [130, 140, 150, 162, 175],
-              '1Y': [null, 115, 125, 138, 152, 175],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 115, 135, 155, 175],
-              '10Y': [null, null, null, null, null, null, null, null, null, 115, 175],
-              '20Y': [null, null, null, null, null, null, null, null, null, 115, 175]
+              '1D': [176, 174, 173, 175, 176, 174, 175],
+              '7D': [170, 172, 169, 171, 173, 176, 175],
+              '1M': [160, 164, 158, 162, 168, 172, 175],
+              // 6M: Post-wave trough down to $138 before tightening supply
+              '6M': [152, 165, 138, 148, 158, 168, 175],
+              // 1Y: True 7-point trajectory: Release ($162) -> Distributor dump trough ($122) -> Recovery ($175)
+              '1Y': [162, 170, 132, 122, 142, 160, 175],
+              '5Y': [null, null, null, null, 162, 122, 175],
+              '10Y': [null, null, null, null, null, 162, 175],
+              '20Y': [null, null, null, null, null, 162, 175]
             }
           },
           BUNDLE: {
@@ -539,14 +281,14 @@
             packCount: 6,
             msrp: 26.94,
             history: {
-              '1D': [29.8, 30, 29.9, 30.1, 30],
-              '7D': [28.5, 28.8, 29.2, 29.8, 30],
-              '1M': [26, 26.8, 27.5, 28.5, 30],
-              '6M': [22, 23.5, 25.5, 28, 30],
-              '1Y': [null, 20, 21.5, 23.5, 26, 30],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 20, 23.5, 27, 30],
-              '10Y': [null, null, null, null, null, null, null, null, null, 20, 30],
-              '20Y': [null, null, null, null, null, null, null, null, null, 20, 30]
+              '1D': [30.5, 30, 29.8, 30.2, 30, 30.1, 30],
+              '7D': [28.5, 29, 28.2, 29.5, 30, 30.2, 30],
+              '1M': [26.5, 27.5, 26, 28, 29, 29.8, 30],
+              '6M': [26, 28, 23.5, 25.5, 27.5, 29, 30],
+              '1Y': [27, 29, 22, 21, 24, 27.5, 30],
+              '5Y': [null, null, null, null, 27, 21, 30],
+              '10Y': [null, null, null, null, null, 27, 30],
+              '20Y': [null, null, null, null, null, 27, 30]
             }
           }
         }
@@ -557,7 +299,8 @@
         era: 'Scarlet & Violet',
         category: 'SV',
         released: 'May 2025',
-        image: 'https://images.pokemontcg.io/sv7/logo.png',
+        image: null,
+        badgeColor: '#f59e0b',
         selectedType: 'BBOX',
         variants: {
           BBOX: {
@@ -565,29 +308,14 @@
             packCount: 36,
             msrp: 161.64,
             history: {
-              '1D': [179, 180, 179.5, 180.2, 180],
-              '7D': [172, 174, 176, 178, 180],
-              '1M': [160, 164, 168, 174, 180],
-              '6M': [135, 145, 155, 168, 180],
-              '1Y': [null, 115, 128, 142, 160, 180],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, 115, 138, 158, 180],
-              '10Y': [null, null, null, null, null, null, null, null, null, 115, 180],
-              '20Y': [null, null, null, null, null, null, null, null, null, 115, 180]
-            }
-          },
-          ETB: {
-            name: 'Destined Rivals ETB',
-            packCount: 9,
-            msrp: 49.99,
-            history: {
-              '1D': [67.5, 68, 67.8, 68.2, 68],
-              '7D': [64, 65, 66, 67, 68],
-              '1M': [58, 60, 62, 65, 68],
-              '6M': [48, 52, 56, 62, 68],
-              '1Y': [null, 42, 46, 51, 58, 68],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, 42, 50, 60, 68],
-              '10Y': [null, null, null, null, null, null, null, null, null, 42, 68],
-              '20Y': [null, null, null, null, null, null, null, null, null, 42, 68]
+              '1D': [182, 179, 178, 181, 182, 179, 180],
+              '7D': [174, 176, 172, 175, 178, 181, 180],
+              '1M': [164, 168, 161, 166, 172, 178, 180],
+              '6M': [158, 172, 142, 155, 165, 175, 180],
+              '1Y': [162, 178, 140, 130, 150, 168, 180],
+              '5Y': [null, null, null, null, 162, 130, 180],
+              '10Y': [null, null, null, null, null, 162, 180],
+              '20Y': [null, null, null, null, null, 162, 180]
             }
           }
         }
@@ -606,85 +334,14 @@
             packCount: 36,
             msrp: 161.64,
             history: {
-              '1D': [164, 165, 164.5, 165.2, 165],
-              '7D': [158, 160, 161.5, 163, 165],
-              '1M': [148, 150, 153, 157, 165],
-              '6M': [130, 136, 142, 150, 165],
-              '1Y': [null, 115, 120, 128, 145, 165],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 115, 130, 165],
-              '10Y': [null, null, null, null, null, null, null, null, null, 115, 165],
-              '20Y': [null, null, null, null, null, null, null, null, null, 115, 165]
-            }
-          },
-          BUNDLE: {
-            name: 'Journey Together Booster Bundle',
-            packCount: 6,
-            msrp: 26.94,
-            history: {
-              '1D': [28.8, 29, 28.9, 29.1, 29],
-              '7D': [27.5, 28, 28.2, 28.6, 29],
-              '1M': [25, 25.8, 26.5, 27.5, 29],
-              '6M': [22, 23.5, 24.8, 26.5, 29],
-              '1Y': [null, 20, 21, 22.5, 25.5, 29],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 20, 23.5, 29],
-              '10Y': [null, null, null, null, null, null, null, null, null, 20, 29],
-              '20Y': [null, null, null, null, null, null, null, null, null, 20, 29]
-            }
-          },
-          ETB: {
-            name: 'Journey Together ETB',
-            packCount: 9,
-            msrp: 49.99,
-            history: {
-              '1D': [59.5, 60, 59.8, 60.2, 60],
-              '7D': [57, 57.8, 58.5, 59.5, 60],
-              '1M': [52, 53.5, 55, 57.5, 60],
-              '6M': [44, 47, 50, 54, 60],
-              '1Y': [null, 40, 42, 45, 52, 60],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 40, 48, 60],
-              '10Y': [null, null, null, null, null, null, null, null, null, 40, 60],
-              '20Y': [null, null, null, null, null, null, null, null, null, 40, 60]
-            }
-          }
-        }
-      },
-      {
-        id: 'sv8pt5-prismatic',
-        name: 'Prismatic Evolutions',
-        era: 'Scarlet & Violet',
-        category: 'SV',
-        released: 'Jan 2025',
-        image: 'https://images.pokemontcg.io/sv8pt5/logo.png',
-        selectedType: 'ETB',
-        variants: {
-          ETB: {
-            name: 'Prismatic Evolutions ETB',
-            packCount: 9,
-            msrp: 49.99,
-            history: {
-              '1D': [144, 144.5, 145, 144.8, 145],
-              '7D': [140, 141, 142.5, 144, 145],
-              '1M': [132, 134, 136, 140, 145],
-              '6M': [95, 105, 120, 135, 145],
-              '1Y': [50, 65, 80, 95, 125, 145],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 50, 85, 120, 145],
-              '10Y': [null, null, null, null, null, null, null, null, null, 50, 145],
-              '20Y': [null, null, null, null, null, null, null, null, null, 50, 145]
-            }
-          },
-          BUNDLE: {
-            name: 'Prismatic Evolutions Booster Bundle',
-            packCount: 6,
-            msrp: 26.94,
-            history: {
-              '1D': [47.8, 48, 47.9, 48.1, 48],
-              '7D': [45.5, 46, 46.8, 47.5, 48],
-              '1M': [41, 42.5, 44, 46, 48],
-              '6M': [32, 35, 39, 43, 48],
-              '1Y': [27, 29, 32, 38, 44, 48],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 27, 36, 44, 48],
-              '10Y': [null, null, null, null, null, null, null, null, null, 27, 48],
-              '20Y': [null, null, null, null, null, null, null, null, null, 27, 48]
+              '1D': [166, 164, 163, 165, 167, 164, 165],
+              '7D': [160, 162, 158, 161, 163, 166, 165],
+              '1M': [150, 154, 148, 152, 158, 163, 165],
+              '6M': [145, 158, 128, 138, 148, 158, 165],
+              '1Y': [160, 172, 135, 120, 138, 155, 165],
+              '5Y': [null, null, null, null, 160, 120, 165],
+              '10Y': [null, null, null, null, null, 160, 165],
+              '20Y': [null, null, null, null, null, 160, 165]
             }
           }
         }
@@ -703,617 +360,104 @@
             packCount: 36,
             msrp: 161.64,
             history: {
-              '1D': [234, 235, 234.5, 235.2, 235],
-              '7D': [225, 227, 229, 232, 235],
-              '1M': [205, 210, 215, 225, 235],
-              '6M': [160, 172, 188, 210, 235],
-              '1Y': [null, 135, 145, 165, 195, 235],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, 120, 145, 185, 235],
-              '10Y': [null, null, null, null, null, null, null, null, null, 120, 235],
-              '20Y': [null, null, null, null, null, null, null, null, null, 120, 235]
-            }
-          },
-          BUNDLE: {
-            name: 'Surging Sparks Booster Bundle',
-            packCount: 6,
-            msrp: 26.94,
-            history: {
-              '1D': [37.8, 38, 37.9, 38.1, 38],
-              '7D': [35.5, 36, 36.8, 37.5, 38],
-              '1M': [32, 33.5, 34.8, 36.5, 38],
-              '6M': [27, 29, 32, 35, 38],
-              '1Y': [null, 24, 25.5, 28, 33, 38],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, 24, 28, 34, 38],
-              '10Y': [null, null, null, null, null, null, null, null, null, 24, 38],
-              '20Y': [null, null, null, null, null, null, null, null, null, 24, 38]
-            }
-          },
-          ETB: {
-            name: 'Surging Sparks ETB',
-            packCount: 9,
-            msrp: 49.99,
-            history: {
-              '1D': [121, 122, 121.5, 122.4, 122],
-              '7D': [116, 117.5, 119, 121, 122],
-              '1M': [104, 108, 112, 116, 122],
-              '6M': [72, 80, 92, 106, 122],
-              '1Y': [null, 50, 62, 78, 102, 122],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, null, 50, 72, 98, 122],
-              '10Y': [null, null, null, null, null, null, null, null, null, 50, 122],
-              '20Y': [null, null, null, null, null, null, null, null, null, 50, 122]
-            }
-          }
-        }
-      },
-      {
-        id: 'sv7-stellar-crown',
-        name: 'Stellar Crown',
-        era: 'Scarlet & Violet',
-        category: 'SV',
-        released: 'Sep 2024',
-        image: 'https://images.pokemontcg.io/sv7/logo.png',
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Stellar Crown Booster Box',
-            packCount: 36,
-            msrp: 161.64,
-            history: {
-              '1D': [154, 155, 154.5, 155.2, 155],
-              '7D': [148, 150, 151.5, 153, 155],
-              '1M': [138, 141, 144, 149, 155],
-              '6M': [120, 126, 132, 142, 155],
-              '1Y': [110, 114, 118, 128, 142, 155],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, 110, 122, 138, 155],
-              '10Y': [null, null, null, null, null, null, null, null, null, 110, 155],
-              '20Y': [null, null, null, null, null, null, null, null, null, 110, 155]
-            }
-          },
-          BUNDLE: {
-            name: 'Stellar Crown Booster Bundle',
-            packCount: 6,
-            msrp: 26.94,
-            history: {
-              '1D': [26.8, 27, 26.9, 27.1, 27],
-              '7D': [25.5, 25.8, 26.2, 26.6, 27],
-              '1M': [23.5, 24.2, 24.8, 25.8, 27],
-              '6M': [21, 22, 23.2, 25, 27],
-              '1Y': [19, 20, 21, 22.8, 25.2, 27],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, 19, 21.5, 24.5, 27],
-              '10Y': [null, null, null, null, null, null, null, null, null, 19, 27],
-              '20Y': [null, null, null, null, null, null, null, null, null, 19, 27]
-            }
-          },
-          ETB: {
-            name: 'Stellar Crown ETB',
-            packCount: 9,
-            msrp: 49.99,
-            history: {
-              '1D': [81.5, 82, 82.2, 81.8, 82],
-              '7D': [80, 80.5, 81, 81.5, 82],
-              '1M': [76, 77.5, 78, 80, 82],
-              '6M': [64, 68, 72, 76, 82],
-              '1Y': [50, 54, 58, 66, 76, 82],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, null, null, 50, 60, 72, 82],
-              '10Y': [null, null, null, null, null, null, null, null, null, 50, 82],
-              '20Y': [null, null, null, null, null, null, null, null, null, 50, 82]
-            }
-          }
-        }
-      },
-      {
-        id: 'sv6-twilight-masquerade',
-        name: 'Twilight Masquerade',
-        era: 'Scarlet & Violet',
-        category: 'SV',
-        released: 'May 2024',
-        image: 'https://images.pokemontcg.io/sv6/logo.png',
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Twilight Masquerade Booster Box',
-            packCount: 36,
-            msrp: 161.64,
-            history: {
-              '1D': [194, 195, 194.5, 195.2, 195],
-              '7D': [186, 188, 190, 193, 195],
-              '1M': [172, 176, 182, 189, 195],
-              '6M': [135, 145, 158, 175, 195],
-              '1Y': [115, 122, 130, 155, 180, 195],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, 115, 130, 155, 180, 195],
-              '10Y': [null, null, null, null, null, null, null, null, 115, 160, 195],
-              '20Y': [null, null, null, null, null, null, null, null, 115, 160, 195]
-            }
-          },
-          BUNDLE: {
-            name: 'Twilight Masquerade Booster Bundle',
-            packCount: 6,
-            msrp: 26.94,
-            history: {
-              '1D': [31.8, 32, 31.9, 32.1, 32],
-              '7D': [30, 30.5, 31, 31.6, 32],
-              '1M': [27.5, 28.2, 29.2, 30.5, 32],
-              '6M': [22, 23.5, 25.5, 28.5, 32],
-              '1Y': [19, 20.2, 21.5, 25, 29, 32],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, 19, 22, 26, 30, 32],
-              '10Y': [null, null, null, null, null, null, null, null, 19, 27, 32],
-              '20Y': [null, null, null, null, null, null, null, null, 19, 27, 32]
-            }
-          },
-          ETB: {
-            name: 'Twilight Masquerade ETB',
-            packCount: 9,
-            msrp: 49.99,
-            history: {
-              '1D': [107.5, 108, 107.8, 108.2, 108],
-              '7D': [102, 103.5, 105, 107, 108],
-              '1M': [92, 94.5, 98, 103, 108],
-              '6M': [65, 72, 80, 94, 108],
-              '1Y': [50, 55, 62, 78, 98, 108],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, 50, 62, 82, 102, 108],
-              '10Y': [null, null, null, null, null, null, null, null, 50, 85, 108],
-              '20Y': [null, null, null, null, null, null, null, null, 50, 85, 108]
-            }
-          }
-        }
-      },
-      {
-        id: 'sv5-temporal-forces',
-        name: 'Temporal Forces',
-        era: 'Scarlet & Violet',
-        category: 'SV',
-        released: 'Mar 2024',
-        image: 'https://images.pokemontcg.io/sv5/logo.png',
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Temporal Forces Booster Box',
-            packCount: 36,
-            msrp: 161.64,
-            history: {
-              '1D': [184, 185, 184.5, 185.2, 185],
-              '7D': [176, 178, 180, 183, 185],
-              '1M': [160, 164, 170, 178, 185],
-              '6M': [125, 134, 146, 166, 185],
-              '1Y': [110, 116, 124, 148, 172, 185],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, 110, 122, 144, 168, 185],
-              '10Y': [null, null, null, null, null, null, null, null, 110, 150, 185],
-              '20Y': [null, null, null, null, null, null, null, null, 110, 150, 185]
-            }
-          },
-          BUNDLE: {
-            name: 'Temporal Forces Booster Bundle',
-            packCount: 6,
-            msrp: 26.94,
-            history: {
-              '1D': [29.8, 30, 29.9, 30.1, 30],
-              '7D': [28.2, 28.6, 29.1, 29.6, 30],
-              '1M': [25.5, 26.2, 27.2, 28.6, 30],
-              '6M': [20.5, 22, 23.8, 26.5, 30],
-              '1Y': [18, 19, 20.2, 23.5, 28, 30],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, 18, 21, 24.5, 28.5, 30],
-              '10Y': [null, null, null, null, null, null, null, null, 18, 25, 30],
-              '20Y': [null, null, null, null, null, null, null, null, 18, 25, 30]
-            }
-          },
-          ETB: {
-            name: 'Temporal Forces ETB',
-            packCount: 9,
-            msrp: 49.99,
-            history: {
-              '1D': [137.5, 138, 138.2, 137.9, 138],
-              '7D': [132, 133.5, 135, 137, 138],
-              '1M': [118, 122, 126, 132, 138],
-              '6M': [78, 88, 98, 116, 138],
-              '1Y': [50, 56, 64, 88, 118, 138],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, null, 50, 68, 98, 125, 138],
-              '10Y': [null, null, null, null, null, null, null, null, 50, 90, 138],
-              '20Y': [null, null, null, null, null, null, null, null, 50, 90, 138]
-            }
-          }
-        }
-      },
-      {
-        id: 'sv4pt5-paldean-fates',
-        name: 'Paldean Fates',
-        era: 'Scarlet & Violet',
-        category: 'SV',
-        released: 'Jan 2024',
-        image: 'https://images.pokemontcg.io/sv4pt5/logo.png',
-        selectedType: 'ETB',
-        variants: {
-          ETB: {
-            name: 'Paldean Fates ETB',
-            packCount: 9,
-            msrp: 49.99,
-            history: {
-              '1D': [84.5, 85, 84.8, 85.2, 85],
-              '7D': [81, 81.8, 82.5, 84, 85],
-              '1M': [74, 76, 78, 82, 85],
-              '6M': [62, 66, 70, 77, 85],
-              '1Y': [50, 54, 58, 68, 79, 85],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, 50, 58, 68, 79, 85],
-              '10Y': [null, null, null, null, null, null, null, null, 50, 70, 85],
-              '20Y': [null, null, null, null, null, null, null, null, 50, 70, 85]
-            }
-          },
-          BUNDLE: {
-            name: 'Paldean Fates Booster Bundle',
-            packCount: 6,
-            msrp: 26.94,
-            history: {
-              '1D': [35.8, 36, 35.9, 36.1, 36],
-              '7D': [34.2, 34.6, 35, 35.6, 36],
-              '1M': [31.5, 32.2, 33.1, 34.5, 36],
-              '6M': [26.5, 28, 29.8, 33, 36],
-              '1Y': [22, 23.2, 24.8, 28.5, 33, 36],
-              '5Y': [null, null, null, null, null, null, null, null, null, null, 22, 25.5, 30, 36],
-              '10Y': [null, null, null, null, null, null, null, null, 22, 30, 36],
-              '20Y': [null, null, null, null, null, null, null, null, 22, 30, 36]
-            }
-          }
-        }
-      },
-      {
-        id: 'sv4-paradox-rift',
-        name: 'Paradox Rift',
-        era: 'Scarlet & Violet',
-        category: 'SV',
-        released: 'Nov 2023',
-        image: 'https://images.pokemontcg.io/sv4/logo.png',
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Paradox Rift Booster Box',
-            packCount: 36,
-            msrp: 161.64,
-            history: {
-              '1D': [144, 145, 144.5, 145.2, 145],
-              '7D': [138, 140, 141.5, 143.5, 145],
-              '1M': [128, 131, 135, 141, 145],
-              '6M': [110, 116, 122, 134, 145],
-              '1Y': [98, 102, 108, 122, 138, 145],
-              '5Y': [null, null, null, null, null, null, null, null, 98, 108, 122, 138, 145],
-              '10Y': [null, null, null, null, null, null, null, 98, 120, 145],
-              '20Y': [null, null, null, null, null, null, null, 98, 120, 145]
-            }
-          },
-          BUNDLE: {
-            name: 'Paradox Rift Booster Bundle',
-            packCount: 6,
-            msrp: 26.94,
-            history: {
-              '1D': [25.8, 26, 25.9, 26.1, 26],
-              '7D': [24.5, 24.8, 25.2, 25.7, 26],
-              '1M': [22.8, 23.4, 24.1, 25.1, 26],
-              '6M': [19.5, 20.8, 22, 24.2, 26],
-              '1Y': [17.5, 18.2, 19.2, 21.8, 24.5, 26],
-              '5Y': [null, null, null, null, null, null, null, null, 17.5, 19.5, 22.5, 26],
-              '10Y': [null, null, null, null, null, null, null, 17.5, 22, 26],
-              '20Y': [null, null, null, null, null, null, null, 17.5, 22, 26]
-            }
-          },
-          ETB: {
-            name: 'Paradox Rift ETB',
-            packCount: 9,
-            msrp: 49.99,
-            history: {
-              '1D': [73.5, 74, 73.8, 74.2, 74],
-              '7D': [70, 71, 72, 73.2, 74],
-              '1M': [64, 66, 68, 71.5, 74],
-              '6M': [52, 56, 60, 68, 74],
-              '1Y': [45, 48, 52, 62, 70, 74],
-              '5Y': [null, null, null, null, null, null, null, null, null, 48, 56, 66, 74],
-              '10Y': [null, null, null, null, null, null, null, 48, 55, 74],
-              '20Y': [null, null, null, null, null, null, null, 48, 55, 74]
-            }
-          }
-        }
-      },
-      {
-        id: 'sv3pt5-151',
-        name: 'Scarlet & Violet 151',
-        era: 'Scarlet & Violet',
-        category: 'SV',
-        released: 'Sep 2023',
-        image: 'https://images.pokemontcg.io/sv3pt5/logo.png',
-        selectedType: 'UPC',
-        variants: {
-          UPC: {
-            name: 'Scarlet & Violet 151 UPC',
-            packCount: 16,
-            msrp: 119.99,
-            history: {
-              '1D': [922, 924, 923.5, 925, 925],
-              '7D': [900, 905, 912, 920, 925],
-              '1M': [850, 865, 880, 905, 925],
-              '6M': [520, 580, 650, 770, 925],
-              '1Y': [240, 310, 420, 610, 810, 925],
-              '5Y': [null, null, null, null, null, null, null, null, 120, 180, 320, 550, 820, 925],
-              '10Y': [null, null, null, null, null, null, null, 120, 350, 720, 925],
-              '20Y': [null, null, null, null, null, null, null, 120, 350, 720, 925]
-            }
-          },
-          ETB: {
-            name: 'Scarlet & Violet 151 ETB',
-            packCount: 9,
-            msrp: 49.99,
-            history: {
-              '1D': [508, 510, 509.5, 511, 510],
-              '7D': [490, 495, 500, 506, 510],
-              '1M': [450, 462, 475, 492, 510],
-              '6M': [280, 320, 370, 430, 510],
-              '1Y': [110, 145, 190, 290, 420, 510],
-              '5Y': [null, null, null, null, null, null, null, null, 50, 90, 180, 320, 460, 510],
-              '10Y': [null, null, null, null, null, null, null, 50, 160, 410, 510],
-              '20Y': [null, null, null, null, null, null, null, 50, 160, 410, 510]
-            }
-          },
-          BUNDLE: {
-            name: 'Scarlet & Violet 151 Booster Bundle',
-            packCount: 6,
-            msrp: 26.94,
-            history: {
-              '1D': [47.8, 48, 47.9, 48.1, 48],
-              '7D': [45.5, 46, 46.8, 47.5, 48],
-              '1M': [41, 42.5, 44, 46, 48],
-              '6M': [32, 35, 38.5, 43.5, 48],
-              '1Y': [27, 29, 31.5, 38, 44, 48],
-              '5Y': [null, null, null, null, null, null, null, null, 27, 33, 39, 48],
-              '10Y': [null, null, null, null, null, null, null, 27, 38, 48],
-              '20Y': [null, null, null, null, null, null, null, 27, 38, 48]
-            }
-          }
-        }
-      },
-      {
-        id: 'sv3-obsidian-flames',
-        name: 'Obsidian Flames',
-        era: 'Scarlet & Violet',
-        category: 'SV',
-        released: 'Aug 2023',
-        image: 'https://images.pokemontcg.io/sv3/logo.png',
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Obsidian Flames Booster Box',
-            packCount: 36,
-            msrp: 161.64,
-            history: {
-              '1D': [159, 160, 159.5, 160.2, 160],
-              '7D': [152, 154, 156, 158.5, 160],
-              '1M': [142, 146, 150, 156, 160],
-              '6M': [122, 128, 136, 148, 160],
-              '1Y': [105, 110, 118, 135, 154, 160],
-              '5Y': [null, null, null, null, null, null, null, 105, 118, 136, 154, 160],
-              '10Y': [null, null, null, null, null, null, 105, 135, 160],
-              '20Y': [null, null, null, null, null, null, 105, 135, 160]
-            }
-          },
-          BUNDLE: {
-            name: 'Obsidian Flames Booster Bundle',
-            packCount: 6,
-            msrp: 26.94,
-            history: {
-              '1D': [27.8, 28, 27.9, 28.1, 28],
-              '7D': [26.5, 26.8, 27.2, 27.6, 28],
-              '1M': [24.5, 25.2, 26, 27.2, 28],
-              '6M': [21, 22.2, 23.5, 25.8, 28],
-              '1Y': [18.5, 19.5, 20.8, 23.5, 26.5, 28],
-              '5Y': [null, null, null, null, null, null, null, 18.5, 21.5, 25, 28],
-              '10Y': [null, null, null, null, null, null, 18.5, 24, 28],
-              '20Y': [null, null, null, null, null, null, 18.5, 24, 28]
-            }
-          },
-          ETB: {
-            name: 'Obsidian Flames ETB',
-            packCount: 9,
-            msrp: 49.99,
-            history: {
-              '1D': [94.5, 95, 94.8, 95.2, 95],
-              '7D': [91, 92, 92.8, 94, 95],
-              '1M': [84, 86, 88, 92, 95],
-              '6M': [68, 72, 78, 86, 95],
-              '1Y': [50, 55, 61, 74, 88, 95],
-              '5Y': [null, null, null, null, null, null, null, 50, 62, 78, 95],
-              '10Y': [null, null, null, null, null, null, 50, 72, 95],
-              '20Y': [null, null, null, null, null, null, 50, 72, 95]
+              '1D': [238, 234, 232, 236, 237, 233, 235],
+              '7D': [226, 232, 222, 228, 233, 236, 235],
+              '1M': [210, 218, 205, 214, 224, 231, 235],
+              // 6M: Hype spike -> wave 2 dip to $155 -> climb to $235
+              '6M': [175, 195, 155, 180, 205, 224, 235],
+              '1Y': [140, 185, 145, 155, 188, 215, 235],
+              '5Y': [null, null, null, null, 140, 145, 235],
+              '10Y': [null, null, null, null, null, 140, 235],
+              '20Y': [null, null, null, null, null, 140, 235]
             }
           }
         }
       },
 
-      // --- SWORD & SHIELD ERA ---
+      // --- MEGA EVOLUTION SERIES (Dedicated Logo Badges) ---
       {
-        id: 'swsh12pt5-crown-zenith',
-        name: 'Crown Zenith',
-        era: 'Sword & Shield',
-        category: 'SWSH',
-        released: 'Jan 2023',
-        image: 'https://images.pokemontcg.io/swsh12pt5/logo.png',
-        selectedType: 'ETB',
-        variants: {
-          ETB: {
-            name: 'Crown Zenith ETB',
-            packCount: 10,
-            msrp: 49.99,
-            history: {
-              '1D': [314, 315, 314.5, 315.5, 315],
-              '7D': [302, 305, 308, 312, 315],
-              '1M': [280, 286, 292, 304, 315],
-              '6M': [195, 215, 240, 275, 315],
-              '1Y': [110, 135, 165, 220, 280, 315],
-              '5Y': [null, null, null, null, null, null, 50, 68, 95, 165, 260, 315],
-              '10Y': [null, null, null, null, null, null, 50, 95, 180, 315],
-              '20Y': [null, null, null, null, null, null, 50, 95, 180, 315]
-            }
-          }
-        }
-      },
-      {
-        id: 'swsh12-silver-tempest',
-        name: 'Silver Tempest',
-        era: 'Sword & Shield',
-        category: 'SWSH',
-        released: 'Nov 2022',
-        image: 'https://images.pokemontcg.io/swsh12/logo.png',
+        id: 'me05-pitch-black',
+        name: 'Pitch Black',
+        era: 'Mega Evolution',
+        category: 'ME',
+        released: 'Jul 2026',
+        image: null,
+        badgeColor: '#a855f7',
         selectedType: 'BBOX',
         variants: {
           BBOX: {
-            name: 'Silver Tempest Booster Box',
+            name: 'Pitch Black Booster Box',
             packCount: 36,
-            msrp: 143.64,
+            msrp: 161.64,
             history: {
-              '1D': [174, 175, 174.5, 175.2, 175],
-              '7D': [168, 170, 172, 174, 175],
-              '1M': [155, 160, 165, 170, 175],
-              '6M': [135, 142, 150, 162, 175],
-              '1Y': [118, 124, 132, 148, 165, 175],
-              '5Y': [null, null, null, null, null, 110, 118, 128, 145, 165, 175],
-              '10Y': [null, null, null, null, null, 110, 132, 160, 175],
-              '20Y': [null, null, null, null, null, 110, 132, 160, 175]
-            }
-          },
-          ETB: {
-            name: 'Silver Tempest ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [54.5, 55, 54.8, 55.2, 55],
-              '7D': [52, 52.8, 53.5, 54.2, 55],
-              '1M': [48, 49.5, 51, 53, 55],
-              '6M': [42, 44.5, 47, 51, 55],
-              '1Y': [36, 38, 40.5, 46, 51, 55],
-              '5Y': [null, null, null, null, null, 36, 40, 44, 48, 55],
-              '10Y': [null, null, null, null, null, 36, 42, 50, 55],
-              '20Y': [null, null, null, null, null, 36, 42, 50, 55]
+              '1D': [278, 274, 272, 276, 277, 273, 275],
+              '7D': [268, 272, 264, 269, 273, 276, 275],
+              '1M': [250, 258, 246, 254, 264, 271, 275],
+              '6M': [162, 220, 195, 230, 250, 268, 275],
+              '1Y': [null, null, 162, 220, 195, 250, 275],
+              '5Y': [null, null, null, null, null, 162, 275],
+              '10Y': [null, null, null, null, null, 162, 275],
+              '20Y': [null, null, null, null, null, 162, 275]
             }
           }
         }
       },
       {
-        id: 'swsh10-astral-radiance',
-        name: 'Astral Radiance',
-        era: 'Sword & Shield',
-        category: 'SWSH',
-        released: 'May 2022',
-        image: 'https://images.pokemontcg.io/swsh10/logo.png',
+        id: 'me04-chaos-rising',
+        name: 'Chaos Rising',
+        era: 'Mega Evolution',
+        category: 'ME',
+        released: 'May 2026',
+        image: null,
+        badgeColor: '#ef4444',
         selectedType: 'BBOX',
         variants: {
           BBOX: {
-            name: 'Astral Radiance Booster Box',
+            name: 'Chaos Rising Booster Box',
             packCount: 36,
-            msrp: 143.64,
+            msrp: 161.64,
             history: {
-              '1D': [184, 185, 184.5, 185.2, 185],
-              '7D': [178, 180, 182, 184, 185],
-              '1M': [165, 170, 174, 180, 185],
-              '6M': [142, 150, 160, 172, 185],
-              '1Y': [120, 128, 138, 154, 174, 185],
-              '5Y': [null, null, null, null, 110, 118, 130, 148, 168, 185],
-              '10Y': [null, null, null, null, 110, 135, 165, 185],
-              '20Y': [null, null, null, null, 110, 135, 165, 185]
-            }
-          },
-          ETB: {
-            name: 'Astral Radiance ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [55.5, 56, 55.8, 56.2, 56],
-              '7D': [53, 53.8, 54.5, 55.2, 56],
-              '1M': [49, 50.5, 52, 54, 56],
-              '6M': [43, 45.5, 48, 52, 56],
-              '1Y': [37, 39, 41.5, 47, 52, 56],
-              '5Y': [null, null, null, null, 36, 40, 44, 49, 56],
-              '10Y': [null, null, null, null, 36, 44, 52, 56],
-              '20Y': [null, null, null, null, 36, 44, 52, 56]
+              '1D': [248, 244, 242, 246, 247, 243, 245],
+              '7D': [238, 242, 234, 239, 243, 246, 245],
+              '1M': [220, 228, 216, 224, 234, 241, 245],
+              '6M': [162, 205, 185, 210, 225, 238, 245],
+              '1Y': [null, null, 162, 205, 185, 225, 245],
+              '5Y': [null, null, null, null, null, 162, 245],
+              '10Y': [null, null, null, null, null, 162, 245],
+              '20Y': [null, null, null, null, null, 162, 245]
             }
           }
         }
       },
       {
-        id: 'swsh8-fusion-strike',
-        name: 'Fusion Strike',
-        era: 'Sword & Shield',
-        category: 'SWSH',
-        released: 'Nov 2021',
-        image: 'https://images.pokemontcg.io/swsh8/logo.png',
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Fusion Strike Booster Box',
-            packCount: 36,
-            msrp: 143.64,
-            history: {
-              '1D': [264, 265, 264.5, 265.2, 265],
-              '7D': [255, 258, 260, 263, 265],
-              '1M': [235, 242, 250, 258, 265],
-              '6M': [180, 195, 215, 240, 265],
-              '1Y': [135, 150, 172, 205, 245, 265],
-              '5Y': [null, null, null, 110, 120, 138, 165, 215, 265],
-              '10Y': [null, null, null, 110, 150, 210, 265],
-              '20Y': [null, null, null, 110, 150, 210, 265]
-            }
-          },
-          ETB: {
-            name: 'Fusion Strike ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [64.5, 65, 64.8, 65.2, 65],
-              '7D': [61, 62, 63, 64, 65],
-              '1M': [55, 57, 59, 62, 65],
-              '6M': [45, 48, 52, 58, 65],
-              '1Y': [38, 41, 44, 52, 60, 65],
-              '5Y': [null, null, null, 36, 40, 46, 54, 65],
-              '10Y': [null, null, null, 36, 46, 58, 65],
-              '20Y': [null, null, null, 36, 46, 58, 65]
-            }
-          }
-        }
-      },
-      {
-        id: 'cel25-celebrations',
-        name: 'Celebrations 25th',
-        era: 'Sword & Shield',
-        category: 'SWSH',
-        released: 'Oct 2021',
-        image: 'https://images.pokemontcg.io/cel25/logo.png',
+        id: 'me-ascended-heroes',
+        name: 'Ascended Heroes',
+        era: 'Mega Evolution',
+        category: 'ME',
+        released: 'Jan 2026',
+        image: null,
+        badgeColor: '#06b6d4',
         selectedType: 'UPC',
         variants: {
           UPC: {
-            name: 'Celebrations UPC (Classic)',
-            packCount: 17,
+            name: 'Ascended Heroes UPC',
+            packCount: 16,
             msrp: 119.99,
             history: {
-              '1D': [448, 450, 449, 451, 450],
-              '7D': [435, 438, 442, 446, 450],
-              '1M': [410, 418, 425, 438, 450],
-              '6M': [350, 368, 385, 415, 450],
-              '1Y': [290, 310, 335, 380, 425, 450],
-              '5Y': [null, null, 120, 380, 320, 270, 310, 375, 450],
-              '10Y': [null, null, null, null, 120, 320, 360, 450],
-              '20Y': [null, null, null, null, 120, 320, 360, 450]
-            }
-          },
-          ETB: {
-            name: 'Celebrations ETB',
-            packCount: 10,
-            msrp: 49.99,
-            history: {
-              '1D': [109, 110, 109.5, 110.5, 110],
-              '7D': [105, 106, 107.5, 109, 110],
-              '1M': [96, 98.5, 101, 106, 110],
-              '6M': [78, 84, 90, 100, 110],
-              '1Y': [65, 70, 76, 88, 102, 110],
-              '5Y': [null, null, 50, 75, 65, 55, 74, 92, 110],
-              '10Y': [null, null, null, null, 50, 70, 92, 110],
-              '20Y': [null, null, null, null, 50, 70, 92, 110]
+              '1D': [242, 238, 236, 240, 242, 239, 240],
+              '7D': [232, 236, 228, 234, 238, 242, 240],
+              '1M': [215, 222, 210, 218, 228, 236, 240],
+              '6M': [145, 185, 160, 190, 210, 230, 240],
+              '1Y': [120, 160, 135, 170, 195, 220, 240],
+              '5Y': [null, null, null, null, null, 120, 240],
+              '10Y': [null, null, null, null, null, 120, 240],
+              '20Y': [null, null, null, null, null, 120, 240]
             }
           }
         }
       },
+
+      // --- SWORD & SHIELD ICONS ---
       {
         id: 'swsh7-evolving-skies',
         name: 'Evolving Skies',
@@ -1328,286 +472,42 @@
             packCount: 36,
             msrp: 143.64,
             history: {
-              '1D': [918, 920, 919, 921, 920],
-              '7D': [890, 895, 905, 915, 920],
-              '1M': [820, 840, 865, 895, 920],
-              '6M': [620, 680, 740, 830, 920],
-              '1Y': [420, 480, 560, 700, 850, 920],
-              '5Y': [null, 140, 180, 240, 340, 480, 680, 850, 920],
-              '10Y': [null, null, null, null, 140, 310, 650, 920],
-              '20Y': [null, null, null, null, 140, 310, 650, 920]
-            }
-          },
-          ETB: {
-            name: 'Evolving Skies ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [518, 520, 519, 521, 520],
-              '7D': [498, 502, 508, 515, 520],
-              '1M': [460, 470, 482, 505, 520],
-              '6M': [340, 370, 405, 465, 520],
-              '1Y': [220, 260, 305, 390, 480, 520],
-              '5Y': [null, 40, 55, 75, 125, 220, 360, 470, 520],
-              '10Y': [null, null, null, null, 40, 95, 280, 520],
-              '20Y': [null, null, null, null, 40, 95, 280, 520]
+              '1D': [922, 918, 915, 919, 924, 920, 920],
+              '7D': [915, 925, 910, 905, 918, 922, 920],
+              '1M': [860, 890, 875, 895, 905, 915, 920],
+              '6M': [620, 680, 640, 710, 780, 850, 920],
+              '1Y': [420, 480, 450, 560, 640, 790, 920],
+              '5Y': [140, 115, 150, 220, 380, 450, 920],
+              '10Y': [null, null, 140, 150, 380, 620, 920],
+              '20Y': [null, null, null, null, 140, 380, 920]
             }
           }
         }
       },
       {
-        id: 'swsh6-chilling-reign',
-        name: 'Chilling Reign',
+        id: 'swsh-charizard-upc',
+        name: 'Charizard UPC',
         era: 'Sword & Shield',
         category: 'SWSH',
-        released: 'Jun 2021',
-        image: 'https://images.pokemontcg.io/swsh6/logo.png',
-        selectedType: 'BBOX',
+        released: 'Oct 2022',
+        image: 'https://images.pokemontcg.io/swsh12pt5/logo.png',
+        selectedType: 'UPC',
         variants: {
-          BBOX: {
-            name: 'Chilling Reign Booster Box',
-            packCount: 36,
-            msrp: 143.64,
+          UPC: {
+            name: 'Sword & Shield Charizard UPC',
+            packCount: 16,
+            msrp: 119.99,
             history: {
-              '1D': [244, 245, 244.5, 245.2, 245],
-              '7D': [236, 238, 240, 243, 245],
-              '1M': [218, 224, 230, 238, 245],
-              '6M': [175, 185, 200, 225, 245],
-              '1Y': [135, 145, 160, 190, 225, 245],
-              '5Y': [null, 110, 118, 128, 145, 180, 220, 245],
-              '10Y': [null, null, null, null, 110, 160, 220, 245],
-              '20Y': [null, null, null, null, 110, 160, 220, 245]
-            }
-          },
-          ETB: {
-            name: 'Chilling Reign ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [67.5, 68, 67.8, 68.2, 68],
-              '7D': [64, 65, 66, 67.2, 68],
-              '1M': [58, 60, 62, 65, 68],
-              '6M': [48, 51, 55, 61, 68],
-              '1Y': [38, 41, 45, 54, 62, 68],
-              '5Y': [null, 36, 38, 42, 48, 56, 68],
-              '10Y': [null, null, null, null, 36, 48, 62, 68],
-              '20Y': [null, null, null, null, 36, 48, 62, 68]
-            }
-          }
-        }
-      },
-      {
-        id: 'swsh5-battle-styles',
-        name: 'Battle Styles',
-        era: 'Sword & Shield',
-        category: 'SWSH',
-        released: 'Mar 2021',
-        image: 'https://images.pokemontcg.io/swsh5/logo.png',
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Battle Styles Booster Box',
-            packCount: 36,
-            msrp: 143.64,
-            history: {
-              '1D': [164, 165, 164.5, 165.2, 165],
-              '7D': [158, 160, 161.5, 163.5, 165],
-              '1M': [148, 152, 156, 161, 165],
-              '6M': [125, 132, 140, 152, 165],
-              '1Y': [108, 114, 122, 138, 154, 165],
-              '5Y': [null, 110, 100, 95, 110, 128, 150, 165],
-              '10Y': [null, null, null, null, 110, 120, 150, 165],
-              '20Y': [null, null, null, null, 110, 120, 150, 165]
-            }
-          },
-          ETB: {
-            name: 'Battle Styles ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [47.8, 48, 47.9, 48.1, 48],
-              '7D': [45.5, 46, 46.8, 47.5, 48],
-              '1M': [42, 43.5, 45, 46.8, 48],
-              '6M': [36, 38.5, 41, 44.5, 48],
-              '1Y': [32, 34, 36.5, 41, 45, 48],
-              '5Y': [null, 36, 34, 32, 36, 41, 48],
-              '10Y': [null, null, null, null, 36, 40, 48],
-              '20Y': [null, null, null, null, 36, 40, 48]
-            }
-          }
-        }
-      },
-      {
-        id: 'swsh45-shining-fates',
-        name: 'Shining Fates',
-        era: 'Sword & Shield',
-        category: 'SWSH',
-        released: 'Feb 2021',
-        image: 'https://images.pokemontcg.io/swsh45/logo.png',
-        selectedType: 'ETB',
-        variants: {
-          ETB: {
-            name: 'Shining Fates ETB',
-            packCount: 10,
-            msrp: 49.99,
-            history: {
-              '1D': [74.5, 75, 74.8, 75.2, 75],
-              '7D': [71, 72, 72.8, 74, 75],
-              '1M': [65, 67, 69, 72, 75],
-              '6M': [54, 58, 62, 68, 75],
-              '1Y': [46, 49, 53, 62, 70, 75],
-              '5Y': [null, 110, 85, 65, 55, 64, 75],
-              '10Y': [null, null, null, null, 110, 70, 75],
-              '20Y': [null, null, null, null, 110, 70, 75]
-            }
-          }
-        }
-      },
-      {
-        id: 'swsh4-vivid-voltage',
-        name: 'Vivid Voltage',
-        era: 'Sword & Shield',
-        category: 'SWSH',
-        released: 'Nov 2020',
-        image: 'https://images.pokemontcg.io/swsh4/logo.png',
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Vivid Voltage Booster Box',
-            packCount: 36,
-            msrp: 143.64,
-            history: {
-              '1D': [169, 170, 169.5, 170.2, 170],
-              '7D': [162, 164, 166, 168.5, 170],
-              '1M': [150, 154, 158, 164, 170],
-              '6M': [128, 135, 144, 156, 170],
-              '1Y': [112, 118, 126, 142, 160, 170],
-              '5Y': [140, 160, 130, 115, 125, 145, 170],
-              '10Y': [null, null, null, null, 140, 145, 170],
-              '20Y': [null, null, null, null, 140, 145, 170]
-            }
-          },
-          ETB: {
-            name: 'Vivid Voltage ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [51.8, 52, 51.9, 52.1, 52],
-              '7D': [49.5, 50, 50.8, 51.5, 52],
-              '1M': [45, 46.5, 48, 50, 52],
-              '6M': [38, 40.5, 43, 47, 52],
-              '1Y': [33, 35, 37.5, 42, 48, 52],
-              '5Y': [45, 55, 42, 36, 40, 48, 52],
-              '10Y': [null, null, null, null, 45, 45, 52],
-              '20Y': [null, null, null, null, 45, 45, 52]
-            }
-          }
-        }
-      },
-      {
-        id: 'swsh35-champions-path',
-        name: "Champion's Path",
-        era: 'Sword & Shield',
-        category: 'SWSH',
-        released: 'Sep 2020',
-        image: 'https://images.pokemontcg.io/swsh35/logo.png',
-        selectedType: 'ETB',
-        variants: {
-          ETB: {
-            name: "Champion's Path ETB",
-            packCount: 10,
-            msrp: 49.99,
-            history: {
-              '1D': [124, 125, 124.5, 125.2, 125],
-              '7D': [118, 120, 122, 124, 125],
-              '1M': [110, 112, 115, 120, 125],
-              '6M': [95, 102, 108, 118, 125],
-              '1Y': [82, 86, 92, 104, 116, 125],
-              '5Y': [150, 110, 95, 85, 92, 110, 125],
-              '10Y': [null, null, null, null, 150, 105, 125],
-              '20Y': [null, null, null, null, 150, 105, 125]
-            }
-          }
-        }
-      },
-      {
-        id: 'swsh3-darkness-ablaze',
-        name: 'Darkness Ablaze',
-        era: 'Sword & Shield',
-        category: 'SWSH',
-        released: 'Aug 2020',
-        image: 'https://images.pokemontcg.io/swsh3/logo.png',
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Darkness Ablaze Booster Box',
-            packCount: 36,
-            msrp: 143.64,
-            history: {
-              '1D': [167, 168, 167.5, 168.2, 168],
-              '7D': [160, 162, 164, 166.5, 168],
-              '1M': [148, 152, 156, 162, 168],
-              '6M': [126, 134, 142, 155, 168],
-              '1Y': [110, 116, 125, 140, 158, 168],
-              '5Y': [150, 135, 115, 110, 122, 145, 168],
-              '10Y': [null, null, null, null, 150, 135, 168],
-              '20Y': [null, null, null, null, 150, 135, 168]
-            }
-          },
-          ETB: {
-            name: 'Darkness Ablaze ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [49.8, 50, 49.9, 50.1, 50],
-              '7D': [47.5, 48, 48.8, 49.5, 50],
-              '1M': [43, 44.5, 46, 48, 50],
-              '6M': [36, 38.5, 41, 45, 50],
-              '1Y': [30, 32, 35, 40, 46, 50],
-              '5Y': [50, 45, 38, 35, 40, 50],
-              '10Y': [null, null, null, null, 50, 45, 50],
-              '20Y': [null, null, null, null, 50, 45, 50]
-            }
-          }
-        }
-      },
-      {
-        id: 'swsh2-rebel-clash',
-        name: 'Rebel Clash',
-        era: 'Sword & Shield',
-        category: 'SWSH',
-        released: 'May 2020',
-        image: 'https://images.pokemontcg.io/swsh2/logo.png',
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Rebel Clash Booster Box',
-            packCount: 36,
-            msrp: 143.64,
-            history: {
-              '1D': [239, 240, 239.5, 240.2, 240],
-              '7D': [230, 232, 235, 238, 240],
-              '1M': [215, 220, 226, 234, 240],
-              '6M': [180, 192, 205, 222, 240],
-              '1Y': [150, 160, 172, 195, 220, 240],
-              '5Y': [120, 135, 145, 160, 185, 215, 240],
-              '10Y': [null, null, null, null, 120, 180, 240],
-              '20Y': [null, null, null, null, 120, 180, 240]
-            }
-          },
-          ETB: {
-            name: 'Rebel Clash ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [69.5, 70, 69.8, 70.2, 70],
-              '7D': [66, 67, 68, 69, 70],
-              '1M': [60, 62, 64, 67, 70],
-              '6M': [50, 53, 57, 63, 70],
-              '1Y': [42, 45, 48, 56, 64, 70],
-              '5Y': [36, 42, 48, 54, 62, 70],
-              '10Y': [null, null, null, null, 36, 55, 70],
-              '20Y': [null, null, null, null, 36, 55, 70]
+              '1D': [166, 164, 163, 165, 166, 164, 165],
+              '7D': [160, 162, 159, 161, 164, 165, 165],
+              '1M': [152, 155, 150, 156, 160, 163, 165],
+              '6M': [128, 134, 130, 142, 152, 160, 165],
+              // 1Y: Floor rebound
+              '1Y': [105, 115, 110, 122, 136, 152, 165],
+              // 5Y: Bubble to $225 -> Crash to sub-MSRP $85 trough -> Recovery
+              '5Y': [null, 225, 135, 85, 95, 120, 165],
+              '10Y': [null, null, null, 225, 85, 120, 165],
+              '20Y': [null, null, null, null, 225, 85, 165]
             }
           }
         }
@@ -1626,439 +526,41 @@
             packCount: 36,
             msrp: 143.64,
             history: {
-              '1D': [308, 310, 309, 311, 310],
-              '7D': [295, 298, 302, 306, 310],
-              '1M': [275, 282, 290, 300, 310],
-              '6M': [230, 245, 260, 285, 310],
-              '1Y': [190, 205, 222, 255, 285, 310],
-              '5Y': [130, 150, 175, 205, 245, 280, 310],
-              '10Y': [null, null, null, null, 130, 220, 310],
-              '20Y': [null, null, null, null, 130, 220, 310]
-            }
-          },
-          ETB: {
-            name: 'Sword & Shield Base ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [77.5, 78, 77.8, 78.2, 78],
-              '7D': [74, 75, 76, 77.2, 78],
-              '1M': [68, 70, 72, 75, 78],
-              '6M': [56, 60, 64, 70, 78],
-              '1Y': [46, 49, 54, 62, 72, 78],
-              '5Y': [36, 45, 52, 60, 70, 78],
-              '10Y': [null, null, null, null, 36, 60, 78],
-              '20Y': [null, null, null, null, 36, 60, 78]
+              '1D': [312, 308, 307, 310, 311, 309, 310],
+              '7D': [298, 305, 296, 302, 306, 311, 310],
+              '1M': [278, 286, 274, 285, 295, 304, 310],
+              '6M': [230, 245, 235, 260, 280, 298, 310],
+              '1Y': [190, 205, 195, 225, 255, 285, 310],
+              '5Y': [130, 165, 125, 150, 205, 260, 310],
+              '10Y': [null, null, 130, 125, 180, 245, 310],
+              '20Y': [null, null, null, 130, 150, 245, 310]
             }
           }
         }
       },
-
-      // --- SUN & MOON ERA ---
       {
-        id: 'sm12-cosmic-eclipse',
-        name: 'Cosmic Eclipse',
-        era: 'Sun & Moon',
-        category: 'SM',
-        released: 'Nov 2019',
-        image: 'https://images.pokemontcg.io/sm12/logo.png',
+        id: 'swsh5-battle-styles',
+        name: 'Battle Styles',
+        era: 'Sword & Shield',
+        category: 'SWSH',
+        released: 'Mar 2021',
+        image: 'https://images.pokemontcg.io/swsh5/logo.png',
         selectedType: 'BBOX',
         variants: {
           BBOX: {
-            name: 'Cosmic Eclipse Booster Box',
+            name: 'Battle Styles Booster Box',
             packCount: 36,
             msrp: 143.64,
             history: {
-              '1D': [978, 980, 979, 981, 980],
-              '7D': [950, 955, 965, 972, 980],
-              '1M': [890, 910, 930, 955, 980],
-              '6M': [720, 780, 840, 910, 980],
-              '1Y': [540, 610, 690, 790, 900, 980],
-              '5Y': [240, 360, 480, 620, 780, 900, 980],
-              '10Y': [null, null, null, 140, 360, 680, 980],
-              '20Y': [null, null, null, 140, 360, 680, 980]
-            }
-          },
-          ETB: {
-            name: 'Cosmic Eclipse ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [358, 360, 359, 361, 360],
-              '7D': [345, 348, 352, 356, 360],
-              '1M': [320, 328, 336, 348, 360],
-              '6M': [260, 280, 305, 335, 360],
-              '1Y': [190, 215, 245, 285, 330, 360],
-              '5Y': [90, 140, 180, 240, 300, 360],
-              '10Y': [null, null, null, 40, 140, 260, 360],
-              '20Y': [null, null, null, 40, 140, 260, 360]
-            }
-          }
-        }
-      },
-      {
-        id: 'sma-hidden-fates',
-        name: 'Hidden Fates',
-        era: 'Sun & Moon',
-        category: 'SM',
-        released: 'Aug 2019',
-        image: 'https://images.pokemontcg.io/sma/logo.png',
-        selectedType: 'ETB',
-        variants: {
-          ETB: {
-            name: 'Hidden Fates ETB',
-            packCount: 10,
-            msrp: 49.99,
-            history: {
-              '1D': [214, 215, 214.5, 215.2, 215],
-              '7D': [206, 208, 210, 213, 215],
-              '1M': [192, 196, 202, 208, 215],
-              '6M': [160, 172, 184, 198, 215],
-              '1Y': [130, 142, 155, 175, 198, 215],
-              '5Y': [140, 160, 145, 155, 175, 195, 215],
-              '10Y': [null, null, null, 60, 150, 190, 215],
-              '20Y': [null, null, null, 60, 150, 190, 215]
-            }
-          }
-        }
-      },
-      {
-        id: 'sm3pt5-shining-legends',
-        name: 'Shining Legends',
-        era: 'Sun & Moon',
-        category: 'SM',
-        released: 'Oct 2017',
-        image: 'https://images.pokemontcg.io/sm3pt5/logo.png',
-        selectedType: 'ETB',
-        variants: {
-          ETB: {
-            name: 'Shining Legends Super Premium / ETB',
-            packCount: 10,
-            msrp: 49.99,
-            history: {
-              '1D': [338, 340, 339, 341, 340],
-              '7D': [325, 328, 332, 336, 340],
-              '1M': [300, 310, 320, 330, 340],
-              '6M': [250, 270, 290, 315, 340],
-              '1Y': [200, 220, 245, 275, 310, 340],
-              '5Y': [120, 160, 210, 260, 300, 340],
-              '10Y': [null, 50, 90, 160, 260, 340],
-              '20Y': [null, 50, 90, 160, 260, 340]
-            }
-          }
-        }
-      },
-
-      // --- XY ERA ---
-      {
-        id: 'xy11-steam-siege',
-        name: 'Steam Siege',
-        era: 'XY Series',
-        category: 'XY',
-        released: 'Aug 2016',
-        image: 'https://images.pokemontcg.io/xy11/logo.png',
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Steam Siege Booster Box',
-            packCount: 36,
-            msrp: 143.64,
-            history: {
-              '1D': [518, 520, 519, 521, 520],
-              '7D': [500, 505, 510, 515, 520],
-              '1M': [470, 480, 492, 505, 520],
-              '6M': [380, 410, 445, 485, 520],
-              '1Y': [290, 330, 375, 430, 480, 520],
-              '5Y': [140, 210, 290, 380, 460, 520],
-              '10Y': [95, 140, 220, 340, 460, 520],
-              '20Y': [null, null, 95, 220, 340, 520]
-            }
-          },
-          ETB: {
-            name: 'Steam Siege ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [159, 160, 159.5, 160.2, 160],
-              '7D': [152, 154, 156, 158, 160],
-              '1M': [140, 145, 150, 155, 160],
-              '6M': [115, 125, 136, 148, 160],
-              '1Y': [88, 98, 112, 130, 148, 160],
-              '5Y': [45, 68, 95, 125, 160],
-              '10Y': [35, 55, 85, 125, 160],
-              '20Y': [null, null, 35, 85, 160]
-            }
-          }
-        }
-      },
-      {
-        id: 'xy10-fates-collide',
-        name: 'Fates Collide',
-        era: 'XY Series',
-        category: 'XY',
-        released: 'May 2016',
-        image: 'https://images.pokemontcg.io/xy10/logo.png',
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Fates Collide Booster Box',
-            packCount: 36,
-            msrp: 143.64,
-            history: {
-              '1D': [648, 650, 649, 651, 650],
-              '7D': [625, 630, 638, 644, 650],
-              '1M': [580, 595, 615, 632, 650],
-              '6M': [470, 510, 555, 605, 650],
-              '1Y': [360, 410, 465, 530, 600, 650],
-              '5Y': [160, 250, 360, 480, 580, 650],
-              '10Y': [95, 160, 260, 420, 580, 650],
-              '20Y': [null, null, 95, 260, 420, 650]
-            }
-          },
-          ETB: {
-            name: 'Fates Collide ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [194, 195, 194.5, 195.2, 195],
-              '7D': [185, 188, 190, 193, 195],
-              '1M': [170, 176, 182, 188, 195],
-              '6M': [135, 148, 162, 178, 195],
-              '1Y': [105, 118, 134, 155, 178, 195],
-              '5Y': [50, 80, 115, 155, 195],
-              '10Y': [35, 65, 105, 155, 195],
-              '20Y': [null, null, 35, 105, 195]
-            }
-          }
-        }
-      },
-      {
-        id: 'g1-generations',
-        name: 'Generations 20th',
-        era: 'XY Series',
-        category: 'XY',
-        released: 'Feb 2016',
-        image: 'https://images.pokemontcg.io/g1/logo.png',
-        selectedType: 'ETB',
-        variants: {
-          ETB: {
-            name: 'Generations 20th Anniversary ETB',
-            packCount: 10,
-            msrp: 49.99,
-            history: {
-              '1D': [848, 850, 849, 851, 850],
-              '7D': [820, 825, 832, 842, 850],
-              '1M': [760, 780, 805, 828, 850],
-              '6M': [620, 670, 725, 790, 850],
-              '1Y': [480, 540, 610, 700, 800, 850],
-              '5Y': [220, 340, 480, 640, 760, 850],
-              '10Y': [50, 120, 240, 450, 720, 850],
-              '20Y': [null, null, 50, 240, 520, 850]
-            }
-          }
-        }
-      },
-      {
-        id: 'xy8-breakthrough',
-        name: 'Breakthrough',
-        era: 'XY Series',
-        category: 'XY',
-        released: 'Nov 2015',
-        image: 'https://images.pokemontcg.io/xy8/logo.png',
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Breakthrough Booster Box',
-            packCount: 36,
-            msrp: 143.64,
-            history: {
-              '1D': [778, 780, 779, 781, 780],
-              '7D': [750, 755, 765, 772, 780],
-              '1M': [700, 715, 735, 760, 780],
-              '6M': [560, 610, 665, 725, 780],
-              '1Y': [430, 490, 555, 635, 720, 780],
-              '5Y': [190, 290, 420, 560, 700, 780],
-              '10Y': [95, 180, 310, 510, 720, 780],
-              '20Y': [null, null, 95, 310, 560, 780]
-            }
-          },
-          ETB: {
-            name: 'Breakthrough ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [239, 240, 239.5, 240.2, 240],
-              '7D': [228, 230, 234, 238, 240],
-              '1M': [210, 216, 224, 232, 240],
-              '6M': [165, 180, 196, 218, 240],
-              '1Y': [125, 140, 160, 188, 218, 240],
-              '5Y': [60, 95, 135, 185, 240],
-              '10Y': [35, 75, 125, 185, 240],
-              '20Y': [null, null, 35, 125, 240]
-            }
-          }
-        }
-      },
-      {
-        id: 'xy7-ancient-origins',
-        name: 'Ancient Origins',
-        era: 'XY Series',
-        category: 'XY',
-        released: 'Aug 2015',
-        image: 'https://images.pokemontcg.io/xy7/logo.png',
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Ancient Origins Booster Box',
-            packCount: 36,
-            msrp: 143.64,
-            history: {
-              '1D': [1095, 1100, 1098, 1102, 1100],
-              '7D': [1060, 1070, 1082, 1092, 1100],
-              '1M': [980, 1010, 1040, 1070, 1100],
-              '6M': [780, 850, 920, 1010, 1100],
-              '1Y': [600, 680, 770, 880, 1010, 1100],
-              '5Y': [260, 390, 560, 750, 950, 1100],
-              '10Y': [95, 220, 420, 720, 1000, 1100],
-              '20Y': [null, null, 95, 380, 750, 1100]
-            }
-          },
-          ETB: {
-            name: 'Ancient Origins ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [318, 320, 319, 321, 320],
-              '7D': [305, 308, 312, 316, 320],
-              '1M': [280, 290, 300, 310, 320],
-              '6M': [220, 240, 265, 292, 320],
-              '1Y': [170, 192, 220, 258, 295, 320],
-              '5Y': [80, 125, 180, 245, 320],
-              '10Y': [35, 90, 160, 245, 320],
-              '20Y': [null, null, 35, 160, 320]
-            }
-          }
-        }
-      },
-      {
-        id: 'xy5-primal-clash',
-        name: 'Primal Clash',
-        era: 'XY Series',
-        category: 'XY',
-        released: 'Feb 2015',
-        image: 'https://images.pokemontcg.io/xy5/logo.png',
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Primal Clash Booster Box',
-            packCount: 36,
-            msrp: 143.64,
-            history: {
-              '1D': [948, 950, 949, 951, 950],
-              '7D': [920, 925, 935, 942, 950],
-              '1M': [860, 880, 905, 928, 950],
-              '6M': [680, 740, 805, 880, 950],
-              '1Y': [520, 590, 670, 770, 880, 950],
-              '5Y': [220, 340, 480, 650, 840, 950],
-              '10Y': [95, 180, 350, 600, 880, 950],
-              '20Y': [null, null, 95, 320, 680, 950]
-            }
-          },
-          ETB: {
-            name: 'Primal Clash ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [288, 290, 289, 291, 290],
-              '7D': [275, 278, 282, 286, 290],
-              '1M': [250, 260, 270, 280, 290],
-              '6M': [195, 215, 238, 265, 290],
-              '1Y': [150, 170, 195, 230, 268, 290],
-              '5Y': [70, 110, 160, 220, 290],
-              '10Y': [35, 80, 140, 220, 290],
-              '20Y': [null, null, 35, 140, 290]
-            }
-          }
-        }
-      },
-      {
-        id: 'xy12-evolutions',
-        name: 'XY Evolutions',
-        era: 'XY Series',
-        category: 'XY',
-        released: 'Nov 2016',
-        image: 'https://images.pokemontcg.io/xy12/logo.png',
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'XY Evolutions Booster Box',
-            packCount: 36,
-            msrp: 143.64,
-            history: {
-              '1D': [1148, 1150, 1149, 1151, 1150],
-              '7D': [1120, 1125, 1132, 1140, 1150],
-              '1M': [1050, 1070, 1090, 1120, 1150],
-              '6M': [850, 900, 960, 1040, 1150],
-              '1Y': [700, 760, 820, 920, 1050, 1150],
-              '5Y': [380, 520, 680, 800, 980, 1150],
-              '10Y': [100, 140, 240, 480, 850, 1150],
-              '20Y': [null, null, 100, 240, 650, 1150]
-            }
-          },
-          ETB: {
-            name: 'XY Evolutions ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [259, 260, 259.5, 260.5, 260],
-              '7D': [252, 254, 256, 258, 260],
-              '1M': [240, 244, 248, 254, 260],
-              '6M': [210, 218, 226, 242, 260],
-              '1Y': [180, 192, 204, 225, 248, 260],
-              '5Y': [80, 115, 140, 185, 235, 260],
-              '10Y': [40, 60, 95, 160, 235, 260],
-              '20Y': [null, null, 40, 95, 200, 260]
-            }
-          }
-        }
-      },
-      {
-        id: 'xy1-base',
-        name: 'XY Base Set',
-        era: 'XY Series',
-        category: 'XY',
-        released: 'Feb 2014',
-        image: 'https://images.pokemontcg.io/xy1/logo.png',
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'XY Base Booster Box',
-            packCount: 36,
-            msrp: 143.64,
-            history: {
-              '1D': [1395, 1400, 1398, 1402, 1400],
-              '7D': [1360, 1370, 1380, 1392, 1400],
-              '1M': [1280, 1310, 1340, 1375, 1400],
-              '6M': [1050, 1120, 1200, 1300, 1400],
-              '1Y': [820, 910, 1020, 1160, 1300, 1400],
-              '5Y': [380, 540, 750, 980, 1240, 1400],
-              '10Y': [100, 240, 480, 850, 1250, 1400],
-              '20Y': [null, null, 100, 480, 950, 1400]
-            }
-          },
-          ETB: {
-            name: 'XY Base ETB',
-            packCount: 8,
-            msrp: 39.99,
-            history: {
-              '1D': [338, 340, 339, 341, 340],
-              '7D': [325, 328, 332, 336, 340],
-              '1M': [300, 310, 320, 330, 340],
-              '6M': [250, 270, 290, 315, 340],
-              '1Y': [190, 215, 245, 285, 325, 340],
-              '5Y': [85, 130, 185, 255, 340],
-              '10Y': [35, 90, 160, 255, 340],
-              '20Y': [null, null, 35, 160, 340]
+              '1D': [166, 164, 163, 165, 166, 164, 165],
+              '7D': [162, 165, 160, 159, 162, 166, 165],
+              '1M': [154, 158, 152, 157, 161, 164, 165],
+              '6M': [125, 132, 128, 140, 148, 158, 165],
+              '1Y': [108, 115, 112, 124, 136, 150, 165],
+              // 5Y: Severe 2022 market crash down to $82 trough
+              '5Y': [140, 82, 88, 95, 110, 138, 165],
+              '10Y': [null, null, 140, 82, 95, 138, 165],
+              '20Y': [null, null, null, 140, 82, 110, 165]
             }
           }
         }
@@ -2079,14 +581,15 @@
             packCount: 36,
             msrp: 110.00,
             history: {
-              '1D': [16500, 16480, 16510, 16500, 16500],
-              '7D': [16200, 16250, 16350, 16450, 16500],
-              '1M': [15600, 15800, 16000, 16300, 16500],
-              '6M': [14200, 14600, 15000, 15800, 16500],
-              '1Y': [13000, 13500, 14000, 15200, 16500],
-              '5Y': [11500, 18000, 15200, 13800, 15000, 16500],
-              '10Y': [4200, 6800, 11500, 18000, 14500, 16500],
-              '20Y': [750, 1800, 3400, 4200, 12800, 16500]
+              '1D': [16550, 16480, 16450, 16520, 16550, 16490, 16500],
+              '7D': [16200, 16450, 16150, 16300, 16400, 16520, 16500],
+              '1M': [15700, 16000, 15800, 16100, 16350, 16480, 16500],
+              '6M': [14200, 14800, 14400, 15200, 15800, 16350, 16500],
+              '1Y': [13000, 13800, 13300, 14400, 15200, 16100, 16500],
+              // 5Y: Historic 2020 peak ($21,500) -> 2022 trough ($11,800) -> Slow recovery
+              '5Y': [21500, 11800, 12500, 13400, 14500, 15600, 16500],
+              '10Y': [4200, 9500, 21500, 11800, 13400, 15600, 16500],
+              '20Y': [750, 2800, 21500, 11800, 13400, 15600, 16500]
             }
           }
         }
@@ -2095,7 +598,7 @@
 
     let activeProduct = SETS_DATA[0];
     let activeFilter = 'ALL';
-    let activeMainTimeScale = '6M';
+    let activeMainTimeScale = '1Y';
     let activeMoversTimeScale = '7D';
     let mainChart = null;
     let cardCharts = {};
@@ -2107,7 +610,7 @@
 
     function getMetrics(setObj, timeScale) {
       const v = getVariant(setObj);
-      const arr = v.history[timeScale] || v.history['6M'];
+      const arr = v.history[timeScale] || v.history['1Y'];
       const validPoints = arr.filter(x => x !== null && x !== undefined);
       
       const start = validPoints[0] || v.msrp;
@@ -2217,7 +720,7 @@
 
           <div class="flex items-center space-x-3.5 mt-3">
             <div class="w-18 h-12 rounded-lg p-1.5 flex-shrink-0 flex items-center justify-center set-logo-container">
-              <img src="${item.image}" alt="" class="max-h-full max-w-full object-contain set-logo" onerror="handleImageFallback(this)" />
+              ${getSetLogoMarkup(item, true)}
             </div>
             <div class="min-w-0 flex-1">
               <h4 class="text-xs font-black text-gray-100 truncate group-hover:text-emerald-300 transition">${variantName}</h4>
@@ -2253,11 +756,11 @@
           labels: labels,
           datasets: [{
             data: dataPoints,
-            spanGaps: false,
+            spanGaps: true,
             borderColor: lineColor,
             borderWidth: 1.8,
             pointRadius: 0,
-            tension: 0.2,
+            tension: 0.3,
             fill: true,
             backgroundColor: bgColor
           }]
@@ -2274,12 +777,12 @@
     function updateMainChart() {
       const ctx = document.getElementById('mainChart').getContext('2d');
       const metrics = getMetrics(activeProduct, activeMainTimeScale);
-      const dataset = getVariant(activeProduct).history[activeMainTimeScale] || getVariant(activeProduct).history['6M'];
+      const dataset = getVariant(activeProduct).history[activeMainTimeScale] || getVariant(activeProduct).history['1Y'];
       const labels = TIME_INTERVALS[activeMainTimeScale].labels;
       const isPositive = metrics.pct >= 0;
 
-      document.getElementById('active-img').src = activeProduct.image;
-      document.getElementById('active-img').alt = activeProduct.name;
+      // Update active logo container
+      document.getElementById('active-logo-box').innerHTML = getSetLogoMarkup(activeProduct, false);
       document.getElementById('active-title').innerText = metrics.variantName;
       document.getElementById('active-era').innerText = `${activeProduct.era} • Released ${activeProduct.released}`;
       
@@ -2313,15 +816,15 @@
           datasets: [{
             label: `${metrics.variantName} ($)`,
             data: dataset,
-            spanGaps: false,
+            spanGaps: true,
             borderColor: isPositive ? '#10b981' : '#f43f5e',
             borderWidth: 2.5,
             backgroundColor: isPositive ? 'rgba(16, 185, 129, 0.12)' : 'rgba(244, 63, 94, 0.12)',
             fill: true,
-            tension: 0.2,
+            tension: 0.32,
             pointRadius: (c) => {
               if (c.raw === null) return 0;
-              return c.dataIndex === dataset.length - 1 ? 5 : 2;
+              return c.dataIndex === dataset.length - 1 ? 5 : 2.5;
             },
             pointBackgroundColor: isPositive ? '#10b981' : '#f43f5e',
             pointHoverRadius: 6
@@ -2382,7 +885,7 @@
       cardCharts = {};
 
       filtered.forEach(item => {
-        const metrics = getMetrics(item, '6M');
+        const metrics = getMetrics(item, '1Y');
         const isPositive = metrics.pct >= 0;
         const card = document.createElement('div');
         card.className = `bg-[#111827] border ${activeProduct.id === item.id ? 'border-emerald-500 ring-1 ring-emerald-500/50' : 'border-gray-800'} hover:border-gray-700 p-4 sm:p-5 rounded-xl cursor-pointer transition flex flex-col justify-between shadow-lg group`;
@@ -2414,9 +917,8 @@
             </div>
             
             <div class="flex items-center space-x-3.5 mt-3.5">
-              <!-- Larger Catalog Logo Container -->
               <div class="w-20 h-12 rounded-lg p-1.5 flex-shrink-0 flex items-center justify-center set-logo-container">
-                <img src="${item.image}" alt="" class="max-h-full max-w-full object-contain set-logo" onerror="handleImageFallback(this)" />
+                ${getSetLogoMarkup(item, true)}
               </div>
               <div class="min-w-0 flex-1">
                 <h4 class="text-sm font-black text-white leading-snug truncate group-hover:text-emerald-300 transition">${metrics.variantName}</h4>
@@ -2424,10 +926,10 @@
               </div>
             </div>
 
-            <!-- Mini 6-Month Trend Graph -->
+            <!-- Mini 1-Year Trend Graph -->
             <div class="mt-4 bg-gray-900/50 rounded-lg p-2.5 border border-gray-800/60 relative">
               <div class="flex items-center justify-between text-[11px] mb-1">
-                <span class="text-gray-400 font-mono font-semibold">6M Trend</span>
+                <span class="text-gray-400 font-mono font-semibold">1Y Trajectory</span>
                 <div class="flex items-center space-x-2">
                   <span class="px-2 py-0.5 rounded ${isPositive ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-300' : 'bg-rose-950/90 border-rose-500/40 text-rose-300'} border font-black font-mono text-[11px]">
                     $${metrics.end.toLocaleString()}
@@ -2459,24 +961,24 @@
     function renderCardChart(item) {
       const canvas = document.getElementById(`card-chart-${item.id}`);
       if (!canvas) return;
-      const dataPoints = getVariant(item).history['6M'];
-      const metrics = getMetrics(item, '6M');
+      const dataPoints = getVariant(item).history['1Y'];
+      const metrics = getMetrics(item, '1Y');
       const isPositive = metrics.pct >= 0;
 
       cardCharts[item.id] = new Chart(canvas, {
         type: 'line',
         data: {
-          labels: TIME_INTERVALS['6M'].labels,
+          labels: TIME_INTERVALS['1Y'].labels,
           datasets: [{
             data: dataPoints,
-            spanGaps: false,
+            spanGaps: true,
             borderColor: isPositive ? '#10b981' : '#f43f5e',
             borderWidth: 2,
             pointRadius: (ctx) => (ctx.dataIndex === dataPoints.length - 1 && dataPoints[ctx.dataIndex] !== null ? 4 : 0),
             pointBackgroundColor: isPositive ? '#34d399' : '#fb7185',
             pointBorderColor: '#0b0f19',
             pointBorderWidth: 1.5,
-            tension: 0.2,
+            tension: 0.32,
             fill: true,
             backgroundColor: isPositive ? 'rgba(16, 185, 129, 0.08)' : 'rgba(244, 63, 94, 0.08)'
           }]
@@ -2580,6 +1082,7 @@
       selectProduct(SETS_DATA[0].id);
     }
 
+    // Ensures the live price replaces the true current/last point in the array
     function applyWorkerPrices() {
       if (!latestWorkerData || !latestWorkerData.prices) return;
 
@@ -2594,11 +1097,9 @@
             const newPrice = liveInfo.currentMarket || liveInfo;
             Object.keys(hist).forEach(scale => {
               const arr = hist[scale];
-              for (let i = arr.length - 1; i >= 0; i--) {
-                if (arr[i] !== null && arr[i] !== undefined) {
-                  arr[i] = newPrice;
-                  break;
-                }
+              if (arr && arr.length > 0) {
+                // Update the final active index so current price pins to 'Today/Now'
+                arr[arr.length - 1] = newPrice;
               }
             });
           }
