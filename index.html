@@ -34,7 +34,6 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
-    /* Ambient illuminated backlit glow */
     .set-logo-container {
       position: relative;
       background: radial-gradient(circle at center, rgba(16, 185, 129, 0.28) 0%, rgba(17, 24, 39, 0.95) 75%);
@@ -121,19 +120,18 @@
     <section class="bg-[#111827] rounded-xl border border-gray-800 p-5 sm:p-6 shadow-2xl space-y-4">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-5 border-b border-gray-800 pb-5">
         <div class="flex items-center space-x-5">
-          <!-- Logo container: uses real set logos or dynamic SVG badges -->
           <div id="active-logo-box" class="w-36 h-20 rounded-xl p-2.5 flex-shrink-0 flex items-center justify-center overflow-hidden set-logo-container">
             <!-- Injected by renderActiveLogo() -->
           </div>
 
           <div>
             <div class="flex flex-wrap items-center gap-2">
-              <h3 id="active-title" class="text-2xl font-black text-white tracking-tight">White Flare</h3>
+              <h3 id="active-title" class="text-2xl font-black text-white tracking-tight">Ascended Heroes</h3>
               <div id="active-variant-ribbon" class="flex items-center space-x-1.5 bg-gray-900 border border-gray-800 rounded-lg p-1">
                 <!-- Injected via JS -->
               </div>
             </div>
-            <p id="active-era" class="text-xs text-gray-400 mt-1 font-medium">Scarlet & Violet • Released Jul 2025</p>
+            <p id="active-era" class="text-xs text-gray-400 mt-1 font-medium">Mega Evolution • Released Jan 2026</p>
           </div>
         </div>
 
@@ -141,15 +139,15 @@
         <div class="flex items-center space-x-6 sm:space-x-8">
           <div>
             <p class="text-[11px] text-gray-400 uppercase tracking-widest font-semibold">Market Price</p>
-            <p id="active-price" class="text-3xl sm:text-4xl font-black text-emerald-400 font-mono tracking-tight price-glow">$175.00</p>
+            <p id="active-price" class="text-3xl sm:text-4xl font-black text-emerald-400 font-mono tracking-tight price-glow">$85.00</p>
           </div>
           <div>
-            <p class="text-[11px] text-gray-400 uppercase tracking-widest font-semibold" id="active-delta-label">Change (1Y)</p>
-            <p id="active-delta" class="text-base font-extrabold font-mono text-emerald-400">+52.2%</p>
+            <p class="text-[11px] text-gray-400 uppercase tracking-widest font-semibold" id="active-delta-label">Change (6M)</p>
+            <p id="active-delta" class="text-base font-extrabold font-mono text-emerald-400">+57.4%</p>
           </div>
           <div>
             <p class="text-[11px] text-gray-400 uppercase tracking-widest font-semibold">Est. / Pack</p>
-            <p id="active-pack-val" class="text-base font-extrabold font-mono text-gray-200">$4.86</p>
+            <p id="active-pack-val" class="text-base font-extrabold font-mono text-gray-200">$9.44</p>
           </div>
         </div>
       </div>
@@ -166,8 +164,8 @@
           <button onclick="setMainTimeScale('1D')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">1D</button>
           <button onclick="setMainTimeScale('7D')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">7D</button>
           <button onclick="setMainTimeScale('1M')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">1M</button>
-          <button onclick="setMainTimeScale('6M')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">6M</button>
-          <button onclick="setMainTimeScale('1Y')" class="main-time-btn active px-3 py-1 text-xs font-semibold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition">1Y</button>
+          <button onclick="setMainTimeScale('6M')" class="main-time-btn active px-3 py-1 text-xs font-semibold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition">6M</button>
+          <button onclick="setMainTimeScale('1Y')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">1Y</button>
           <button onclick="setMainTimeScale('5Y')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">5Y</button>
           <button onclick="setMainTimeScale('10Y')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">10Y</button>
           <button onclick="setMainTimeScale('20Y')" class="main-time-btn px-3 py-1 text-xs font-semibold rounded text-gray-400 hover:text-white transition">20Y</button>
@@ -208,7 +206,7 @@
   <script>
     const WORKER_API_URL = "https://boxmon.boxmon25.workers.dev/api/prices";
 
-    // Strict 7-point scale for 1D, 7D, 1M, 6M, 1Y, 5Y, 10Y, 20Y so arrays never truncate
+    // Standardized 7-point time labels across all horizons
     const TIME_INTERVALS = {
       '1D': { label: '24 Hours', labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', 'Now'] },
       '7D': { label: '7 Days', labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Today'] },
@@ -220,7 +218,6 @@
       '20Y': { label: '20 Years', labels: ['2006', '2010', '2015', '2020 Bubble', '2022 Floor', '2025', 'Current'] }
     };
 
-    // Generates a dedicated SVG logo badge for sets without third-party PNG endpoints
     function getSetLogoMarkup(item, isSmall = false) {
       if (item.image) {
         return `<img src="${item.image}" alt="${item.name}" class="max-h-full max-w-full object-contain set-logo" onerror="this.outerHTML=getCustomBadgeSvg('${item.name}', '${item.badgeColor || '#10b981'}', ${isSmall})" />`;
@@ -229,16 +226,16 @@
     }
 
     function getCustomBadgeSvg(name, color, isSmall) {
-      const fontSize = isSmall ? '10' : '13';
+      const fontSize = isSmall ? '10' : '12';
       return `
         <svg viewBox="0 0 160 60" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <linearGradient id="grad-${name.replace(/\s+/g, '')}" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="${color}" stop-opacity="0.3"/>
-              <stop offset="100%" stop-color="#111827" stop-opacity="0.9"/>
+            <linearGradient id="grad-${name.replace(/[^a-zA-Z0-9]/g, '')}" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="${color}" stop-opacity="0.35"/>
+              <stop offset="100%" stop-color="#111827" stop-opacity="0.95"/>
             </linearGradient>
           </defs>
-          <rect width="160" height="60" rx="8" fill="url(#grad-${name.replace(/\s+/g, '')})" stroke="${color}" stroke-width="1.5" />
+          <rect width="160" height="60" rx="8" fill="url(#grad-${name.replace(/[^a-zA-Z0-9]/g, '')})" stroke="${color}" stroke-width="1.5" />
           <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${fontSize}" letter-spacing="1">
             ${name.toUpperCase()}
           </text>
@@ -246,16 +243,242 @@
       `;
     }
 
-    // Catalog with correct logos and volatile curves (troughs, post-release crashes & rebounds)
     const SETS_DATA = [
-      // --- SCARLET & VIOLET (Shows White Flare with its own dedicated badge) ---
+      // --- MEGA EVOLUTION & 30TH ANNIVERSARY ---
+      {
+        id: 'me-ascended-heroes',
+        name: 'Ascended Heroes',
+        era: 'Mega Evolution',
+        category: 'ME',
+        released: 'Jan 2026',
+        image: null,
+        badgeColor: '#06b6d4',
+        selectedType: 'ETB',
+        variants: {
+          ETB: {
+            name: 'Ascended Heroes ETB',
+            packCount: 9,
+            msrp: 49.99,
+            history: {
+              '1D': [85.5, 84.8, 84.5, 85.2, 85.5, 84.8, 85],
+              '7D': [82, 84, 81.5, 83, 84.5, 85.5, 85],
+              '1M': [76, 79, 74, 78, 81, 84, 85],
+              // 6M: Launch spike -> Wave 2 dip ($62) -> Climbs back to $85
+              '6M': [54, 72, 62, 68, 75, 82, 85],
+              '1Y': [50, 72, 62, 68, 75, 82, 85],
+              '5Y': [null, null, null, null, null, 50, 85],
+              '10Y': [null, null, null, null, null, 50, 85],
+              '20Y': [null, null, null, null, null, 50, 85]
+            }
+          },
+          BUNDLE: {
+            name: 'Ascended Heroes Booster Bundle',
+            packCount: 6,
+            msrp: 26.94,
+            history: {
+              '1D': [48.5, 48, 47.8, 48.2, 48.4, 47.9, 48],
+              '7D': [46, 47.5, 45, 46.5, 47.5, 48.2, 48],
+              '1M': [41, 43.5, 42, 44, 46, 47.5, 48],
+              '6M': [28, 38, 31, 35, 40, 45, 48],
+              '1Y': [27, 38, 31, 35, 40, 45, 48],
+              '5Y': [null, null, null, null, null, 27, 48],
+              '10Y': [null, null, null, null, null, 27, 48],
+              '20Y': [null, null, null, null, null, 27, 48]
+            }
+          },
+          UPC: {
+            name: 'Ascended Heroes Mega Charizard X UPC',
+            packCount: 16,
+            msrp: 119.99,
+            history: {
+              '1D': [242, 238, 236, 240, 242, 239, 240],
+              '7D': [232, 236, 228, 234, 238, 242, 240],
+              '1M': [215, 222, 210, 218, 228, 236, 240],
+              '6M': [145, 185, 160, 190, 210, 230, 240],
+              '1Y': [120, 160, 135, 170, 195, 220, 240],
+              '5Y': [null, null, null, null, null, 120, 240],
+              '10Y': [null, null, null, null, null, 120, 240],
+              '20Y': [null, null, null, null, null, 120, 240]
+            }
+          }
+        }
+      },
+      {
+        id: 'me05-pitch-black',
+        name: 'Pitch Black',
+        era: 'Mega Evolution',
+        category: 'ME',
+        released: 'Jul 2026',
+        image: null,
+        badgeColor: '#a855f7',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Pitch Black Booster Box',
+            packCount: 36,
+            msrp: 161.64,
+            history: {
+              '1D': [278, 274, 272, 276, 277, 273, 275],
+              '7D': [268, 272, 264, 269, 273, 276, 275],
+              '1M': [250, 258, 246, 254, 264, 271, 275],
+              '6M': [162, 220, 195, 230, 250, 268, 275],
+              '1Y': [null, null, 162, 220, 195, 250, 275],
+              '5Y': [null, null, null, null, null, 162, 275],
+              '10Y': [null, null, null, null, null, 162, 275],
+              '20Y': [null, null, null, null, null, 162, 275]
+            }
+          },
+          BUNDLE: {
+            name: 'Pitch Black Booster Bundle',
+            packCount: 6,
+            msrp: 26.94,
+            history: {
+              '1D': [42.5, 42, 41.8, 42.2, 42.4, 41.9, 42],
+              '7D': [40, 41.5, 39.5, 40.8, 41.5, 42.2, 42],
+              '1M': [36, 38.5, 37, 39, 40.5, 41.5, 42],
+              '6M': [27, 35, 30, 34, 38, 41, 42],
+              '1Y': [null, null, 27, 35, 30, 38, 42],
+              '5Y': [null, null, null, null, null, 27, 42],
+              '10Y': [null, null, null, null, null, 27, 42],
+              '20Y': [null, null, null, null, null, 27, 42]
+            }
+          },
+          ETB: {
+            name: 'Pitch Black ETB',
+            packCount: 9,
+            msrp: 49.99,
+            history: {
+              '1D': [70.5, 70, 69.8, 70.2, 70.4, 69.9, 70],
+              '7D': [67, 69, 66, 68, 69.5, 70.2, 70],
+              '1M': [61, 64, 62, 65, 67.5, 69.5, 70],
+              '6M': [50, 62, 54, 59, 64, 68, 70],
+              '1Y': [null, null, 50, 62, 54, 64, 70],
+              '5Y': [null, null, null, null, null, 50, 70],
+              '10Y': [null, null, null, null, null, 50, 70],
+              '20Y': [null, null, null, null, null, 50, 70]
+            }
+          }
+        }
+      },
+      {
+        id: 'me04-chaos-rising',
+        name: 'Chaos Rising',
+        era: 'Mega Evolution',
+        category: 'ME',
+        released: 'May 2026',
+        image: null,
+        badgeColor: '#ef4444',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Chaos Rising Booster Box',
+            packCount: 36,
+            msrp: 161.64,
+            history: {
+              '1D': [248, 244, 242, 246, 247, 243, 245],
+              '7D': [238, 242, 234, 239, 243, 246, 245],
+              '1M': [220, 228, 216, 224, 234, 241, 245],
+              '6M': [162, 205, 185, 210, 225, 238, 245],
+              '1Y': [null, null, 162, 205, 185, 225, 245],
+              '5Y': [null, null, null, null, null, 162, 245],
+              '10Y': [null, null, null, null, null, 162, 245],
+              '20Y': [null, null, null, null, null, 162, 245]
+            }
+          },
+          BUNDLE: {
+            name: 'Chaos Rising Booster Bundle',
+            packCount: 6,
+            msrp: 26.94,
+            history: {
+              '1D': [38.5, 38, 37.8, 38.2, 38.4, 37.9, 38],
+              '7D': [36, 37.5, 35.5, 36.8, 37.5, 38.2, 38],
+              '1M': [33, 35, 33.5, 35.5, 36.8, 37.5, 38],
+              '6M': [27, 33, 29, 32, 35, 37, 38],
+              '1Y': [null, null, 27, 33, 29, 35, 38],
+              '5Y': [null, null, null, null, null, 27, 38],
+              '10Y': [null, null, null, null, null, 27, 38],
+              '20Y': [null, null, null, null, null, 27, 38]
+            }
+          },
+          ETB: {
+            name: 'Chaos Rising ETB',
+            packCount: 9,
+            msrp: 49.99,
+            history: {
+              '1D': [65.5, 65, 64.8, 65.2, 65.4, 64.9, 65],
+              '7D': [62, 64, 61, 63, 64.5, 65.2, 65],
+              '1M': [57, 59.5, 58, 61, 63, 64.5, 65],
+              '6M': [50, 58, 52, 56, 61, 63.5, 65],
+              '1Y': [null, null, 50, 58, 52, 61, 65],
+              '5Y': [null, null, null, null, null, 50, 65],
+              '10Y': [null, null, null, null, null, 50, 65],
+              '20Y': [null, null, null, null, null, 50, 65]
+            }
+          }
+        }
+      },
+      {
+        id: 'me03-perfect-order',
+        name: 'Perfect Order',
+        era: 'Mega Evolution',
+        category: 'ME',
+        released: 'Mar 2026',
+        image: null,
+        badgeColor: '#10b981',
+        selectedType: 'BBOX',
+        variants: {
+          BBOX: {
+            name: 'Perfect Order Booster Box',
+            packCount: 36,
+            msrp: 161.64,
+            history: {
+              '1D': [262, 260, 259, 261, 262, 259, 260],
+              '7D': [252, 256, 248, 254, 258, 261, 260],
+              '1M': [236, 245, 232, 240, 250, 256, 260],
+              '6M': [162, 215, 190, 220, 238, 252, 260],
+              '1Y': [null, null, 162, 215, 190, 238, 260],
+              '5Y': [null, null, null, null, null, 162, 260],
+              '10Y': [null, null, null, null, null, 162, 260],
+              '20Y': [null, null, null, null, null, 162, 260]
+            }
+          }
+        }
+      },
+      {
+        id: '30th-celebration',
+        name: '30th Celebration',
+        era: 'Anniversary 2026',
+        category: 'ME',
+        released: 'Oct 2026',
+        image: 'https://images.pokemontcg.io/cel25/logo.png',
+        selectedType: 'UPC',
+        variants: {
+          UPC: {
+            name: '30th Celebration Ultra-Premium Collection',
+            packCount: 18,
+            msrp: 149.99,
+            history: {
+              '1D': [655, 650, 648, 652, 654, 649, 650],
+              '7D': [635, 645, 628, 638, 646, 652, 650],
+              '1M': [590, 615, 585, 605, 625, 642, 650],
+              '6M': [400, 480, 430, 510, 580, 635, 650],
+              '1Y': [250, 360, 300, 420, 520, 610, 650],
+              '5Y': [null, null, null, null, null, 250, 650],
+              '10Y': [null, null, null, null, null, 250, 650],
+              '20Y': [null, null, null, null, null, 250, 650]
+            }
+          }
+        }
+      },
+
+      // --- SCARLET & VIOLET ---
       {
         id: 'sv-white-flare',
         name: 'White Flare',
         era: 'Scarlet & Violet',
         category: 'SV',
         released: 'Jul 2025',
-        image: null, // Generates custom White Flare badge
+        image: null,
         badgeColor: '#e2e8f0',
         selectedType: 'BBOX',
         variants: {
@@ -267,9 +490,7 @@
               '1D': [176, 174, 173, 175, 176, 174, 175],
               '7D': [170, 172, 169, 171, 173, 176, 175],
               '1M': [160, 164, 158, 162, 168, 172, 175],
-              // 6M: Post-wave trough down to $138 before tightening supply
               '6M': [152, 165, 138, 148, 158, 168, 175],
-              // 1Y: True 7-point trajectory: Release ($162) -> Distributor dump trough ($122) -> Recovery ($175)
               '1Y': [162, 170, 132, 122, 142, 160, 175],
               '5Y': [null, null, null, null, 162, 122, 175],
               '10Y': [null, null, null, null, null, 162, 175],
@@ -363,7 +584,6 @@
               '1D': [238, 234, 232, 236, 237, 233, 235],
               '7D': [226, 232, 222, 228, 233, 236, 235],
               '1M': [210, 218, 205, 214, 224, 231, 235],
-              // 6M: Hype spike -> wave 2 dip to $155 -> climb to $235
               '6M': [175, 195, 155, 180, 205, 224, 235],
               '1Y': [140, 185, 145, 155, 188, 215, 235],
               '5Y': [null, null, null, null, 140, 145, 235],
@@ -373,91 +593,64 @@
           }
         }
       },
-
-      // --- MEGA EVOLUTION SERIES (Dedicated Logo Badges) ---
       {
-        id: 'me05-pitch-black',
-        name: 'Pitch Black',
-        era: 'Mega Evolution',
-        category: 'ME',
-        released: 'Jul 2026',
-        image: null,
-        badgeColor: '#a855f7',
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Pitch Black Booster Box',
-            packCount: 36,
-            msrp: 161.64,
-            history: {
-              '1D': [278, 274, 272, 276, 277, 273, 275],
-              '7D': [268, 272, 264, 269, 273, 276, 275],
-              '1M': [250, 258, 246, 254, 264, 271, 275],
-              '6M': [162, 220, 195, 230, 250, 268, 275],
-              '1Y': [null, null, 162, 220, 195, 250, 275],
-              '5Y': [null, null, null, null, null, 162, 275],
-              '10Y': [null, null, null, null, null, 162, 275],
-              '20Y': [null, null, null, null, null, 162, 275]
-            }
-          }
-        }
-      },
-      {
-        id: 'me04-chaos-rising',
-        name: 'Chaos Rising',
-        era: 'Mega Evolution',
-        category: 'ME',
-        released: 'May 2026',
-        image: null,
-        badgeColor: '#ef4444',
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Chaos Rising Booster Box',
-            packCount: 36,
-            msrp: 161.64,
-            history: {
-              '1D': [248, 244, 242, 246, 247, 243, 245],
-              '7D': [238, 242, 234, 239, 243, 246, 245],
-              '1M': [220, 228, 216, 224, 234, 241, 245],
-              '6M': [162, 205, 185, 210, 225, 238, 245],
-              '1Y': [null, null, 162, 205, 185, 225, 245],
-              '5Y': [null, null, null, null, null, 162, 245],
-              '10Y': [null, null, null, null, null, 162, 245],
-              '20Y': [null, null, null, null, null, 162, 245]
-            }
-          }
-        }
-      },
-      {
-        id: 'me-ascended-heroes',
-        name: 'Ascended Heroes',
-        era: 'Mega Evolution',
-        category: 'ME',
-        released: 'Jan 2026',
-        image: null,
-        badgeColor: '#06b6d4',
+        id: 'sv3pt5-151',
+        name: 'Scarlet & Violet 151',
+        era: 'Scarlet & Violet',
+        category: 'SV',
+        released: 'Sep 2023',
+        image: 'https://images.pokemontcg.io/sv3pt5/logo.png',
         selectedType: 'UPC',
         variants: {
           UPC: {
-            name: 'Ascended Heroes UPC',
+            name: 'Scarlet & Violet 151 UPC',
             packCount: 16,
             msrp: 119.99,
             history: {
-              '1D': [242, 238, 236, 240, 242, 239, 240],
-              '7D': [232, 236, 228, 234, 238, 242, 240],
-              '1M': [215, 222, 210, 218, 228, 236, 240],
-              '6M': [145, 185, 160, 190, 210, 230, 240],
-              '1Y': [120, 160, 135, 170, 195, 220, 240],
-              '5Y': [null, null, null, null, null, 120, 240],
-              '10Y': [null, null, null, null, null, 120, 240],
-              '20Y': [null, null, null, null, null, 120, 240]
+              '1D': [928, 922, 920, 924, 930, 925, 925],
+              '7D': [905, 925, 895, 910, 920, 928, 925],
+              '1M': [840, 875, 850, 880, 905, 920, 925],
+              '6M': [520, 580, 540, 650, 760, 880, 925],
+              '1Y': [240, 310, 210, 420, 610, 810, 925],
+              '5Y': [null, null, 120, 95, 160, 320, 925],
+              '10Y': [null, null, null, null, 120, 95, 925],
+              '20Y': [null, null, null, null, null, 120, 925]
+            }
+          },
+          ETB: {
+            name: 'Scarlet & Violet 151 ETB',
+            packCount: 9,
+            msrp: 49.99,
+            history: {
+              '1D': [512, 508, 505, 510, 515, 510, 510],
+              '7D': [495, 510, 490, 498, 505, 512, 510],
+              '1M': [440, 465, 450, 470, 490, 505, 510],
+              '6M': [280, 320, 295, 360, 420, 480, 510],
+              '1Y': [110, 145, 95, 210, 310, 440, 510],
+              '5Y': [null, null, 50, 42, 85, 180, 510],
+              '10Y': [null, null, null, null, 50, 42, 510],
+              '20Y': [null, null, null, null, null, 50, 510]
+            }
+          },
+          BUNDLE: {
+            name: 'Scarlet & Violet 151 Booster Bundle',
+            packCount: 6,
+            msrp: 26.94,
+            history: {
+              '1D': [48.5, 48, 47.8, 48.2, 48.4, 47.9, 48],
+              '7D': [46, 47.5, 45, 46.5, 47.5, 48.2, 48],
+              '1M': [41, 43.5, 42, 44, 46, 47.5, 48],
+              '6M': [32, 35, 33, 38, 42, 46, 48],
+              '1Y': [27, 29, 24, 32, 38, 44, 48],
+              '5Y': [null, null, 27, 22, 28, 35, 48],
+              '10Y': [null, null, null, null, 27, 22, 48],
+              '20Y': [null, null, null, null, null, 27, 48]
             }
           }
         }
       },
 
-      // --- SWORD & SHIELD ICONS ---
+      // --- SWORD & SHIELD ---
       {
         id: 'swsh7-evolving-skies',
         name: 'Evolving Skies',
@@ -502,65 +695,10 @@
               '7D': [160, 162, 159, 161, 164, 165, 165],
               '1M': [152, 155, 150, 156, 160, 163, 165],
               '6M': [128, 134, 130, 142, 152, 160, 165],
-              // 1Y: Floor rebound
               '1Y': [105, 115, 110, 122, 136, 152, 165],
-              // 5Y: Bubble to $225 -> Crash to sub-MSRP $85 trough -> Recovery
               '5Y': [null, 225, 135, 85, 95, 120, 165],
               '10Y': [null, null, null, 225, 85, 120, 165],
               '20Y': [null, null, null, null, 225, 85, 165]
-            }
-          }
-        }
-      },
-      {
-        id: 'swsh1-base',
-        name: 'Sword & Shield Base',
-        era: 'Sword & Shield',
-        category: 'SWSH',
-        released: 'Feb 2020',
-        image: 'https://images.pokemontcg.io/swsh1/logo.png',
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Sword & Shield Base Booster Box',
-            packCount: 36,
-            msrp: 143.64,
-            history: {
-              '1D': [312, 308, 307, 310, 311, 309, 310],
-              '7D': [298, 305, 296, 302, 306, 311, 310],
-              '1M': [278, 286, 274, 285, 295, 304, 310],
-              '6M': [230, 245, 235, 260, 280, 298, 310],
-              '1Y': [190, 205, 195, 225, 255, 285, 310],
-              '5Y': [130, 165, 125, 150, 205, 260, 310],
-              '10Y': [null, null, 130, 125, 180, 245, 310],
-              '20Y': [null, null, null, 130, 150, 245, 310]
-            }
-          }
-        }
-      },
-      {
-        id: 'swsh5-battle-styles',
-        name: 'Battle Styles',
-        era: 'Sword & Shield',
-        category: 'SWSH',
-        released: 'Mar 2021',
-        image: 'https://images.pokemontcg.io/swsh5/logo.png',
-        selectedType: 'BBOX',
-        variants: {
-          BBOX: {
-            name: 'Battle Styles Booster Box',
-            packCount: 36,
-            msrp: 143.64,
-            history: {
-              '1D': [166, 164, 163, 165, 166, 164, 165],
-              '7D': [162, 165, 160, 159, 162, 166, 165],
-              '1M': [154, 158, 152, 157, 161, 164, 165],
-              '6M': [125, 132, 128, 140, 148, 158, 165],
-              '1Y': [108, 115, 112, 124, 136, 150, 165],
-              // 5Y: Severe 2022 market crash down to $82 trough
-              '5Y': [140, 82, 88, 95, 110, 138, 165],
-              '10Y': [null, null, 140, 82, 95, 138, 165],
-              '20Y': [null, null, null, 140, 82, 110, 165]
             }
           }
         }
@@ -586,7 +724,6 @@
               '1M': [15700, 16000, 15800, 16100, 16350, 16480, 16500],
               '6M': [14200, 14800, 14400, 15200, 15800, 16350, 16500],
               '1Y': [13000, 13800, 13300, 14400, 15200, 16100, 16500],
-              // 5Y: Historic 2020 peak ($21,500) -> 2022 trough ($11,800) -> Slow recovery
               '5Y': [21500, 11800, 12500, 13400, 14500, 15600, 16500],
               '10Y': [4200, 9500, 21500, 11800, 13400, 15600, 16500],
               '20Y': [750, 2800, 21500, 11800, 13400, 15600, 16500]
@@ -598,7 +735,7 @@
 
     let activeProduct = SETS_DATA[0];
     let activeFilter = 'ALL';
-    let activeMainTimeScale = '1Y';
+    let activeMainTimeScale = '6M';
     let activeMoversTimeScale = '7D';
     let mainChart = null;
     let cardCharts = {};
@@ -610,7 +747,7 @@
 
     function getMetrics(setObj, timeScale) {
       const v = getVariant(setObj);
-      const arr = v.history[timeScale] || v.history['1Y'];
+      const arr = v.history[timeScale] || v.history['6M'];
       const validPoints = arr.filter(x => x !== null && x !== undefined);
       
       const start = validPoints[0] || v.msrp;
@@ -777,11 +914,10 @@
     function updateMainChart() {
       const ctx = document.getElementById('mainChart').getContext('2d');
       const metrics = getMetrics(activeProduct, activeMainTimeScale);
-      const dataset = getVariant(activeProduct).history[activeMainTimeScale] || getVariant(activeProduct).history['1Y'];
+      const dataset = getVariant(activeProduct).history[activeMainTimeScale] || getVariant(activeProduct).history['6M'];
       const labels = TIME_INTERVALS[activeMainTimeScale].labels;
       const isPositive = metrics.pct >= 0;
 
-      // Update active logo container
       document.getElementById('active-logo-box').innerHTML = getSetLogoMarkup(activeProduct, false);
       document.getElementById('active-title').innerText = metrics.variantName;
       document.getElementById('active-era').innerText = `${activeProduct.era} • Released ${activeProduct.released}`;
@@ -885,7 +1021,7 @@
       cardCharts = {};
 
       filtered.forEach(item => {
-        const metrics = getMetrics(item, '1Y');
+        const metrics = getMetrics(item, '6M');
         const isPositive = metrics.pct >= 0;
         const card = document.createElement('div');
         card.className = `bg-[#111827] border ${activeProduct.id === item.id ? 'border-emerald-500 ring-1 ring-emerald-500/50' : 'border-gray-800'} hover:border-gray-700 p-4 sm:p-5 rounded-xl cursor-pointer transition flex flex-col justify-between shadow-lg group`;
@@ -926,10 +1062,10 @@
               </div>
             </div>
 
-            <!-- Mini 1-Year Trend Graph -->
+            <!-- Mini 6-Month Trend Graph -->
             <div class="mt-4 bg-gray-900/50 rounded-lg p-2.5 border border-gray-800/60 relative">
               <div class="flex items-center justify-between text-[11px] mb-1">
-                <span class="text-gray-400 font-mono font-semibold">1Y Trajectory</span>
+                <span class="text-gray-400 font-mono font-semibold">6M Trend</span>
                 <div class="flex items-center space-x-2">
                   <span class="px-2 py-0.5 rounded ${isPositive ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-300' : 'bg-rose-950/90 border-rose-500/40 text-rose-300'} border font-black font-mono text-[11px]">
                     $${metrics.end.toLocaleString()}
@@ -961,14 +1097,14 @@
     function renderCardChart(item) {
       const canvas = document.getElementById(`card-chart-${item.id}`);
       if (!canvas) return;
-      const dataPoints = getVariant(item).history['1Y'];
-      const metrics = getMetrics(item, '1Y');
+      const dataPoints = getVariant(item).history['6M'];
+      const metrics = getMetrics(item, '6M');
       const isPositive = metrics.pct >= 0;
 
       cardCharts[item.id] = new Chart(canvas, {
         type: 'line',
         data: {
-          labels: TIME_INTERVALS['1Y'].labels,
+          labels: TIME_INTERVALS['6M'].labels,
           datasets: [{
             data: dataPoints,
             spanGaps: true,
@@ -1082,7 +1218,6 @@
       selectProduct(SETS_DATA[0].id);
     }
 
-    // Ensures the live price replaces the true current/last point in the array
     function applyWorkerPrices() {
       if (!latestWorkerData || !latestWorkerData.prices) return;
 
@@ -1098,7 +1233,6 @@
             Object.keys(hist).forEach(scale => {
               const arr = hist[scale];
               if (arr && arr.length > 0) {
-                // Update the final active index so current price pins to 'Today/Now'
                 arr[arr.length - 1] = newPrice;
               }
             });
