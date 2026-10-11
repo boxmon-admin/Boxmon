@@ -1391,41 +1391,62 @@
       selectProduct(SETS_DATA[0].id);
     }
 
-    function applyWorkerPrices() {
+function applyWorkerPrices() {
       if (!latestWorkerData || !latestWorkerData.prices) return;
+
+      let hasUpdates = false;
 
       SETS_DATA.forEach(set => {
         Object.keys(set.variants).forEach(varType => {
           const typeLower = varType.toLowerCase();
           const targetKey = `${set.id}-${typeLower}`;
-          const liveInfo = latestWorkerData.prices[targetKey] || latestWorkerData.prices[set.id];
+          const entry = latestWorkerData.prices[targetKey] || latestWorkerData.prices[set.id];
 
-          if (liveInfo) {
-            const hist = set.variants[varType].history;
-            const newPrice = liveInfo.currentMarket || liveInfo;
-            Object.keys(hist).forEach(scale => {
-              const arr = hist[scale];
-              if (arr && arr.length > 0) {
-                arr[arr.length - 1] = newPrice;
-              }
-            });
+          if (entry) {
+            // Extracts value whether it is a number or an object like { currentMarket: 85 }
+            const rawVal = typeof entry === 'object' && entry !== null ? entry.currentMarket : entry;
+            const numPrice = Number(rawVal);
+
+            if (!isNaN(numPrice) && numPrice > 0) {
+              const hist = set.variants[varType].history;
+              Object.keys(hist).forEach(scale => {
+                const arr = hist[scale];
+                if (Array.isArray(arr) && arr.length > 0) {
+                  arr[arr.length - 1] = numPrice;
+                }
+              });
+              hasUpdates = true;
+            }
           }
         });
       });
 
-      renderMarketMovers();
-      updateMainChart();
-      renderCatalog();
+      // Update navbar with the live sync time
+      const syncEl = document.getElementById('sync-status');
+      if (syncEl && latestWorkerData.lastUpdated) {
+        const dateObj = new Date(latestWorkerData.lastUpdated);
+        const timeStr = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        syncEl.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Synced (${timeStr})`;
+      }
+
+      if (hasUpdates) {
+        renderMarketMovers();
+        updateMainChart();
+        renderCatalog();
+      }
     }
 
     async function syncLiveMarketPrices() {
       try {
         const res = await fetch(WORKER_API_URL);
-        if (!res.ok) return;
+        if (!res.ok) {
+          console.warn(`Worker responded with status: ${res.status}`);
+          return;
+        }
         latestWorkerData = await res.json();
         applyWorkerPrices();
       } catch (err) {
-        console.warn("Using offline market baseline:", err);
+        console.warn("Live worker unreachable, using offline market baseline:", err);
       }
     }
 
